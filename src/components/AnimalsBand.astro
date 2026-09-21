@@ -168,7 +168,7 @@ const ANIMAL_SVGS: Record<string, string> = {
 
   .globo-dialogo {
     position: absolute;
-    bottom: 105%;
+    bottom: 108%;
     left: 50%;
     transform: translateX(-50%) scale(0);
     background: #FFF;
@@ -178,11 +178,14 @@ const ANIMAL_SVGS: Record<string, string> = {
     font-size: 0.86rem;
     font-weight: 800;
     color: var(--marron-osc);
-    white-space: nowrap;
+    white-space: normal;
+    width: max-content;
+    max-width: min(220px, 80vw);
+    text-align: center;
     box-shadow: 0 8px 24px rgba(0,0,0,0.16);
-    z-index: 10;
+    z-index: 30;
     pointer-events: none;
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
     opacity: 0;
   }
 
@@ -196,45 +199,80 @@ const ANIMAL_SVGS: Record<string, string> = {
     border-top-color: var(--color-primary);
   }
 
-  .tarjeta-animal:hover .globo-dialogo,
   :global(.globo-dialogo.activo) {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
+    transform: translateX(-50%) scale(1) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   @media (max-width: 650px) {
-    .contenedor-animalitos { gap: 16px; }
-    .tarjeta-animal { width: 78px; }
-    .icono-animal-svg { width: 68px; height: 68px; }
+    .contenedor-animalitos { gap: 14px; }
+    .tarjeta-animal { width: 72px; }
+    .icono-animal-svg { width: 62px; height: 62px; }
+    .globo-dialogo { font-size: 0.8rem; padding: 6px 10px; }
   }
 </style>
 
 <script>
   function setupAnimals() {
     const cards = document.querySelectorAll('.tarjeta-animal');
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const bubble = card.querySelector('.globo-dialogo');
-        if (bubble) {
-          bubble.classList.add('activo');
-          setTimeout(() => bubble.classList.remove('activo'), 3400);
-        }
+    let activeBubbleTimer: any = null;
 
-        // Corazoncito flotante
-        const rect = card.getBoundingClientRect();
-        const heart = document.createElement('div');
-        heart.textContent = '💛';
-        heart.style.cssText = `
-          position: fixed;
-          left: ${rect.left + rect.width / 2}px;
-          top: ${rect.top}px;
-          font-size: 22px;
-          z-index: 99999;
-          pointer-events: none;
-          animation: animHeart 1.2s ease-out forwards;
-        `;
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 1200);
+    function closeAllAnimalBubbles() {
+      if (activeBubbleTimer) clearTimeout(activeBubbleTimer);
+      document.querySelectorAll('.globo-dialogo.activo').forEach(b => {
+        b.classList.remove('activo');
+      });
+    }
+
+    // 1. Cerrar la nube de mensaje al tocar en cualquier otra parte de la pantalla
+    document.addEventListener('click', (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tarjeta-animal')) {
+        closeAllAnimalBubbles();
+      }
+    });
+
+    // Soporte para pantallas táctiles (móviles)
+    document.addEventListener('touchend', (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tarjeta-animal')) {
+        closeAllAnimalBubbles();
+      }
+    }, { passive: true });
+
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const bubble = card.querySelector('.globo-dialogo');
+        const wasActive = bubble?.classList.contains('activo');
+
+        // 2. Cerrar cualquier otro animalito que estuviera abierto
+        closeAllAnimalBubbles();
+
+        // 3. Si no estaba abierto, abrir este
+        if (bubble && !wasActive) {
+          bubble.classList.add('activo');
+          activeBubbleTimer = setTimeout(() => {
+            bubble.classList.remove('activo');
+          }, 4500);
+
+          // Corazoncito flotante
+          const rect = card.getBoundingClientRect();
+          const heart = document.createElement('div');
+          heart.textContent = '💛';
+          heart.style.cssText = `
+            position: fixed;
+            left: ${rect.left + rect.width / 2}px;
+            top: ${rect.top}px;
+            font-size: 22px;
+            z-index: 99999;
+            pointer-events: none;
+            animation: animHeart 1.2s ease-out forwards;
+          `;
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 1200);
+        }
       });
     });
   }

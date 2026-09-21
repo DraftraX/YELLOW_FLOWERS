@@ -83,6 +83,25 @@ const { audioUrl = "" } = Astro.props;
   @keyframes animCorrerOnda {
     to { stroke-dashoffset: -28; }
   }
+
+  @media (max-width: 600px) {
+    .btn-musica-flotante {
+      bottom: 16px;
+      right: 16px;
+      width: 50px;
+      height: 50px;
+      box-shadow: 0 6px 18px rgba(92, 58, 33, 0.3);
+    }
+    .btn-musica-flotante svg {
+      width: 24px;
+      height: 24px;
+    }
+    .onda-audio {
+      bottom: 30px;
+      right: 72px;
+      width: 50px;
+    }
+  }
 </style>
 
 <script>
@@ -144,32 +163,57 @@ const { audioUrl = "" } = Astro.props;
       });
     }
 
+    private playMusicBoxChime(freq: number) {
+      if (!this.audioCtx) return;
+      try {
+        const now = this.audioCtx.currentTime;
+        // 1. Oscilador fundamental (Tono puro)
+        const osc1 = this.audioCtx.createOscillator();
+        const gain1 = this.audioCtx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(freq, now);
+        gain1.gain.setValueAtTime(0.001, now);
+        gain1.gain.linearRampToValueAtTime(0.14, now + 0.015);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
+        osc1.connect(gain1);
+        gain1.connect(this.audioCtx.destination);
+        osc1.start(now);
+        osc1.stop(now + 1.85);
+
+        // 2. Oscilador armónico de campanilla metálica (Timbre de caja de música)
+        const osc2 = this.audioCtx.createOscillator();
+        const gain2 = this.audioCtx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(freq * 2, now);
+        gain2.gain.setValueAtTime(0.001, now);
+        gain2.gain.linearRampToValueAtTime(0.04, now + 0.01);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+        osc2.connect(gain2);
+        gain2.connect(this.audioCtx.destination);
+        osc2.start(now);
+        osc2.stop(now + 0.95);
+      } catch(e) {}
+    }
+
     private startSynthMelody() {
       this.initContext();
       this.isPlaying = true;
-      const notes = [523.25, 659.25, 783.99, 1046.50, 880.00, 783.99, 659.25, 587.33];
+      // Melodía romántica y dulce de caja de música (C -> G -> Am -> F)
+      const melody = [
+        523.25, 659.25, 783.99, 1046.50, // Do, Mi, Sol, Do (C mayor)
+        392.00, 493.88, 587.33, 783.99,  // Sol, Si, Re, Sol (G mayor)
+        440.00, 523.25, 659.25, 880.00,  // La, Do, Mi, La (Am)
+        349.23, 440.00, 523.25, 698.46,  // Fa, La, Do, Fa (F mayor)
+        783.99, 880.00, 1046.50, 1318.51 // Destellos mágicos agudos
+      ];
       let step = 0;
 
       const playStep = () => {
         if (!this.isPlaying) return;
-        const freq = notes[step % notes.length];
-        if (this.audioCtx) {
-          try {
-            const osc = this.audioCtx.createOscillator();
-            const gain = this.audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.001, this.audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.12, this.audioCtx.currentTime + 0.04);
-            gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 1.6);
-            osc.connect(gain);
-            gain.connect(this.audioCtx.destination);
-            osc.start();
-            osc.stop(this.audioCtx.currentTime + 1.6);
-          } catch(e) {}
-        }
+        const freq = melody[step % melody.length];
+        this.playMusicBoxChime(freq);
         step++;
-        this.synthTimer = setTimeout(playStep, 680);
+        this.synthTimer = setTimeout(playStep, 540);
       };
 
       playStep();
@@ -178,14 +222,17 @@ const { audioUrl = "" } = Astro.props;
 
     startMusic() {
       this.initContext();
-      if (this.audioEl && this.audioEl.src && this.audioEl.src !== window.location.href) {
+      // Si se subió un audio personalizado válido, reproducirlo
+      if (this.audioEl && this.audioEl.src && this.audioEl.src !== window.location.href && !this.audioEl.src.endsWith('/')) {
         this.audioEl.play().then(() => {
           this.isPlaying = true;
           this.updateUI();
-        }).catch(() => {
+        }).catch((err) => {
+          console.warn("Fallo reproducción de archivo de audio, usando caja de música por defecto:", err);
           this.startSynthMelody();
         });
       } else {
+        // Si no se subió música, usar inmediatamente la música romántica por defecto
         this.startSynthMelody();
       }
     }

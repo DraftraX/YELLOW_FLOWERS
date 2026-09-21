@@ -389,6 +389,64 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
     padding: 60px 20px 30px;
     font-weight: 800;
   }
+
+  @media (max-width: 600px) {
+    .contenedor-regalo-publico {
+      padding: 16px 12px 80px;
+    }
+    .encabezado-limpio {
+      padding: 20px 6px 10px;
+    }
+    .fecha-pill {
+      font-size: 0.76rem;
+      letter-spacing: 2px;
+      padding: 6px 16px;
+    }
+    .titulo-principal {
+      font-size: clamp(1.7rem, 6.5vw, 2.5rem);
+      margin-top: 14px;
+    }
+    .subtitulo-principal {
+      font-size: 0.98rem;
+    }
+    .seccion-bloque {
+      margin: 45px auto;
+    }
+    .carta-amor-contenedor {
+      padding: 24px 18px;
+      border-radius: 18px;
+    }
+    .carta-amor-contenedor h3 {
+      font-size: 1.45rem;
+    }
+    .carta-amor-contenedor p {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .firma-carta {
+      font-size: 1.05rem;
+    }
+    .marco-foto-central {
+      width: min(280px, 75vw);
+      margin: 20px auto;
+    }
+    .corona-girasoles-rotativa {
+      inset: -36px;
+      width: calc(100% + 72px);
+      height: calc(100% + 72px);
+    }
+    .pie-foto-texto {
+      font-size: 1.35rem;
+      margin-top: 36px;
+    }
+    .grilla-notas {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .nota-polaroid {
+      padding: 20px 16px;
+    }
+  }
 </style>
 
 <script>

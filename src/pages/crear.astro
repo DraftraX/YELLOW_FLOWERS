@@ -615,12 +615,92 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     border-radius: 10px;
     font-weight: 800;
     cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ============================================================
+     RESPONSIVE PARA CELULARES Y PANTALLAS PEQUEÑAS
+     ============================================================ */
+  @media (max-width: 768px) {
+    .crear-contenedor {
+      padding: 16px 12px 60px;
+    }
+
+    .crear-header {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      padding: 16px;
+      gap: 12px;
+    }
+
+    .crear-brand {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .crear-brand h1 {
+      font-size: 1.35rem;
+    }
+
+    .btn-secundario {
+      width: 100%;
+      text-align: center;
+    }
+
+    .tabs-bar {
+      padding: 6px 6px 0;
+      gap: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+    }
+
+    .tab-pane {
+      padding: 16px 12px;
+    }
+
+    .grid-temas {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-caja {
+      padding: 24px 16px;
+      border-radius: 20px;
+      max-width: 95vw;
+    }
+
+    .caja-enlace {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .caja-enlace button {
+      width: 100%;
+      padding: 12px;
+    }
+
+    .acciones-modal {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .acciones-modal a,
+    .acciones-modal button {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
 
 <script>
   let uploadedAudioUrl = "";
   let uploadedPhotoUrl = "";
+  let isUploadingAudio = false;
 
   document.addEventListener('DOMContentLoaded', () => {
     // Pestañas
@@ -646,7 +726,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
       });
     });
 
-    // Subida de audio robusta (Cliente + Servidor Cloud)
+    // Subida de audio personalizada
     const fileAudio = document.getElementById('file-audio') as HTMLInputElement;
     const audioNameLabel = document.getElementById('audio-filename');
     const audioPlayerContainer = document.getElementById('preview-audio-container');
@@ -657,23 +737,16 @@ import { DEFAULT_GIFT } from '../utils/defaults';
         const file = e.target.files[0];
         if (!file) return;
 
-        if (audioNameLabel) audioNameLabel.textContent = `Procesando: ${file.name}...`;
+        isUploadingAudio = true;
+        if (audioNameLabel) audioNameLabel.textContent = `⏳ Subiendo tu canción: ${file.name}...`;
 
-        // 1. Inmediato en cliente para reproducción local sin esperar
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-          uploadedAudioUrl = event.target.result;
-          if (audioPreviewPlayer && audioPlayerContainer) {
-            audioPreviewPlayer.src = event.target.result;
-            audioPlayerContainer.style.display = 'block';
-          }
-          if (audioNameLabel) {
-            audioNameLabel.textContent = `✓ Audio listo: ${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
-          }
-        };
-        reader.readAsDataURL(file);
+        // Vista previa local inmediata en el navegador
+        const blobUrl = URL.createObjectURL(file);
+        if (audioPreviewPlayer && audioPlayerContainer) {
+          audioPreviewPlayer.src = blobUrl;
+          audioPlayerContainer.style.display = 'block';
+        }
 
-        // 2. Intentar obtener URL de streaming ligero en la nube para no saturar enlaces
         try {
           const formData = new FormData();
           formData.append('file', file);
@@ -683,18 +756,29 @@ import { DEFAULT_GIFT } from '../utils/defaults';
             method: 'POST',
             body: formData
           });
+
           if (res.ok) {
             const json = await res.json();
             if (json.success && json.url) {
               uploadedAudioUrl = json.url;
-              console.log("Audio alojado en cloud streaming:", json.url);
+              if (audioNameLabel) {
+                audioNameLabel.textContent = `✓ Canción lista para tu regalo: ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+              }
             }
+          } else {
+            throw new Error('Error al procesar en servidor');
           }
         } catch (err) {
-          console.warn("Usando audio codificado localmente:", err);
+          console.warn("Error en subida de audio:", err);
+          if (audioNameLabel) {
+            audioNameLabel.textContent = `⚠️ No se pudo guardar la canción en el servidor. Si dejas el campo vacío sonará la caja de música por defecto ✨`;
+          }
+        } finally {
+          isUploadingAudio = false;
         }
       });
     }
+
 
     // Subida de foto robusta
     const filePhoto = document.getElementById('file-photo') as HTMLInputElement;
@@ -747,6 +831,11 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        if (isUploadingAudio) {
+          alert('Tu canción aún se está subiendo y procesando. Por favor espera unos segundos e intenta nuevamente.');
+          return;
+        }
 
         const selectedThemeEl = document.querySelector('input[name="theme"]:checked') as HTMLInputElement;
         const theme = selectedThemeEl ? selectedThemeEl.value : 'clasico';

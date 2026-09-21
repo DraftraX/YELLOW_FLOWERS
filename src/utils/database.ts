@@ -55,8 +55,16 @@ function initDatabaseSchema(db: DatabaseSync) {
       notes_json TEXT,
       animals_json TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS audios (
+      id TEXT PRIMARY KEY,
+      mime TEXT NOT NULL,
+      data BLOB NOT NULL,
+      created_at INTEGER NOT NULL
+    );
   `);
 }
+
 
 /**
  * Guarda o actualiza un regalo en SQLite
@@ -184,3 +192,49 @@ export function dbPurgeExpired(): number {
     return 0;
   }
 }
+
+/**
+ * Guarda un archivo de audio directamente en SQLite como BLOB
+ */
+export function dbSaveAudio(id: string, mime: string, buffer: Buffer): void {
+  try {
+    const db = getDatabase();
+    const stmt = db.prepare(`INSERT OR REPLACE INTO audios (id, mime, data, created_at) VALUES (?, ?, ?, ?)`);
+    stmt.run(id, mime, buffer, Date.now());
+  } catch (e) {
+    console.error("Error guardando audio en SQLite:", e);
+  }
+}
+
+/**
+ * Obtiene un archivo de audio desde SQLite por su ID
+ */
+export function dbGetAudio(id: string): { mime: string; data: Buffer } | null {
+  try {
+    const db = getDatabase();
+    const stmt = db.prepare(`SELECT mime, data FROM audios WHERE id = ?`);
+    const row = stmt.get(id) as any;
+    if (!row || !row.data) return null;
+    return {
+      mime: row.mime || 'audio/mpeg',
+      data: Buffer.from(row.data)
+    };
+  } catch (e) {
+    console.error("Error obteniendo audio de SQLite:", e);
+    return null;
+  }
+}
+
+/**
+ * Elimina un audio expirado de SQLite
+ */
+export function dbDeleteAudio(id: string): void {
+  try {
+    const db = getDatabase();
+    const stmt = db.prepare(`DELETE FROM audios WHERE id = ?`);
+    stmt.run(id);
+  } catch (e) {
+    console.error("Error eliminando audio de SQLite:", e);
+  }
+}
+

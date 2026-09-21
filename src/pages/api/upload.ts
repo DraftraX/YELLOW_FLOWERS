@@ -3,6 +3,7 @@ import { Buffer } from 'node:buffer';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import sharp from 'sharp';
+import { dbSaveAudio } from '../../utils/database';
 
 export const prerender = false;
 
@@ -80,53 +81,43 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // ============================================================
-    // CASO 2: AUDIO -> ALOJAMIENTO STREAMING O DATA URI
+    // CASO 2: AUDIO -> ALOJAMIENTO AUTÓNOMO EN SQLITE Y STREAMING LOCAL
     // ============================================================
-    // Intentar subir a servicio libre de streaming para no saturar memoria
+    const audioId = `audio_${crypto.randomUUID().slice(0, 8)}`;
+    const mimeType = file.type || 'audio/mpeg';
+
+    // 1. Guardar archivo binario en SQLite
     try {
-      const extFormData = new FormData();
-      extFormData.append('file', file, file.name);
-
-      const uploadRes = await fetch('https://tmpfiles.org/api/v1/upload', {
-        method: 'POST',
-        body: extFormData
-      });
-
-      if (uploadRes.ok) {
-        const json = await uploadRes.json();
-        if (json?.data?.url) {
-          const directStreamUrl = json.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
-          return new Response(JSON.stringify({
-            success: true,
-            url: directStreamUrl,
-            fileName: file.name,
-            fileSize: file.size,
-            storageType: 'cloud_stream'
-          }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-          });
-        }
-      }
-    } catch (extErr) {
-      console.warn("Fallo subida a tmpfiles.org, usando data URI:", extErr);
+      dbSaveAudio(audioId, mimeType, rawBuffer);
+    } catch (dbErr) {
+      console.warn("No se pudo guardar audio en SQLite:", dbErr);
     }
 
-    // Fallback de audio a Base64 data URI
-    const mimeType = file.type || 'audio/mpeg';
-    const base64Audio = rawBuffer.toString('base64');
-    const audioDataUri = `data:${mimeType};base64,${base64Audio}`;
+    // 2. Guardar archivo en disco si es posible
+    try {
+      const ext = path.extname(file.name) || '.mp3';
+      const audioFileName = `${audioId}${ext}`;
+      const localAudioPath = path.join(UPLOADS_DIR, audioFileName);
+      fs.writeFileSync(localAudioPath, rawBuffer);
+    } catch (fsErr) {
+      console.warn("No se pudo guardar audio en disco:", fsErr);
+    }
+
+    // URL ligera y directa al endpoint de streaming /api/audio
+    const audioUrl = `/api/audio?id=${audioId}`;
 
     return new Response(JSON.stringify({
       success: true,
-      url: audioDataUri,
+      url: audioUrl,
+      id: audioId,
       fileName: file.name,
       fileSize: file.size,
-      storageType: 'base64'
+      storageType: 'sqlite_stream'
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
+
 
   } catch (e: any) {
     console.error("Error en api/upload:", e);
