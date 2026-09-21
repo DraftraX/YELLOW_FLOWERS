@@ -1,0 +1,880 @@
+/* ============================================================
+   FLORES AMARILLAS · EDICIÓN MAESTRA & REGALO ESPECIAL
+   Dedicado con amor para Maria Iboni <3
+   ============================================================ */
+
+:root {
+  --amarillo: #FFC93C;
+  --amarillo-osc: #F0A500;
+  --dorado: #E8B33C;
+  --crema: #FFFDF5;
+  --marron: #5C3A21;
+  --marron-osc: #3D2311;
+  --verde: #5B8C4A;
+  --rojo: #E05555;
+
+  /* Variables dinámicas por temática */
+  --app-bg: radial-gradient(circle at 15% 20%, rgba(255,214,90,.4), transparent 45%), radial-gradient(circle at 85% 75%, rgba(255,190,60,.35), transparent 50%), linear-gradient(180deg,#FFF3C4 0%,#FFE792 38%,#FFF9E8 100%);
+  --card-bg: #FFFFFF;
+  --text-color: #5C3A21;
+  --color-primary: #F0A500;
+  --primary-glow: rgba(240,165,0,0.45);
+  --color-accent: #E05555;
+  --color-secondary: #FFD45E;
+  --box-bg: linear-gradient(160deg, #FFD45E, #F0A500);
+  --ribbon-bg: linear-gradient(90deg, #E05555, #B83A3A);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--app-bg);
+  min-height: 100vh;
+  color: var(--text-color);
+  overflow-x: hidden;
+  position: relative;
+  transition: background 0.6s ease, color 0.4s ease;
+}
+
+/* Temática Noche */
+body.theme-noche {
+  color: #F8FAFC;
+}
+body.theme-noche .nota,
+body.theme-noche #mensaje-secreto,
+body.theme-noche .tarjeta-animal,
+body.theme-noche .seccion-contenedor {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border-color: rgba(251, 191, 36, 0.4) !important;
+}
+body.theme-noche .globo-dialogo {
+  background: #0F172A !important;
+  color: #FDE047 !important;
+  border-color: #F59E0B !important;
+}
+body.theme-noche .subtitulo,
+body.theme-noche .pista {
+  color: #E2E8F0 !important;
+}
+
+/* ---------- FONDO DE PÉTALOS FLOTANTES ---------- */
+#petalos-fondo {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.petalo-flotante {
+  position: absolute;
+  top: -60px;
+  animation: caerPetalo linear infinite;
+  transform-origin: center;
+}
+
+@keyframes caerPetalo {
+  0% {
+    transform: translateY(-8vh) translateX(0) rotate(0deg) rotateY(0deg);
+  }
+  30% {
+    transform: translateY(35vh) translateX(28px) rotate(110deg) rotateY(180deg);
+  }
+  65% {
+    transform: translateY(72vh) translateX(-22px) rotate(230deg) rotateY(360deg);
+  }
+  100% {
+    transform: translateY(115vh) translateX(14px) rotate(360deg) rotateY(540deg);
+  }
+}
+
+/* ---------- MARIPOSAS AMBIENTALES ---------- */
+.mariposa {
+  position: fixed;
+  width: 44px;
+  z-index: 3;
+  pointer-events: none;
+  animation: volarMariposa 16s linear infinite;
+}
+
+.mariposa svg {
+  width: 100%;
+  animation: aleteoAla 0.45s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes aleteoAla {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0.4); }
+}
+
+@keyframes volarMariposa {
+  0%   { transform: translate(-10vw, 70vh) rotate(10deg); }
+  25%  { transform: translate(30vw, 35vh) rotate(-10deg); }
+  50%  { transform: translate(60vw, 60vh) rotate(12deg); }
+  75%  { transform: translate(85vw, 25vh) rotate(-8deg); }
+  100% { transform: translate(110vw, 55vh) rotate(10deg); }
+}
+
+/* ---------- BARRA SUPERIOR DE ENLACES / MODO ---------- */
+.top-nav-bar {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-nav-accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid var(--color-primary);
+  color: var(--text-color);
+  padding: 8px 16px;
+  border-radius: 40px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  transition: all 0.25s ease;
+}
+
+.btn-nav-accion:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: #FFF;
+  box-shadow: 0 6px 18px var(--primary-glow);
+  color: var(--color-primary);
+}
+
+/* ---------- CONTENEDOR PRINCIPAL ---------- */
+main {
+  position: relative;
+  z-index: 2;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
+}
+
+header {
+  text-align: center;
+  padding: 40px 15px 15px;
+}
+
+.fecha-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  border: 2px solid var(--color-primary);
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  box-shadow: 0 6px 16px var(--primary-glow);
+  animation: latidoPill 2.5s ease-in-out infinite;
+}
+
+@keyframes latidoPill {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+h1.titulo-principal {
+  margin-top: 22px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 6.8vw, 4.4rem);
+  line-height: 1.1;
+  background: linear-gradient(95deg, var(--color-primary) 0%, #C97B10 50%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 2px rgba(255,255,255,0.7));
+}
+
+.subtitulo-principal {
+  font-size: 1.15rem;
+  margin-top: 12px;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.divisor-decorativo {
+  width: 220px;
+  height: 22px;
+  margin: 20px auto 0;
+  display: block;
+}
+
+/* ============================================================
+   SECCIÓN DE LA CAJA DE REGALO SORPRESA
+   ============================================================ */
+#zona-regalo {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px 10px 40px;
+  position: relative;
+}
+
+.invitacion-apertura {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  animation: pulsarInvitacion 2s ease-in-out infinite;
+}
+
+@keyframes pulsarInvitacion {
+  0%, 100% { transform: scale(1); opacity: 0.92; }
+  50% { transform: scale(1.04); opacity: 1; color: var(--color-primary); }
+}
+
+/* Envoltorio interactivo de la caja */
+.caja-regalo-wrap {
+  position: relative;
+  width: 320px;
+  height: 360px;
+  margin: 0 auto;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.caja-regalo-wrap:hover {
+  transform: scale(1.05) translateY(-4px);
+}
+
+/* Sombra de la caja */
+.sombra-caja {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(60, 30, 10, 0.4), transparent 70%);
+  transition: all 0.6s ease;
+}
+
+/* Cuerpo de la caja */
+.cuerpo-caja {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 190px;
+  border-radius: 18px;
+  background: var(--box-bg);
+  box-shadow: inset 0 -16px 28px rgba(78, 47, 24, 0.22), 0 16px 36px rgba(100, 50, 10, 0.25);
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Cinta vertical en el cuerpo */
+.cuerpo-caja::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 48px;
+  transform: translateX(-50%);
+  background: var(--ribbon-bg);
+  box-shadow: 2px 0 6px rgba(0,0,0,0.18), -2px 0 6px rgba(255,255,255,0.25);
+}
+
+/* Brillo satinado */
+.cuerpo-caja::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,0.38) 0% 22%, transparent 35%);
+  pointer-events: none;
+}
+
+/* Tapa de la caja */
+.tapa-caja {
+  position: absolute;
+  bottom: 180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 292px;
+  height: 64px;
+  border-radius: 14px;
+  background: var(--box-bg);
+  box-shadow: 0 12px 24px rgba(60, 30, 10, 0.32);
+  z-index: 4;
+  transition: transform 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.8s ease;
+}
+
+.tapa-caja::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 48px;
+  transform: translateX(-50%);
+  background: var(--ribbon-bg);
+}
+
+/* Lazo y moño en la tapa */
+.lazo-superior {
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 105px;
+  z-index: 5;
+  transform-origin: 50% 90%;
+  animation: mecerLazo 3s ease-in-out infinite;
+  filter: drop-shadow(0 6px 8px rgba(80, 20, 20, 0.35));
+  transition: transform 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.8s ease;
+}
+
+@keyframes mecerLazo {
+  0%, 100% { transform: translateX(-50%) rotate(-5deg); }
+  50% { transform: translateX(-50%) rotate(5deg); }
+}
+
+/* Etiqueta colgante personalizada: 'Para: Maria Iboni <3' */
+.etiqueta-destinatario {
+  position: absolute;
+  top: 48px;
+  right: 16px;
+  z-index: 6;
+  background: #FFFDF5;
+  border: 1.5px dashed var(--color-primary);
+  border-radius: 8px;
+  padding: 6px 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+  transform: rotate(8deg);
+  transition: transform 0.3s ease;
+}
+
+.etiqueta-destinatario small {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-accent);
+  font-weight: 800;
+}
+
+.etiqueta-destinatario span {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--marron-osc);
+}
+
+/* Ramo mini que brota de adentro de la caja */
+.ramo-brote-caja {
+  position: absolute;
+  bottom: 130px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 260px;
+  height: 270px;
+  z-index: 3;
+  transform-origin: bottom center;
+  transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+  pointer-events: none;
+}
+
+/* Estado ABIERTO */
+.caja-regalo-wrap.abierta {
+  cursor: default;
+}
+.caja-regalo-wrap.abierta:hover {
+  transform: none;
+}
+.caja-regalo-wrap.abierta .tapa-caja {
+  transform: translateX(-50%) translateY(-220px) rotate(-32deg) scale(0.85);
+  opacity: 0;
+  pointer-events: none;
+}
+.caja-regalo-wrap.abierta .lazo-superior {
+  transform: translateX(-50%) translateY(-220px) rotate(-32deg) scale(0.85);
+  opacity: 0;
+  pointer-events: none;
+}
+.caja-regalo-wrap.abierta .ramo-brote-caja {
+  transform: translateX(-50%) scale(1);
+  pointer-events: auto;
+}
+.caja-regalo-wrap.abierta .sombra-caja {
+  width: 320px;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   CONTENIDO REVELADO TRAS LA APERTURA
+   (Oculto al inicio para no arruinar la sorpresa)
+   ============================================================ */
+#contenido-revelado {
+  display: none;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#contenido-revelado.revelado {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Secciones estilizadas con tarjetas premium */
+.seccion-regalo {
+  margin: 70px auto;
+  text-align: center;
+  position: relative;
+}
+
+.titulo-seccion {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4.2vw, 2.6rem);
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.subtitulo-seccion {
+  font-size: 1.05rem;
+  opacity: 0.85;
+  margin-bottom: 30px;
+}
+
+/* ---------- CARTA SECRETA DEDICADA ---------- */
+.carta-amor-contenedor {
+  max-width: 660px;
+  margin: 30px auto;
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 40px 34px;
+  box-shadow: 0 20px 50px rgba(92, 58, 33, 0.16);
+  border: 3px solid var(--color-secondary);
+  position: relative;
+  text-align: left;
+}
+
+/* Cinta decorativa superior */
+.carta-amor-contenedor::before {
+  content: '💛 PARA MARIA IBONI';
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  background: var(--color-primary);
+  color: #FFF;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  padding: 4px 18px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.carta-amor-contenedor h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: 18px;
+}
+
+.carta-amor-contenedor p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+.firma-carta {
+  margin-top: 24px;
+  text-align: right;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+/* ---------- RAMO MAJESTUOSO HERO ---------- */
+.ramo-hero-contenedor {
+  position: relative;
+  max-width: 580px;
+  margin: 20px auto;
+  animation: mecerSuaveRamo 5s ease-in-out infinite;
+}
+
+@keyframes mecerSuaveRamo {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50% { transform: translateY(-8px) rotate(1.2deg); }
+}
+
+.pista-ramo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.85);
+  border: 1.5px solid var(--color-secondary);
+  padding: 6px 18px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-top: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* ---------- FOTO CENTRAL ENMARCADA ---------- */
+.marco-foto-central {
+  position: relative;
+  width: min(340px, 80vw);
+  aspect-ratio: 1;
+  margin: 30px auto;
+}
+
+.corona-girasoles-rotativa {
+  position: absolute;
+  inset: -52px;
+  width: calc(100% + 104px);
+  height: calc(100% + 104px);
+  animation: rotarCorona 32s linear infinite;
+  filter: drop-shadow(0 8px 16px var(--primary-glow));
+  pointer-events: none;
+}
+
+@keyframes rotarCorona {
+  to { transform: rotate(360deg); }
+}
+
+.foto-recuerdo-wrapper {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 7px solid #FFFFFF;
+  box-shadow: 0 0 0 5px var(--color-primary), 0 20px 45px rgba(80, 40, 10, 0.3), 0 0 60px var(--primary-glow);
+  animation: haloBrillo 4s ease-in-out infinite;
+  background: #FFF;
+}
+
+@keyframes haloBrillo {
+  0%, 100% { box-shadow: 0 0 0 5px var(--color-primary), 0 20px 45px rgba(80, 40, 10, 0.3), 0 0 45px var(--primary-glow); }
+  50% { box-shadow: 0 0 0 7px var(--color-secondary), 0 24px 50px rgba(80, 40, 10, 0.35), 0 0 85px var(--primary-glow); }
+}
+
+.foto-recuerdo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pie-foto-texto {
+  margin-top: 50px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.pie-foto-texto small {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+/* ---------- NOTITAS DE AMOR (CARDS) ---------- */
+.grilla-notas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 26px;
+  margin-top: 30px;
+}
+
+.nota-polaroid {
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: 0 12px 30px rgba(92, 58, 33, 0.12);
+  position: relative;
+  text-align: left;
+  border-top: 8px solid var(--color-primary);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: flotarNota 4.5s ease-in-out infinite;
+}
+
+.nota-polaroid:nth-child(2) { animation-delay: 0.8s; border-top-color: #F59E0B; }
+.nota-polaroid:nth-child(3) { animation-delay: 1.6s; border-top-color: #EF4444; }
+.nota-polaroid:nth-child(4) { animation-delay: 2.4s; border-top-color: #10B981; }
+
+@keyframes flotarNota {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.nota-polaroid:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 42px rgba(92, 58, 33, 0.22);
+}
+
+.nota-polaroid h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: var(--color-primary);
+}
+
+.nota-polaroid p {
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+/* ---------- BANDA DE ANIMALITOS INTERACTIVOS ---------- */
+.contenedor-animalitos {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 35px;
+}
+
+.tarjeta-animal {
+  position: relative;
+  width: 96px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: mecerAnimal 3s ease-in-out infinite;
+}
+
+@keyframes mecerAnimal {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.tarjeta-animal:hover {
+  transform: scale(1.18) translateY(-14px);
+}
+
+.icono-animal-svg {
+  width: 82px;
+  height: 82px;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,0.18));
+}
+
+.nombre-animal {
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+/* Globos de diálogo emergentes */
+.globo-dialogo {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: #FFF;
+  border: 2px solid var(--color-primary);
+  border-radius: 16px;
+  padding: 8px 14px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--marron-osc);
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+  z-index: 10;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+  opacity: 0;
+}
+
+.globo-dialogo::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: var(--color-primary);
+}
+
+.tarjeta-animal:hover .globo-dialogo,
+.globo-dialogo.activo {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+.animar-salto {
+  animation: reboteAnimalSalto 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28) !important;
+}
+
+@keyframes reboteAnimalSalto {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35) translateY(-24px); }
+  70%  { transform: scale(0.95) translateY(4px); }
+  100% { transform: scale(1); }
+}
+
+.corazon-flotante {
+  position: fixed;
+  pointer-events: none;
+  font-size: 20px;
+  z-index: 10000;
+  animation: subirCorazon 1.2s ease-out forwards;
+}
+
+@keyframes subirCorazon {
+  0% { transform: translate(-50%, 0) scale(0.6); opacity: 1; }
+  100% { transform: translate(-50%, -80px) scale(1.4); opacity: 0; }
+}
+
+/* ---------- BOTÓN FLOTANTE DE MÚSICA ---------- */
+#btn-musica {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: none;
+  background: var(--box-bg);
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(92, 58, 33, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: latidoMusica 2.4s ease-in-out infinite;
+}
+
+#btn-musica:hover {
+  transform: scale(1.15) rotate(-6deg);
+}
+
+#btn-musica.tocando {
+  animation: rotarMusicaBtn 6s linear infinite;
+}
+
+@keyframes rotarMusicaBtn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes latidoMusica {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+#btn-musica svg {
+  width: 30px;
+  height: 30px;
+  fill: #3D2311;
+}
+
+#onda {
+  position: fixed;
+  bottom: 42px;
+  right: 94px;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#onda path {
+  stroke-dasharray: 6 8;
+  animation: correrOnda 1.2s linear infinite;
+}
+
+@keyframes correrOnda {
+  to { stroke-dashoffset: -28; }
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 60px 20px 40px;
+  font-weight: 800;
+}
+
+footer svg {
+  width: 160px;
+  display: block;
+  margin: 0 auto 16px;
+}
+
+/* ============================================================
+   RESPONSIVO PARA MÓVILES
+   ============================================================ */
+@media (max-width: 650px) {
+  .caja-regalo-wrap {
+    width: 270px;
+    height: 310px;
+  }
+  .cuerpo-caja {
+    width: 220px;
+    height: 160px;
+  }
+  .tapa-caja {
+    width: 250px;
+    height: 54px;
+    bottom: 152px;
+  }
+  .lazo-superior {
+    width: 85px;
+    top: -40px;
+  }
+  .etiqueta-destinatario {
+    top: 36px;
+    right: 6px;
+    padding: 4px 8px;
+  }
+  .carta-amor-contenedor {
+    padding: 30px 20px;
+  }
+  .contenedor-animalitos {
+    gap: 18px;
+  }
+  .tarjeta-animal {
+    width: 80px;
+  }
+  .icono-animal-svg {
+    width: 68px;
+    height: 68px;
+  }
+}

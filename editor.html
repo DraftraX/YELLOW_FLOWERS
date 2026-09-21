@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taller de Personalización — Flores Amarillas</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Estilos del Editor de Regalo */
+    body {
+      background: #F8FAFC;
+      color: #1E293B;
+      padding-bottom: 60px;
+    }
+
+    .editor-header {
+      background: #FFFFFF;
+      border-bottom: 2px solid #E2E8F0;
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .editor-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .editor-brand h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #B45309;
+      margin: 0;
+    }
+
+    .editor-brand p {
+      font-size: 0.85rem;
+      color: #64748B;
+      margin: 0;
+    }
+
+    .editor-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-editor {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primario {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(217,119,6,0.35);
+    }
+    .btn-primario:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(217,119,6,0.5);
+    }
+
+    .btn-secundario {
+      background: #EFF6FF;
+      color: #2563EB;
+      border: 1.5px solid #BFDBFE;
+    }
+    .btn-secundario:hover {
+      background: #DBEAFE;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: #FFFFFF;
+      color: #475569;
+      border: 1.5px solid #CBD5E1;
+    }
+    .btn-outline:hover {
+      background: #F1F5F9;
+    }
+
+    /* Layout en 2 columnas */
+    .editor-layout {
+      max-width: 1440px;
+      margin: 24px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 560px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .editor-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Panel Izquierdo: Formularios */
+    .editor-panel {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1.5px solid #E2E8F0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .tabs-nav {
+      display: flex;
+      overflow-x: auto;
+      background: #F8FAFC;
+      border-bottom: 1.5px solid #E2E8F0;
+      padding: 8px 12px 0;
+      gap: 6px;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border: none;
+      background: transparent;
+      color: #64748B;
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.activo {
+      background: #FFFFFF;
+      color: #D97706;
+      border-top: 3px solid #F59E0B;
+      font-weight: 800;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.03);
+    }
+
+    .tab-content {
+      padding: 24px;
+      display: none;
+    }
+
+    .tab-content.activo {
+      display: block;
+    }
+
+    /* Campos de formulario */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-group small {
+      display: block;
+      font-size: 0.78rem;
+      color: #64748B;
+      margin-top: 4px;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #CBD5E1;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      color: #1E293B;
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: #F59E0B;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Selector de temáticas */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .theme-card {
+      border: 2px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .theme-card.seleccionado {
+      border-color: #F59E0B;
+      background: #FFFBEB;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.2);
+    }
+
+    .theme-card-preview {
+      height: 36px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* Lista de animales */
+    .animal-edit-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .animal-edit-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .animal-edit-inputs {
+      flex-grow: 1;
+    }
+
+    /* Lista de notas */
+    .nota-edit-item {
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .btn-borrar-nota {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #FEE2E2;
+      color: #EF4444;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Panel Derecho: Vista Previa en Vivo */
+    .preview-panel {
+      position: sticky;
+      top: 86px;
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1.5px solid #E2E8F0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .preview-bar {
+      padding: 12px 18px;
+      background: #F8FAFC;
+      border-bottom: 1.5px solid #E2E8F0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .preview-bar span {
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-frame-container {
+      width: 100%;
+      height: 720px;
+      background: #FFF;
+      position: relative;
+    }
+
+    .preview-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Toast / Modal de Enlace Copiado */
+    #toast-copiado {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10B981;
+      color: #FFF;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 800;
+      box-shadow: 0 10px 26px rgba(16,185,129,0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 99999;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #toast-copiado.mostrar {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABECERA DEL EDITOR -->
+  <header class="editor-header">
+    <div class="editor-brand">
+      <span style="font-size: 1.8rem;">🌻</span>
+      <div>
+        <h1>Taller de Personalización</h1>
+        <p>Edita tu regalo y genera un enlace listo para compartir</p>
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button class="btn-editor btn-outline" id="btn-resetear" title="Restablecer dedicatoria a Maria Iboni <3">
+        <span>🔄 Restablecer a Maria Iboni</span>
+      </button>
+
+      <a href="index.html" target="_blank" class="btn-editor btn-secundario" id="btn-ver-publica" title="Abrir la versión pública para la destinataria">
+        <span>🎁 Ver Regalo Público</span>
+      </a>
+
+      <button class="btn-editor btn-primario" id="btn-copiar-enlace" title="Copiar enlace con todas las modificaciones">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        <span>Copiar Enlace para Regalar</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL: FORMULARIO + VISTA PREVIA -->
+  <div class="editor-layout">
+
+    <!-- PANEL DE EDICIÓN -->
+    <div class="editor-panel">
+      <!-- Pestañas -->
+      <nav class="tabs-nav">
+        <button class="tab-btn activo" data-tab="tab-textos">💌 Destinataria</button>
+        <button class="tab-btn" data-tab="tab-multimedia">📷 Multimedia</button>
+        <button class="tab-btn" data-tab="tab-tematica">🎨 Temática</button>
+        <button class="tab-btn" data-tab="tab-animales">🐾 Animalitos</button>
+        <button class="tab-btn" data-tab="tab-notas">📝 Notitas</button>
+        <button class="tab-btn" data-tab="tab-musica">🎵 Música</button>
+      </nav>
+
+      <!-- TAB 1: DESTINATARIA & DEDICATORIA -->
+      <div class="tab-content activo" id="tab-textos">
+        <div class="form-group">
+          <label>Nombre de la destinataria</label>
+          <input type="text" id="input-recipient" class="form-input" placeholder="Ej: Maria Iboni <3">
+          <small>Aparece en la etiqueta de la caja de regalo y en el ramo.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Firma / De parte de</label>
+          <input type="text" id="input-sender" class="form-input" placeholder="Ej: Con mucho amor">
+        </div>
+
+        <div class="form-group">
+          <label>Título en el encabezado</label>
+          <input type="text" id="input-headertitle" class="form-input" placeholder="Flores Amarillas para Ti">
+        </div>
+
+        <div class="form-group">
+          <label>Subtítulo de la caja de regalo</label>
+          <input type="text" id="input-boxsubtitle" class="form-input" placeholder="Toca la caja para abrir tu regalo especial">
+        </div>
+
+        <hr style="border:none;border-top:1.5px dashed #E2E8F0;margin:24px 0;">
+
+        <h4 style="margin-bottom:14px;color:#B45309;font-family:'Playfair Display',serif;">Carta de Amor Secreta</h4>
+        <div class="form-group">
+          <label>Título de la carta</label>
+          <input type="text" id="input-lettertitle" class="form-input" placeholder="Para ti, mi niña hermosa">
+        </div>
+
+        <div class="form-group">
+          <label>Cuerpo del mensaje de amor</label>
+          <textarea id="input-letterbody" class="form-textarea" rows="5"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Firma de la carta</label>
+          <input type="text" id="input-lettersign" class="form-input" placeholder="— Con todo mi amor, hoy y siempre">
+        </div>
+      </div>
+
+      <!-- TAB 2: MULTIMEDIA & FOTO -->
+      <div class="tab-content" id="tab-multimedia">
+        <div class="form-group">
+          <label>Foto central especial</label>
+          <input type="text" id="input-photourl" class="form-input" placeholder="https://ejemplo.com/foto.jpg">
+          <small>Pega el enlace a una foto online o sube una desde tu dispositivo:</small>
+          
+          <div style="margin-top:10px;">
+            <input type="file" id="file-photo" accept="image/*" style="font-size:0.85rem;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Título superior de la foto</label>
+          <input type="text" id="input-phototitle" class="form-input" placeholder="Mi persona favorita">
+        </div>
+
+        <div class="form-group">
+          <label>Frase destacada bajo la foto</label>
+          <input type="text" id="input-photosubtitle" class="form-input" placeholder="Maria Iboni, brillas más que mil girasoles 🌻">
+        </div>
+      </div>
+
+      <!-- TAB 3: TEMÁTICA & COLORES -->
+      <div class="tab-content" id="tab-tematica">
+        <label style="margin-bottom:12px;display:block;font-weight:800;">Selecciona una paleta de color y ambiente</label>
+        <div class="theme-grid" id="theme-selector-grid">
+          <!-- Opciones inyectadas por JS -->
+        </div>
+      </div>
+
+      <!-- TAB 4: ANIMALITOS -->
+      <div class="tab-content" id="tab-animales">
+        <p style="font-size:0.85rem;color:#64748B;margin-bottom:16px;">
+          Personaliza los animalitos que le enviarán saludos con globos de diálogo interactivos:
+        </p>
+        <div id="animales-editor-lista">
+          <!-- Inyectado por JS -->
+        </div>
+      </div>
+
+      <!-- TAB 5: NOTITAS -->
+      <div class="tab-content" id="tab-notas">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <label style="font-weight:800;margin:0;">Razones de Amor (Notitas interactiva)</label>
+          <button type="button" class="btn-editor btn-secundario" id="btn-agregar-nota" style="padding:6px 12px;font-size:0.8rem;">
+            + Agregar Nota
+          </button>
+        </div>
+        <div id="notas-editor-lista">
+          <!-- Inyectado por JS -->
+        </div>
+      </div>
+
+      <!-- TAB 6: MÚSICA -->
+      <div class="tab-content" id="tab-musica">
+        <div class="form-group">
+          <label>Canción personalizada (Enlace MP3)</label>
+          <input type="text" id="input-musicurl" class="form-input" placeholder="https://ejemplo.com/cancion.mp3">
+          <small>Si dejas este campo vacío, la página reproducirá automáticamente una delicada cajita de música sintetizada con arpegios románticos ✨</small>
+        </div>
+
+        <div style="background:#FEF3C7;padding:16px;border-radius:12px;border:1px solid #FDE68A;margin-top:20px;">
+          <h5 style="margin:0 0 6px;color:#92400E;font-size:0.95rem;">💡 ¿Cómo funciona la música?</h5>
+          <p style="margin:0;font-size:0.85rem;color:#78350F;line-height:1.5;">
+            Por políticas de los navegadores, la música comienza automáticamente apenas el destinatario toca la caja de regalo para abrirla, asegurando una experiencia perfecta.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO: VISTA PREVIA EN TIEMPO REAL -->
+    <div class="preview-panel">
+      <div class="preview-bar">
+        <span>
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#10B981;"></span>
+          Vista Previa en Tiempo Real
+        </span>
+        <button class="btn-editor btn-outline" id="btn-recargar-preview" style="padding:4px 10px;font-size:0.75rem;">
+          🔄 Actualizar
+        </button>
+      </div>
+      <div class="preview-frame-container">
+        <iframe src="index.html" class="preview-frame" id="preview-frame" title="Vista previa del regalo"></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST DE ENLACE COPIADO -->
+  <div id="toast-copiado">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span>¡Enlace listo para regalar copiado al portapapeles!</span>
+  </div>
+
+  <script src="js/state.js"></script>
+  <script src="js/animals.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const giftState = new GiftState();
+      let currentData = giftState.data;
+
+      // Elementos de la interfaz
+      const previewFrame = document.getElementById('preview-frame');
+      const toastCopiado = document.getElementById('toast-copiado');
+
+      // Sistema de Pestañas
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('activo'));
+          tabContents.forEach(c => c.classList.remove('activo'));
+          btn.classList.add('activo');
+          const target = document.getElementById(btn.getAttribute('data-tab'));
+          if (target) target.classList.add('activo');
+        });
+      });
+
+      // Llenar formulario con los datos actuales
+      function popularFormulario(data) {
+        document.getElementById('input-recipient').value = data.recipient || "";
+        document.getElementById('input-sender').value = data.senderTag || "";
+        document.getElementById('input-headertitle').value = data.headerTitle || "";
+        document.getElementById('input-boxsubtitle').value = data.boxSubtitle || "";
+        document.getElementById('input-lettertitle').value = data.letterTitle || "";
+        document.getElementById('input-letterbody').value = data.letterBody || "";
+        document.getElementById('input-lettersign').value = data.letterSign || "";
+
+        document.getElementById('input-photourl').value = data.photoUrl || "";
+        document.getElementById('input-phototitle').value = data.photoTitle || "";
+        document.getElementById('input-photosubtitle').value = data.photoSubtitle || "";
+        document.getElementById('input-musicurl').value = data.musicUrl || "";
+
+        renderTemasSelector(data.theme);
+        renderAnimalesEditor(data.animals || []);
+        renderNotasEditor(data.notes || []);
+      }
+
+      // Render de Temáticas
+      function renderTemasSelector(selectedTheme) {
+        const grid = document.getElementById('theme-selector-grid');
+        grid.innerHTML = '';
+        Object.keys(window.THEMES).forEach(key => {
+          const t = window.THEMES[key];
+          const div = document.createElement('div');
+          div.className = `theme-card ${key === selectedTheme ? 'seleccionado' : ''}`;
+          div.innerHTML = `
+            <div class="theme-card-preview" style="background:${t.bg};border:1.5px solid ${t.primary};"></div>
+            <strong style="font-size:0.88rem;display:block;color:${t.textColor};">${t.name}</strong>
+          `;
+          div.addEventListener('click', () => {
+            currentData.theme = key;
+            renderTemasSelector(key);
+            actualizarPreview();
+          });
+          grid.appendChild(div);
+        });
+      }
+
+      // Render de Animalitos
+      function renderAnimalesEditor(animals) {
+        const contenedor = document.getElementById('animales-editor-lista');
+        contenedor.innerHTML = '';
+        animals.forEach((item, idx) => {
+          const div = document.createElement('div');
+          div.className = 'animal-edit-item';
+          const svgCode = window.ANIMAL_SVGS[item.id] || window.ANIMAL_SVGS.gato;
+
+          div.innerHTML = `
+            <div class="animal-edit-icon">${svgCode}</div>
+            <div class="animal-edit-inputs">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-size:0.86rem;">${item.name}</strong>
+                <label style="font-size:0.8rem;display:flex;align-items:center;gap:4px;cursor:pointer;">
+                  <input type="checkbox" ${item.active !== false ? 'checked' : ''} data-idx="${idx}" class="chk-animal-active">
+                  Activo
+                </label>
+              </div>
+              <input type="text" value="${item.msg}" class="form-input txt-animal-msg" data-idx="${idx}" style="font-size:0.84rem;padding:6px 10px;">
+            </div>
+          `;
+          contenedor.appendChild(div);
+        });
+
+        // Eventos en animalitos
+        contenedor.querySelectorAll('.chk-animal-active').forEach(chk => {
+          chk.addEventListener('change', (e) => {
+            const idx = e.target.getAttribute('data-idx');
+            currentData.animals[idx].active = e.target.checked;
+            actualizarPreview();
+          });
+        });
+
+        contenedor.querySelectorAll('.txt-animal-msg').forEach(inp => {
+          inp.addEventListener('input', (e) => {
+            const idx = e.target.getAttribute('data-idx');
+            currentData.animals[idx].msg = e.target.value;
+            actualizarPreview();
+          });
+        });
+      }
+
+      // Render de Notitas
+      function renderNotasEditor(notes) {
+        const contenedor = document.getElementById('notas-editor-lista');
+        contenedor.innerHTML = '';
+        notes.forEach((nota, idx) => {
+          const div = document.createElement('div');
+          div.className = 'nota-edit-item';
+          div.innerHTML = `
+            <button type="button" class="btn-borrar-nota" data-idx="${idx}">Eliminar</button>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label>Título de la nota</label>
+              <input type="text" class="form-input txt-nota-title" value="${nota.title}" data-idx="${idx}">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label>Mensaje</label>
+              <textarea class="form-textarea txt-nota-body" rows="2" data-idx="${idx}">${nota.body}</textarea>
+            </div>
+          `;
+          contenedor.appendChild(div);
+        });
+
+        contenedor.querySelectorAll('.btn-borrar-nota').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.getAttribute('data-idx'), 10);
+            currentData.notes.splice(idx, 1);
+            renderNotasEditor(currentData.notes);
+            actualizarPreview();
+          });
+        });
+
+        contenedor.querySelectorAll('.txt-nota-title').forEach(inp => {
+          inp.addEventListener('input', (e) => {
+            const idx = e.target.getAttribute('data-idx');
+            currentData.notes[idx].title = e.target.value;
+            actualizarPreview();
+          });
+        });
+
+        contenedor.querySelectorAll('.txt-nota-body').forEach(inp => {
+          inp.addEventListener('input', (e) => {
+            const idx = e.target.getAttribute('data-idx');
+            currentData.notes[idx].body = e.target.value;
+            actualizarPreview();
+          });
+        });
+      }
+
+      // Botón agregar nota
+      document.getElementById('btn-agregar-nota').addEventListener('click', () => {
+        currentData.notes.push({
+          id: 'n_' + Date.now(),
+          title: 'Nueva Razón 💛',
+          body: 'Escribe aquí otra hermosa razón...'
+        });
+        renderNotasEditor(currentData.notes);
+        actualizarPreview();
+      });
+
+      // Subida de imagen local (FileReader Base64)
+      const filePhoto = document.getElementById('file-photo');
+      if (filePhoto) {
+        filePhoto.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              currentData.photoUrl = event.target.result;
+              document.getElementById('input-photourl').value = "Imagen local cargada";
+              actualizarPreview();
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Escuchar cambios en campos de texto principales
+      const textFields = [
+        ['input-recipient', 'recipient'],
+        ['input-sender', 'senderTag'],
+        ['input-headertitle', 'headerTitle'],
+        ['input-boxsubtitle', 'boxSubtitle'],
+        ['input-lettertitle', 'letterTitle'],
+        ['input-letterbody', 'letterBody'],
+        ['input-lettersign', 'letterSign'],
+        ['input-photourl', 'photoUrl'],
+        ['input-phototitle', 'photoTitle'],
+        ['input-photosubtitle', 'photoSubtitle'],
+        ['input-musicurl', 'musicUrl']
+      ];
+
+      textFields.forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', () => {
+            currentData[key] = el.value;
+            if (key === 'recipient') {
+              currentData.boxTag = `Para: ${el.value}`;
+            }
+            actualizarPreview();
+          });
+        }
+      });
+
+      // Actualizar iframe de previsualización
+      let previewDebounce = null;
+      function actualizarPreview() {
+        clearTimeout(previewDebounce);
+        previewDebounce = setTimeout(() => {
+          giftState.data = currentData;
+          giftState.saveToLocalStorage();
+          const encoded = giftState.encodeDataString(currentData);
+          previewFrame.src = `index.html#data=${encoded}`;
+        }, 300);
+      }
+
+      // Botón recargar preview
+      document.getElementById('btn-recargar-preview').addEventListener('click', () => {
+        actualizarPreview();
+      });
+
+      // Botón Resetear a Maria Iboni <3
+      document.getElementById('btn-resetear').addEventListener('click', () => {
+        if (confirm("¿Deseas restablecer todos los textos y el ramo a la dedicatoria original de Maria Iboni <3?")) {
+          currentData = giftState.resetToDefault();
+          popularFormulario(currentData);
+          actualizarPreview();
+        }
+      });
+
+      // Copiar enlace listo para regalar
+      document.getElementById('btn-copiar-enlace').addEventListener('click', () => {
+        const publicUrl = giftState.generateShareableUrl();
+        navigator.clipboard.writeText(publicUrl).then(() => {
+          mostrarToast();
+        }).catch(() => {
+          prompt("Copia tu enlace público:", publicUrl);
+        });
+      });
+
+      // Botón Ver Regalo Público
+      document.getElementById('btn-ver-publica').addEventListener('click', (e) => {
+        e.preventDefault();
+        const publicUrl = giftState.generateShareableUrl();
+        window.open(publicUrl, '_blank');
+      });
+
+      function mostrarToast() {
+        toastCopiado.classList.add('mostrar');
+        setTimeout(() => toastCopiado.classList.remove('mostrar'), 3200);
+      }
+
+      // Inicio
+      popularFormulario(currentData);
+      actualizarPreview();
+    });
+  </script>
+</body>
+</html>

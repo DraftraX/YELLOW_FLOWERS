@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flores Amarillas — Para Maria Iboni <3</title>
+  
+  <!-- Tipografías elegantes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- PÉTALOS FLOTANTES EN EL FONDO -->
+  <div id="petalos-fondo"></div>
+
+  <!-- MARIPOSAS AMBIENTALES -->
+  <div class="mariposa" style="animation-delay: 0s; top: 0;">
+    <svg viewBox="0 0 40 40"><g><ellipse cx="12" cy="16" rx="9" ry="12" fill="#FFC93C" transform="rotate(-24 12 16)"/><ellipse cx="28" cy="16" rx="9" ry="12" fill="#F0A500" transform="rotate(24 28 16)"/><ellipse cx="14" cy="29" rx="6" ry="8" fill="#FFE37A" transform="rotate(-14 14 29)"/><ellipse cx="26" cy="29" rx="6" ry="8" fill="#FFD45E" transform="rotate(14 26 29)"/><rect x="18.6" y="8" width="2.8" height="26" rx="1.4" fill="#4E2F18"/></g></svg>
+  </div>
+  <div class="mariposa" style="animation-delay: 7s; top: 0;">
+    <svg viewBox="0 0 40 40"><g><ellipse cx="12" cy="16" rx="9" ry="12" fill="#FF9F68" transform="rotate(-24 12 16)"/><ellipse cx="28" cy="16" rx="9" ry="12" fill="#F0803C" transform="rotate(24 28 16)"/><ellipse cx="14" cy="29" rx="6" ry="8" fill="#FFC093" transform="rotate(-14 14 29)"/><ellipse cx="26" cy="29" rx="6" ry="8" fill="#FFAF78" transform="rotate(14 26 29)"/><rect x="18.6" y="8" width="2.8" height="26" rx="1.4" fill="#4E2F18"/></g></svg>
+  </div>
+
+  <!-- BARRA SUPERIOR DE ACCIONES -->
+  <div class="top-nav-bar">
+    <a href="editor.html" class="btn-nav-accion" id="btn-ir-editor" title="Abrir editor para personalizar este regalo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      <span>Personalizar Regalo</span>
+    </a>
+  </div>
+
+  <main>
+    <!-- ENCABEZADO -->
+    <header>
+      <span class="fecha-pill" id="header-pill">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9L21 9.3l-5 4.4 1.6 6.8L12 16.9 6.4 20.5 8 13.7 3 9.3l6.6-.4L12 2z"/></svg>
+        <span id="txt-pill">21 · DE · SEPTIEMBRE</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9L21 9.3l-5 4.4 1.6 6.8L12 16.9 6.4 20.5 8 13.7 3 9.3l6.6-.4L12 2z"/></svg>
+      </span>
+
+      <h1 class="titulo-principal" id="txt-titulo-principal">Flores Amarillas para Ti</h1>
+      <p class="subtitulo-principal" id="txt-subtitulo-principal">Un detalle inolvidable preparado con todo el corazón…</p>
+
+      <svg class="divisor-decorativo" viewBox="0 0 220 20">
+        <path d="M0 10 H90 M130 10 H220" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round"/>
+        <g transform="translate(110,10)">
+          <circle r="5" fill="var(--color-primary)"/>
+          <circle cx="-11" r="3.4" fill="var(--color-secondary)"/>
+          <circle cx="11" r="3.4" fill="var(--color-secondary)"/>
+        </g>
+      </svg>
+    </header>
+
+    <!-- ETAPA 1: CAJA DE REGALO INTERACTIVA (EL PUNTO DE PARTIDA) -->
+    <section id="zona-regalo">
+      <p class="invitacion-apertura" id="txt-box-subtitle">
+        Toca la caja para descubrir tu sorpresa especial — <span style="color:var(--color-primary)">te está esperando ✨</span>
+      </p>
+
+      <div class="caja-regalo-wrap" id="caja-regalo" role="button" aria-label="Abrir caja de regalo" tabindex="0">
+        <!-- Ramo que brota al abrir -->
+        <div class="ramo-brote-caja" id="ramo-mini-caja"></div>
+
+        <!-- Tapa de la caja -->
+        <div class="tapa-caja"></div>
+
+        <!-- Lazo y moño -->
+        <svg class="lazo-superior" viewBox="0 0 96 60">
+          <path d="M48 34 C 30 6, 6 10, 12 26 C 16 38, 38 38, 48 34 Z" fill="#E53935"/>
+          <path d="M48 34 C 66 6, 90 10, 84 26 C 80 38, 58 38, 48 34 Z" fill="#C62828"/>
+          <path d="M48 34 C 40 30, 38 24, 44 22 C 50 20, 54 26, 52 32 Z" fill="#B71C1C"/>
+          <path d="M48 34 C 56 30, 58 24, 52 22 C 46 20, 42 26, 44 32 Z" fill="#B71C1C"/>
+          <path d="M44 40 L 40 56 L 47 50 L 49 58 L 53 42 Z" fill="#E53935"/>
+        </svg>
+
+        <!-- Etiqueta personalizada -->
+        <div class="etiqueta-destinatario">
+          <small id="txt-sender-tag">Con mucho amor</small>
+          <span id="txt-box-tag">Para: Maria Iboni &lt;3</span>
+        </div>
+
+        <!-- Cuerpo de la caja -->
+        <div class="cuerpo-caja"></div>
+
+        <!-- Sombra en suelo -->
+        <div class="sombra-caja"></div>
+      </div>
+    </section>
+
+    <!-- ETAPA 2: CONTENIDO REVELADO TRAS ABRIR EL REGALO -->
+    <div id="contenido-revelado">
+
+      <!-- CARTA SECRETA DEDICADA -->
+      <section class="seccion-regalo">
+        <div class="carta-amor-contenedor">
+          <h3 id="txt-letter-title">Para ti, mi niña hermosa</h3>
+          <p id="txt-letter-body">
+            El 21 de septiembre se regalan flores amarillas como símbolo de un amor puro, incondicional y lleno de luz. Hoy este ramo entero florece para ti, Maria Iboni, porque no hay sol ni jardín en este mundo que brille con tanta calidez, dulzura y magia como lo haces tú todos los días en mi vida.
+          </p>
+          <div class="firma-carta" id="txt-letter-sign">— Con todo mi amor, hoy y siempre</div>
+        </div>
+      </section>
+
+      <!-- EL GRAN RAMO EXUBERANTE Y DINÁMICO -->
+      <section class="seccion-regalo">
+        <h2 class="titulo-seccion">Un Ramo que Florece por Ti</h2>
+        <p class="subtitulo-seccion">Cada flor fue cultivada con cariño para ti</p>
+
+        <div class="ramo-hero-contenedor" id="ramo-maestro-contenedor">
+          <!-- El SVG de alta fidelidad se genera aquí dinámicamente -->
+        </div>
+
+        <div>
+          <span class="pista-ramo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--color-primary)"><path d="M12 2l2.4 6.9L21 9.3l-5 4.4 1.6 6.8L12 16.9 6.4 20.5 8 13.7 3 9.3l6.6-.4L12 2z"/></svg>
+            Toca o pasa el cursor sobre las flores para verlas florecer con destellos ✨
+          </span>
+        </div>
+      </section>
+
+      <!-- FOTO CENTRAL ENMARCADA -->
+      <section class="seccion-regalo">
+        <h2 class="titulo-seccion">La Sonrisa Más Hermosa</h2>
+        <p class="subtitulo-seccion">En cualquier rincón del universo, tú eres mi sol</p>
+
+        <div class="marco-foto-central">
+          <!-- Corona de girasoles rotativa -->
+          <svg class="corona-girasoles-rotativa" viewBox="0 0 100 100" id="corona-svg"></svg>
+          
+          <div class="foto-recuerdo-wrapper">
+            <img id="img-persona-especial" src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80" alt="Maria Iboni">
+          </div>
+        </div>
+
+        <p class="pie-foto-texto">
+          <small id="txt-photo-title">Mi persona favorita</small>
+          <span id="txt-photo-subtitle">Maria Iboni, brillas más que mil girasoles 🌻</span>
+        </p>
+      </section>
+
+      <!-- NOTITAS DE AMOR -->
+      <section class="seccion-regalo">
+        <h2 class="titulo-seccion">Razones por las que Iluminas Mi Vida</h2>
+        <p class="subtitulo-seccion">Unas cuantas de las infinitas razones para quererte tanto</p>
+
+        <div class="grilla-notas" id="grilla-notas-contenedor">
+          <!-- Se inyectan dinámicamente desde el estado -->
+        </div>
+      </section>
+
+      <!-- BANDA DE ANIMALITOS AMIGOS -->
+      <section class="seccion-regalo">
+        <h2 class="titulo-seccion">Nuestros Amiguitos te Mandan Saludos</h2>
+        <p class="subtitulo-seccion">Toca a cada uno para escuchar sus cariños</p>
+
+        <div class="contenedor-animalitos" id="contenedor-animalitos">
+          <!-- Generado con SVG dinámico e interactivo -->
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer>
+        <svg viewBox="0 0 150 24">
+          <path d="M0 12 H55 M95 12 H150" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round"/>
+          <g transform="translate(75,12)">
+            <path d="M0 5 C -8 -4 -18 2 0 12 C 18 2 8 -4 0 5Z" fill="var(--color-accent)"/>
+          </g>
+        </svg>
+        <p id="txt-footer-dedication">Hecho con mucho amor para Maria Iboni &lt;3 · 21 de Septiembre</p>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- REPRODUCTOR FLOTANTE DE MÚSICA -->
+  <button id="btn-musica" title="Reproducir música romántica" aria-label="Música">
+    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+  </button>
+  <svg id="onda" width="70" height="24" viewBox="0 0 70 24">
+    <path d="M2 12 q6 -10 12 0 t12 0 t12 0 t12 0 t12 0" stroke="var(--color-primary)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <!-- SCRIPTS -->
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/bouquet.js"></script>
+  <script src="js/animals.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inicializar Estado
+      const giftState = new GiftState();
+      const data = giftState.data;
+
+      // 2. Aplicar temática visual
+      giftState.applyThemeCSS(data.theme);
+
+      // 3. Rellenar textos personalizados en la interfaz
+      document.getElementById('txt-pill').textContent = data.headerPill || "21 · DE · SEPTIEMBRE";
+      document.getElementById('txt-titulo-principal').innerHTML = (data.headerTitle || "Flores Amarillas para Ti").replace('\n', '<br>');
+      document.getElementById('txt-subtitulo-principal').textContent = data.headerSubtitle;
+      document.getElementById('txt-box-subtitle').innerHTML = `${data.boxSubtitle || 'Toca la caja para abrir tu regalo especial'} — <span style="color:var(--color-primary)">te está esperando ✨</span>`;
+      document.getElementById('txt-box-tag').textContent = data.boxTag || `Para: ${data.recipient}`;
+      document.getElementById('txt-sender-tag').textContent = data.senderTag || "Con mucho amor";
+
+      document.getElementById('txt-letter-title').textContent = data.letterTitle;
+      document.getElementById('txt-letter-body').textContent = data.letterBody;
+      document.getElementById('txt-letter-sign').textContent = data.letterSign;
+
+      if (data.photoUrl) {
+        document.getElementById('img-persona-especial').src = data.photoUrl;
+      }
+      document.getElementById('txt-photo-title').textContent = data.photoTitle || "Mi persona favorita";
+      document.getElementById('txt-photo-subtitle').textContent = data.photoSubtitle || `${data.recipient}, brillas más que mil girasoles 🌻`;
+      document.getElementById('txt-footer-dedication').innerHTML = `Hecho con mucho amor para ${data.recipient} · 21 de Septiembre`;
+
+      // 4. Generar Corona de Girasoles en la foto central
+      const coronaSvg = document.getElementById('corona-svg');
+      if (coronaSvg) {
+        let coronaHTML = '';
+        const numFlowers = 14;
+        for (let i = 0; i < numFlowers; i++) {
+          const ang = (360 / numFlowers) * i;
+          let petals = '';
+          for (let p = 0; p < 8; p++) {
+            petals += `<ellipse cx="0" cy="-6" rx="2.5" ry="6" fill="#FBBF24" stroke="#F59E0B" stroke-width="0.5" transform="rotate(${p * 45})"/>`;
+          }
+          coronaHTML += `
+            <g transform="rotate(${ang} 50 50) translate(50 7)">
+              <g>${petals}<circle r="3" fill="#78350F"/><circle r="1.5" fill="#451A03"/></g>
+            </g>`;
+        }
+        coronaSvg.innerHTML = coronaHTML;
+      }
+
+      // 5. Inyectar Notitas
+      const grillaNotas = document.getElementById('grilla-notas-contenedor');
+      if (grillaNotas && data.notes) {
+        grillaNotas.innerHTML = '';
+        data.notes.forEach((nota) => {
+          const div = document.createElement('div');
+          div.className = 'nota-polaroid';
+          div.innerHTML = `
+            <h4>${nota.title}</h4>
+            <p>${nota.body}</p>
+          `;
+          grillaNotas.appendChild(div);
+        });
+      }
+
+      // 6. Iniciar Lluvia de Pétalos y Ramo Mini de la Caja
+      new PetalRainSystem('petalos-fondo', 28);
+      new MasterpieceBouquet('ramo-mini-caja', { isMini: true, interactive: false, recipientName: data.recipient });
+
+      // 7. Generar Ramo Hero Principal
+      new MasterpieceBouquet('ramo-maestro-contenedor', { isMini: false, interactive: true, recipientName: data.recipient });
+
+      // 8. Iniciar Banda de Animalitos
+      new AnimalsBand('contenedor-animalitos', data.animals || []);
+
+      // 9. Lógica de Apertura del Regalo (UNBOXING)
+      const caja = document.getElementById('caja-regalo');
+      const contenidoRevelado = document.getElementById('contenido-revelado');
+      let regaloAbierto = false;
+
+      function abrirRegalo() {
+        if (regaloAbierto) return;
+        regaloAbierto = true;
+
+        // Sonido y Música
+        if (window.romanticAudio) {
+          window.romanticAudio.playMagicChime('sparkle');
+          window.romanticAudio.playMusic(data.musicUrl);
+        }
+
+        // Animación de caja abriéndose
+        caja.classList.add('abierta');
+
+        // Explosión de confeti y corazones
+        const rect = caja.getBoundingClientRect();
+        triggerGiftSurpriseExplosion(rect.left + rect.width / 2, rect.top + rect.height * 0.45);
+
+        // Revelar contenido secuencialmente
+        setTimeout(() => {
+          contenidoRevelado.classList.add('revelado');
+          // Desplazamiento suave al mensaje
+          setTimeout(() => {
+            contenidoRevelado.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 450);
+        }, 800);
+      }
+
+      caja.addEventListener('click', abrirRegalo);
+      caja.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          abrirRegalo();
+        }
+      });
+
+      // 10. Botón de música
+      const btnMusica = document.getElementById('btn-musica');
+      if (btnMusica) {
+        btnMusica.addEventListener('click', () => {
+          if (window.romanticAudio) {
+            window.romanticAudio.toggleMusic();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
