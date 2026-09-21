@@ -1,4 +1,5 @@
 import { DEFAULT_GIFT, type GiftData, ONE_WEEK_MS } from './defaults';
+import { dbSaveGift, dbGetGift, dbReviveGift } from './database';
 
 // Almacén en memoria global para el proceso serverless
 const memoryStore = new Map<string, GiftData>();
@@ -55,7 +56,7 @@ export function decodeGiftToken(token: string): GiftData | null {
 }
 
 /**
- * Guarda un regalo con duración máxima estricta de 1 semana
+ * Guarda un regalo con duración máxima estricta de 1 semana en SQLite y memoria
  */
 export function saveGift(data: Partial<GiftData>): { gift: GiftData; token: string } {
   const now = Date.now();
@@ -74,14 +75,20 @@ export function saveGift(data: Partial<GiftData>): { gift: GiftData; token: stri
     expiresAt
   };
 
+  // 1. Guardar en SQLite
+  dbSaveGift(fullGift);
+
+  // 2. Guardar en memoria
   memoryStore.set(id, fullGift);
+
+  // 3. Generar token de respaldo
   const token = encodeGiftToken(fullGift);
 
   return { gift: fullGift, token };
 }
 
 /**
- * Obtiene un regalo por su ID o token
+ * Obtiene un regalo por su ID o token (consulta SQLite -> Memoria -> Token)
  */
 export function getGift(idOrToken: string): { gift: GiftData | null; isExpired: boolean; remainingText: string } {
   let gift: GiftData | null = null;
@@ -92,13 +99,23 @@ export function getGift(idOrToken: string): { gift: GiftData | null; isExpired: 
       ...DEFAULT_GIFT,
       expiresAt: Date.now() + ONE_WEEK_MS
     };
-  } else if (memoryStore.has(idOrToken)) {
-    gift = memoryStore.get(idOrToken)!;
   } else {
-    // Intentar decodificar como token autónomo
-    gift = decodeGiftToken(idOrToken);
-    if (gift) {
-      memoryStore.set(gift.id, gift);
+    // 1. Intentar consultar SQLite
+    gift = dbGetGift(idOrToken);
+
+    // 2. Si no está en SQLite, buscar en memoria
+    if (!gift && memoryStore.has(idOrToken)) {
+      gift = memoryStore.get(idOrToken)!;
+    }
+
+    // 3. Si no, intentar decodificar como token autónomo
+    if (!gift) {
+      gift = decodeGiftToken(idOrToken);
+      if (gift) {
+        // Restaurar en SQLite y memoria
+        dbSaveGift(gift);
+        memoryStore.set(gift.id, gift);
+      }
     }
   }
 
@@ -128,7 +145,7 @@ export function getGift(idOrToken: string): { gift: GiftData | null; isExpired: 
 }
 
 /**
- * Revive un regalo marchitado: añade 1 semana adicional y actualiza almacenamiento
+ * Revive un regalo marchitado: añade 1 semana adicional y actualiza en SQLite y memoria
  */
 export function reviveGift(idOrToken: string): { gift: GiftData; token: string } {
   const { gift } = getGift(idOrToken);
@@ -140,7 +157,10 @@ export function reviveGift(idOrToken: string): { gift: GiftData; token: string }
     expiresAt: Date.now() + ONE_WEEK_MS
   };
 
+  // Guardar en SQLite y memoria
+  dbSaveGift(revived);
   memoryStore.set(revived.id, revived);
+
   const token = encodeGiftToken(revived);
 
   return { gift: revived, token };

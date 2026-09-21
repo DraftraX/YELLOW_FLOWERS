@@ -1,6 +1,24 @@
 import type { APIRoute } from 'astro';
+import { Buffer } from 'node:buffer';
+import fs from 'node:fs';
+import path from 'node:path';
+import sharp from 'sharp';
 
 export const prerender = false;
+
+// Carpeta de almacenamiento para archivos multimedia:
+// En Vercel Serverless solo /tmp es escribible; en local usamos public/uploads
+const UPLOADS_DIR = process.env.VERCEL
+  ? path.join('/tmp', 'uploads')
+  : path.join(process.cwd(), 'public', 'uploads');
+
+if (!fs.existsSync(UPLOADS_DIR)) {
+  try {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  } catch (e) {
+    console.warn("No se pudo crear carpeta de uploads:", e);
+  }
+}
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -15,7 +33,56 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // 1. Intentar subir a servicio libre de almacenamiento temporal (sin límite de tamaño estricto y con URL de streaming)
+    const arrayBuffer = await file.arrayBuffer();
+    const rawBuffer = Buffer.from(arrayBuffer);
+
+    // ============================================================
+    // CASO 1: FOTO / IMAGEN -> COMPRESIÓN ULTRA LIGERA EN WEBP
+    // ============================================================
+    if (type === 'image') {
+      try {
+        // Redimensionar a máximo 500x500 y comprimir en WebP (calidad 80)
+        // Esto reduce fotos de 5MB a solo 15-25 KB, ahorrando 99% de espacio
+        const webpBuffer = await sharp(rawBuffer)
+          .resize(500, 500, { fit: 'cover', position: 'center' })
+          .webp({ quality: 80 })
+          .toBuffer();
+
+        const safeId = Math.random().toString(36).substring(2, 9);
+        const webpFileName = `foto_${safeId}.webp`;
+        const localFilePath = path.join(UPLOADS_DIR, webpFileName);
+
+        // Guardar archivo .webp en la carpeta
+        try {
+          fs.writeFileSync(localFilePath, webpBuffer);
+        } catch (writeErr) {
+          console.warn("No se pudo escribir en disco local:", writeErr);
+        }
+
+        const base64Webp = webpBuffer.toString('base64');
+        const webpDataUri = `data:image/webp;base64,${base64Webp}`;
+
+        return new Response(JSON.stringify({
+          success: true,
+          url: webpDataUri, // WebP ultra compacto (~20KB) garantizado para funcionar en cualquier hosting
+          localPath: `/uploads/${webpFileName}`,
+          fileName: webpFileName,
+          originalSize: file.size,
+          compressedSize: webpBuffer.length,
+          storageType: 'webp_compressed'
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (sharpErr) {
+        console.warn("Error comprimiendo con Sharp, usando buffer directo:", sharpErr);
+      }
+    }
+
+    // ============================================================
+    // CASO 2: AUDIO -> ALOJAMIENTO STREAMING O DATA URI
+    // ============================================================
+    // Intentar subir a servicio libre de streaming para no saturar memoria
     try {
       const extFormData = new FormData();
       extFormData.append('file', file, file.name);
@@ -28,7 +95,6 @@ export const POST: APIRoute = async ({ request }) => {
       if (uploadRes.ok) {
         const json = await uploadRes.json();
         if (json?.data?.url) {
-          // Convertir URL de vista a URL de streaming directo
           const directStreamUrl = json.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
           return new Response(JSON.stringify({
             success: true,
@@ -43,19 +109,17 @@ export const POST: APIRoute = async ({ request }) => {
         }
       }
     } catch (extErr) {
-      console.warn("Fallo subida a tmpfiles.org, usando fallback Base64:", extErr);
+      console.warn("Fallo subida a tmpfiles.org, usando data URI:", extErr);
     }
 
-    // 2. Fallback: Base64 data URI
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const mimeType = file.type || (type === 'audio' ? 'audio/mpeg' : 'image/jpeg');
-    const base64Data = buffer.toString('base64');
-    const dataUri = `data:${mimeType};base64,${base64Data}`;
+    // Fallback de audio a Base64 data URI
+    const mimeType = file.type || 'audio/mpeg';
+    const base64Audio = rawBuffer.toString('base64');
+    const audioDataUri = `data:${mimeType};base64,${base64Audio}`;
 
     return new Response(JSON.stringify({
       success: true,
-      url: dataUri,
+      url: audioDataUri,
       fileName: file.name,
       fileSize: file.size,
       storageType: 'base64'
