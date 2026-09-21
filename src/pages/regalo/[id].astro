@@ -5,6 +5,7 @@ import MasterpieceBouquet from '../../components/MasterpieceBouquet.astro';
 import AnimalsBand from '../../components/AnimalsBand.astro';
 import FloatingPetals from '../../components/FloatingPetals.astro';
 import AudioExperience from '../../components/AudioExperience.astro';
+import WitheredFlowers from '../../components/WitheredFlowers.astro';
 import { getGift } from '../../utils/storage';
 import { DEFAULT_GIFT } from '../../utils/defaults';
 
@@ -14,7 +15,7 @@ const { id } = Astro.params;
 const queryToken = Astro.url.searchParams.get('d') || '';
 
 // Buscar regalo por ID o por token fallback
-const lookupKey = id || queryToken || 'maria-iboni';
+const lookupKey = id || queryToken || 'especial';
 const { gift: loadedGift, isExpired, remainingText } = getGift(lookupKey);
 
 const gift = loadedGift || DEFAULT_GIFT;
@@ -24,19 +25,8 @@ const gift = loadedGift || DEFAULT_GIFT;
   <FloatingPetals />
 
   {isExpired ? (
-    <div class="pantalla-expirado">
-      <div class="tarjeta-expirado">
-        <span class="icono-reloj">⌛</span>
-        <h2>Ciclo de Florecimiento Concluido</h2>
-        <p>
-          Este regalo especial para <strong>{gift.recipient}</strong> fue entregado con mucho amor, 
-          cumpliendo su periodo máximo de 1 semana activa.
-        </p>
-        <p class="cita-amor">
-          “Las flores del 21 de septiembre florecen con el sol, pero el cariño y los momentos compartidos permanecen para siempre en el corazón.”
-        </p>
-      </div>
-    </div>
+    <!-- PANTALLA MÁGICA DE FLORES MARCHITAS Y REGADERA PARA REVIVIR -->
+    <WitheredFlowers gift={gift} token={queryToken} />
   ) : (
     <main class="contenedor-regalo-publico">
       <!-- ENCABEZADO LIMPIO (SIN BOTONES) -->
@@ -97,7 +87,6 @@ const gift = loadedGift || DEFAULT_GIFT;
             <p class="subtitulo-seccion">En cualquier rincón del universo, tú eres mi sol</p>
 
             <div class="marco-foto-central">
-              <!-- Corona de girasoles rotativa -->
               <svg class="corona-girasoles-rotativa" viewBox="0 0 100 100" id="corona-svg"></svg>
               
               <div class="foto-recuerdo-wrapper">
@@ -146,7 +135,7 @@ const gift = loadedGift || DEFAULT_GIFT;
               <path d="M0 5 C -8 -4 -18 2 0 12 C 18 2 8 -4 0 5Z" fill="var(--color-accent)"/>
             </g>
           </svg>
-          <p>Hecho con mucho amor para {gift.recipient} · 21 de Septiembre</p>
+          <p>Hecho con mucho amor · 21 de Septiembre — Flores Amarillas 🌻</p>
         </footer>
 
       </div>
@@ -219,7 +208,6 @@ const gift = loadedGift || DEFAULT_GIFT;
     color: var(--color-primary);
   }
 
-  /* Revelación de Contenido */
   .contenido-revelado-oculto {
     display: none;
     opacity: 0;
@@ -252,7 +240,6 @@ const gift = loadedGift || DEFAULT_GIFT;
     margin-bottom: 26px;
   }
 
-  /* Carta Secreta */
   .carta-amor-contenedor {
     max-width: 660px;
     margin: 20px auto;
@@ -299,7 +286,6 @@ const gift = loadedGift || DEFAULT_GIFT;
     font-weight: 700;
   }
 
-  /* Foto enmarcada */
   .marco-foto-central {
     position: relative;
     width: min(340px, 80vw);
@@ -351,7 +337,6 @@ const gift = loadedGift || DEFAULT_GIFT;
     margin-bottom: 4px;
   }
 
-  /* Notitas */
   .grilla-notas {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -390,50 +375,6 @@ const gift = loadedGift || DEFAULT_GIFT;
     padding: 60px 20px 30px;
     font-weight: 800;
   }
-
-  /* Pantalla de Regalo Expirado */
-  .pantalla-expirado {
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 20px;
-    text-align: center;
-  }
-
-  .tarjeta-expirado {
-    background: #FFF;
-    border-radius: 28px;
-    padding: 44px 34px;
-    max-width: 580px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
-    border: 3px solid var(--color-primary);
-  }
-
-  .icono-reloj {
-    font-size: 3.5rem;
-    display: block;
-    margin-bottom: 14px;
-  }
-
-  .tarjeta-expirado h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--color-primary);
-    margin-bottom: 14px;
-  }
-
-  .tarjeta-expirado p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 14px;
-  }
-
-  .cita-amor {
-    font-style: italic;
-    opacity: 0.85;
-    font-size: 0.95rem;
-  }
 </style>
 
 <script>
@@ -442,7 +383,6 @@ const gift = loadedGift || DEFAULT_GIFT;
     const contenido = document.getElementById('contenido-revelado');
     let abierta = false;
 
-    // Generar corona de girasoles para la foto
     const corona = document.getElementById('corona-svg');
     if (corona) {
       let html = '';
@@ -463,7 +403,6 @@ const gift = loadedGift || DEFAULT_GIFT;
       if (abierta) return;
       abierta = true;
 
-      // Sonido y Música
       if ((window as any).playSparkleChime) {
         (window as any).playSparkleChime();
       }
@@ -471,14 +410,11 @@ const gift = loadedGift || DEFAULT_GIFT;
         (window as any).startRomanticMusic();
       }
 
-      // Animación de caja
       caja.classList.add('abierta');
 
-      // Explosión de confeti
       const rect = caja.getBoundingClientRect();
       spawnConfetti(rect.left + rect.width / 2, rect.top + rect.height * 0.45);
 
-      // Revelar contenido
       setTimeout(() => {
         contenido.classList.add('revelado');
         setTimeout(() => {

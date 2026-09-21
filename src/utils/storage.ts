@@ -3,7 +3,7 @@ import { DEFAULT_GIFT, type GiftData, ONE_WEEK_MS } from './defaults';
 // Almacén en memoria global para el proceso serverless
 const memoryStore = new Map<string, GiftData>();
 
-// Inicializar el regalo predeterminado de Maria Iboni <3
+// Inicializar el regalo predeterminado
 memoryStore.set(DEFAULT_GIFT.id, {
   ...DEFAULT_GIFT,
   createdAt: Date.now(),
@@ -86,11 +86,10 @@ export function saveGift(data: Partial<GiftData>): { gift: GiftData; token: stri
 export function getGift(idOrToken: string): { gift: GiftData | null; isExpired: boolean; remainingText: string } {
   let gift: GiftData | null = null;
 
-  // 1. Caso especial: Maria Iboni <3
-  if (idOrToken === 'maria-iboni' || idOrToken === 'default') {
+  // Caso especial: modelo demo / especial
+  if (idOrToken === 'especial' || idOrToken === 'demo' || idOrToken === 'default' || idOrToken === 'maria-iboni') {
     gift = {
       ...DEFAULT_GIFT,
-      // La dedicatoria original siempre está activa
       expiresAt: Date.now() + ONE_WEEK_MS
     };
   } else if (memoryStore.has(idOrToken)) {
@@ -122,8 +121,27 @@ export function getGift(idOrToken: string): { gift: GiftData | null; isExpired: 
       remainingText = `Válido por ${diffHours} hora${diffHours !== 1 ? 's' : ''}`;
     }
   } else {
-    remainingText = "Este regalo ha expirado (duración máxima de 1 semana cumplida)";
+    remainingText = "Este ramo se ha marchitado (más de 1 semana inactivo)";
   }
 
   return { gift, isExpired, remainingText };
+}
+
+/**
+ * Revive un regalo marchitado: añade 1 semana adicional y actualiza almacenamiento
+ */
+export function reviveGift(idOrToken: string): { gift: GiftData; token: string } {
+  const { gift } = getGift(idOrToken);
+  const targetGift = gift || DEFAULT_GIFT;
+  
+  const revived: GiftData = {
+    ...targetGift,
+    createdAt: Date.now(),
+    expiresAt: Date.now() + ONE_WEEK_MS
+  };
+
+  memoryStore.set(revived.id, revived);
+  const token = encodeGiftToken(revived);
+
+  return { gift: revived, token };
 }

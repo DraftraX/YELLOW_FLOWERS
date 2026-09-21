@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { DEFAULT_GIFT } from '../utils/defaults';
 ---
 
-<Layout title="Crear un Regalo de Flores Amarillas" theme="clasico">
+<Layout title="Crear Regalo de Flores Amarillas — 21 de Septiembre" theme="clasico">
   <div class="crear-contenedor">
     
     <!-- CABECERA -->
@@ -11,13 +11,13 @@ import { DEFAULT_GIFT } from '../utils/defaults';
       <div class="crear-brand">
         <span class="icono-flor">🌻</span>
         <div>
-          <h1>Taller de Regalos — Flores Amarillas</h1>
-          <p>Crea un regalo sorpresa único para esa persona especial. Cada regalo es independiente y dura hasta 1 semana.</p>
+          <h1>Taller Libre de Flores Amarillas</h1>
+          <p>Crea un ramo virtual personalizado para quien tú quieras este 21 de septiembre. Cada regalo dura 1 semana (y se puede revivir regándolo con agua fresca 💧).</p>
         </div>
       </div>
       <div class="crear-actions">
-        <a href="/regalo/maria-iboni" target="_blank" class="btn-secundario">
-          🎁 Ver Ejemplo de Maria Iboni
+        <a href="/regalo/demo" target="_blank" class="btn-secundario">
+          🎁 Ver Regalo Demo
         </a>
       </div>
     </header>
@@ -40,50 +40,50 @@ import { DEFAULT_GIFT } from '../utils/defaults';
           <!-- TAB 1: DESTINATARIA & CARTA -->
           <div class="tab-pane activo" id="tab-persona">
             <div class="form-grupo">
-              <label>¿Para quién es el regalo?</label>
-              <input type="text" id="input-recipient" class="form-control" value="Maria Iboni <3" placeholder="Ej: Maria Iboni <3" required>
-              <small>Este nombre aparecerá en la caja de regalo, el ramo y toda la sorpresa.</small>
+              <label>¿Para quién es el regalo? (Nombre o Apodo especial)</label>
+              <input type="text" id="input-recipient" class="form-control" placeholder="Ej: Mi persona favorita, Lucía <3, Mi amor..." required>
+              <small>Este nombre aparecerá en la caja de regalo, la etiqueta del ramo y la dedicatoria.</small>
             </div>
 
             <div class="form-grupo">
               <label>Firma / De parte de</label>
-              <input type="text" id="input-sender" class="form-control" value="Con mucho amor" placeholder="Ej: Con mucho amor">
+              <input type="text" id="input-sender" class="form-control" value="Con todo mi amor" placeholder="Ej: Con todo mi amor, Tu admirador secreto...">
             </div>
 
             <div class="form-grupo">
-              <label>Título de la dedicatoria</label>
+              <label>Título principal</label>
               <input type="text" id="input-headertitle" class="form-control" value="Flores Amarillas para Ti">
             </div>
 
             <hr class="separador">
-            <h4 class="subtitulo-form">Carta de Amor Secreta</h4>
+            <h4 class="subtitulo-form">Carta de Amor / Dedicatoria Secreta</h4>
 
             <div class="form-grupo">
               <label>Título de la carta</label>
-              <input type="text" id="input-lettertitle" class="form-control" value="Para ti, mi niña hermosa">
+              <input type="text" id="input-lettertitle" class="form-control" value="Para ti, alguien muy especial">
             </div>
 
             <div class="form-grupo">
-              <label>Mensaje de amor</label>
-              <textarea id="input-letterbody" class="form-control textarea" rows="4">El 21 de septiembre se regalan flores amarillas como símbolo de un amor puro, incondicional y lleno de luz. Hoy este ramo entero florece para ti, porque no hay sol ni jardín en este mundo que brille con tanta calidez, dulzura y magia como lo haces tú todos los días en mi vida.</textarea>
+              <label>Cuerpo del mensaje</label>
+              <textarea id="input-letterbody" class="form-control textarea" rows="4">El 21 de septiembre se regalan flores amarillas como promesa de un amor puro, alegría y complicidad que florece con cada amanecer. Hoy este ramo entero florece para ti, porque no hay sol ni jardín en este mundo que brille con tanta calidez, dulzura y magia como lo haces tú todos los días en mi vida.</textarea>
             </div>
 
             <div class="form-grupo">
               <label>Firma de la carta</label>
-              <input type="text" id="input-lettersign" class="form-control" value="— Con todo mi amor, hoy y siempre">
+              <input type="text" id="input-lettersign" class="form-control" value="— Siempre contigo, con todo mi cariño">
             </div>
           </div>
 
           <!-- TAB 2: SUBIR AUDIO PERSONALIZADO -->
           <div class="tab-pane" id="tab-audio">
             <div class="form-grupo">
-              <label>Subir canción o mensaje de voz (Audio MP3 / WAV)</label>
-              <p class="ayuda-texto">Este audio comenzará a sonar automáticamente cuando la persona toque la caja para abrirla.</p>
+              <label>Subir canción o nota de voz (MP3 / WAV / M4A)</label>
+              <p class="ayuda-texto">Este audio comenzará a reproducirse automáticamente apenas la persona toque la caja para abrirla.</p>
               
               <div class="dropzone-archivo">
                 <input type="file" id="file-audio" accept="audio/*">
                 <span class="dropzone-icono">🎵</span>
-                <p>Haz clic para elegir un archivo de audio (MP3, WAV, M4A)</p>
+                <p>Haz clic para elegir un archivo de audio desde tu dispositivo</p>
                 <small id="audio-filename" style="color:#B45309;font-weight:700;"></small>
               </div>
 
@@ -97,7 +97,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
             <div class="form-grupo" style="margin-top:20px;">
               <label>O ingresa un enlace directo a una canción (URL MP3)</label>
               <input type="text" id="input-audiourl" class="form-control" placeholder="https://ejemplo.com/cancion.mp3">
-              <small>Si no subes audio, se reproducirá la delicada caja de música sintetizada ✨</small>
+              <small>Si no subes ningún audio, la página reproducirá automáticamente una delicada caja musical sintetizada ✨</small>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
               <div class="dropzone-archivo">
                 <input type="file" id="file-photo" accept="image/*">
                 <span class="dropzone-icono">📷</span>
-                <p>Haz clic para elegir una foto desde tu celular o computadora</p>
+                <p>Haz clic para elegir una foto desde tu galería o computadora</p>
               </div>
 
               <!-- Vista previa de la foto -->
@@ -206,11 +206,11 @@ import { DEFAULT_GIFT } from '../utils/defaults';
             </div>
           </div>
 
-          <!-- BOTÓN PRINCIPAL DE GENERACIÓN -->
+          <!-- BARRA INFERIOR DE GENERAR -->
           <div class="barra-generar">
             <div class="info-expiracion">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              <span>Vigencia: Máximo 1 semana activa para cada regalo creado</span>
+              <span>Vigencia: 1 semana activa. Si se marchita, ¡se revive regándolo con agua! 💧</span>
             </div>
             <button type="submit" class="btn-crear-regalo" id="btn-submit">
               🎁 Crear Regalo y Generar Enlace Único
@@ -220,15 +220,15 @@ import { DEFAULT_GIFT } from '../utils/defaults';
 
       </div>
 
-      <!-- PANEL LATERAL: INFORMACIÓN Y VISTA -->
+      <!-- PANEL LATERAL: GUÍA RÁPIDA -->
       <div class="info-lateral">
         <div class="tarjeta-guia">
-          <h3>🌟 ¿Cómo funciona tu regalo?</h3>
+          <h3>🌻 ¿Por qué flores amarillas?</h3>
           <ul>
-            <li><strong>100% Sorpresa</strong>: El destinatario solo verá la misteriosa caja de regalo al entrar.</li>
-            <li><strong>Música & Audio Propio</strong>: Al tocar la caja, explota confeti y comenzará la canción que subiste.</li>
-            <li><strong>Sin Distracciones</strong>: En el enlace que le envíes no habrá ningún botón de edición ni publicidad.</li>
-            <li><strong>Caducidad de 1 semana</strong>: Diseñado como un detalle especial de temporada del 21 de septiembre.</li>
+            <li><strong>Tradición del 21 de Septiembre</strong>: Simbolizan el inicio de la primavera, el amor sincero, la amistad y la promesa de estar juntos.</li>
+            <li><strong>Música & Audio Subido</strong>: Tu canción elegida sonará apenas la persona abra la caja sorpresa.</li>
+            <li><strong>0 Botones en el Regalo</strong>: Quien reciba tu enlace solo verá su sorpresa, sin botones de edición ni menús.</li>
+            <li><strong>Flores Marchitas & Revivir</strong>: Si pasa más de 1 semana inactivo, ¡la persona puede usar la regadera mágica para revivirlo!</li>
           </ul>
         </div>
       </div>
@@ -241,7 +241,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     <div class="modal-caja">
       <span class="modal-icono">🎉</span>
       <h2>¡Tu Regalo está Listo para Entregar!</h2>
-      <p>Copia el enlace único a continuación y envíaselo por WhatsApp o mensaje:</p>
+      <p>Copia el enlace único y envíaselo a esa persona especial por WhatsApp o mensaje:</p>
       
       <div class="caja-enlace">
         <input type="text" id="url-generada" readonly>
@@ -249,7 +249,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
       </div>
 
       <div class="modal-acciones">
-        <a id="btn-abrir-regalo" href="#" target="_blank" class="btn-crear-regalo" style="text-decoration:none;display:inline-block;padding:10px 20px;">
+        <a id="btn-abrir-regalo" href="#" target="_blank" class="btn-crear-regalo" style="text-decoration:none;display:inline-block;padding:12px 22px;">
           Abrir y Ver Regalo Ahora
         </a>
         <button type="button" id="btn-cerrar-modal" class="btn-secundario" style="margin-top:10px;">
@@ -423,7 +423,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     margin-bottom: 12px;
   }
 
-  /* Subida de archivo dropzone */
   .dropzone-archivo {
     position: relative;
     border: 2px dashed #F59E0B;
@@ -449,7 +448,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     margin-bottom: 6px;
   }
 
-  /* Selector de temas */
   .grid-temas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -474,7 +472,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     margin-bottom: 8px;
   }
 
-  /* Lista de animales */
   .item-animal-edit {
     background: #F8FAFC;
     border: 1px solid #E2E8F0;
@@ -490,7 +487,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     font-size: 0.85rem;
   }
 
-  /* Lista de notas */
   .item-nota-edit {
     background: #F8FAFC;
     border: 1px solid #E2E8F0;
@@ -499,7 +495,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     margin-bottom: 10px;
   }
 
-  /* Barra inferior de generar */
   .barra-generar {
     padding: 20px 24px;
     background: #F8FAFC;
@@ -534,7 +529,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     box-shadow: 0 10px 26px rgba(217, 119, 6, 0.45);
   }
 
-  /* Tarjeta Guía Lateral */
   .tarjeta-guia {
     background: #FFF;
     border-radius: 20px;
@@ -568,7 +562,6 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     font-size: 0.8rem;
   }
 
-  /* Modal */
   .modal-fondo {
     display: none;
     position: fixed;
@@ -734,6 +727,12 @@ import { DEFAULT_GIFT } from '../utils/defaults';
         const selectedThemeEl = document.querySelector('input[name="theme"]:checked') as HTMLInputElement;
         const theme = selectedThemeEl ? selectedThemeEl.value : 'clasico';
 
+        const recipient = (document.getElementById('input-recipient') as HTMLInputElement).value.trim();
+        if (!recipient) {
+          alert('Por favor escribe para quién es el regalo');
+          return;
+        }
+
         // Recolectar animales
         const animalMsgEls = document.querySelectorAll('.txt-animal-msg');
         const animalChkEls = document.querySelectorAll('.chk-animal');
@@ -765,7 +764,8 @@ import { DEFAULT_GIFT } from '../utils/defaults';
         const manualPhotoUrl = (document.getElementById('input-photourl') as HTMLInputElement).value;
 
         const giftPayload = {
-          recipient: (document.getElementById('input-recipient') as HTMLInputElement).value,
+          recipient,
+          boxTag: `Para: ${recipient}`,
           senderTag: (document.getElementById('input-sender') as HTMLInputElement).value,
           headerTitle: (document.getElementById('input-headertitle') as HTMLInputElement).value,
           letterTitle: (document.getElementById('input-lettertitle') as HTMLInputElement).value,

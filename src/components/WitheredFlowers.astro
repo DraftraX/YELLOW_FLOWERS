@@ -1,0 +1,361 @@
+---
+import type { GiftData } from '../utils/defaults';
+
+interface Props {
+  gift: GiftData;
+  token?: string;
+}
+
+const { gift, token = "" } = Astro.props;
+---
+
+<div class="escena-marchita-contenedor" id="escena-marchita">
+  <div class="tarjeta-marchita">
+    
+    <!-- ILUSTRACIÓN SVG DE FLORES MARCHITAS -->
+    <div class="flores-marchitas-svg-wrap" id="contenedor-flores-svg">
+      <svg viewBox="-150 -180 300 360" width="100%" height="100%" class="svg-marchito">
+        <defs>
+          <filter id="desaturarSepia">
+            <feColorMatrix type="matrix" values="0.4 0.4 0.2 0 0  0.3 0.4 0.2 0 0  0.2 0.3 0.2 0 0  0 0 0 1 0" />
+          </filter>
+        </defs>
+
+        <!-- Sombra en suelo -->
+        <ellipse cx="0" cy="140" rx="80" ry="16" fill="rgba(60,40,30,0.25)" />
+
+        <!-- Envoltorio mustio y descolorido -->
+        <polygon points="-90,-40 90,-40 45,130 -45,130" fill="#9C8B77" class="envoltorio-marchito" />
+        <polygon points="-80,-40 -110,0 -45,130" fill="#7D6E5D" />
+        <polygon points="80,-40 110,0 45,130" fill="#7D6E5D" />
+
+        <!-- Tallos curvados y decaídos -->
+        <path d="M-30 110 Q -60 30 -80 -20 Q -95 -50 -110 -40" stroke="#635B48" stroke-width="6" fill="none" stroke-linecap="round" class="tallo-marchito tallo-1" />
+        <path d="M0 110 Q -10 20 -20 -60 Q -30 -100 -50 -90" stroke="#635B48" stroke-width="6" fill="none" stroke-linecap="round" class="tallo-marchito tallo-2" />
+        <path d="M30 110 Q 50 30 70 -30 Q 85 -70 95 -60" stroke="#635B48" stroke-width="6" fill="none" stroke-linecap="round" class="tallo-marchito tallo-3" />
+
+        <!-- Flor 1 caída a la izquierda -->
+        <g transform="translate(-110, -40) rotate(70)" class="cabeza-marchita flor-1">
+          <ellipse cx="-15" cy="-8" rx="8" ry="18" fill="#8C7A5B" />
+          <ellipse cx="0" cy="-22" rx="7" ry="16" fill="#A8946E" />
+          <ellipse cx="15" cy="-8" rx="8" ry="18" fill="#8C7A5B" />
+          <circle r="16" fill="#4A3B2C" />
+        </g>
+
+        <!-- Flor 2 caída al centro-izquierda -->
+        <g transform="translate(-50, -90) rotate(55)" class="cabeza-marchita flor-2">
+          <ellipse cx="-18" cy="-10" rx="9" ry="20" fill="#948261" />
+          <ellipse cx="0" cy="-26" rx="9" ry="20" fill="#B39F78" />
+          <ellipse cx="18" cy="-10" rx="9" ry="20" fill="#948261" />
+          <circle r="20" fill="#423425" />
+        </g>
+
+        <!-- Flor 3 caída a la derecha -->
+        <g transform="translate(95, -60) rotate(-65)" class="cabeza-marchita flor-3">
+          <ellipse cx="-15" cy="-8" rx="8" ry="18" fill="#8C7A5B" />
+          <ellipse cx="0" cy="-22" rx="7" ry="16" fill="#A8946E" />
+          <ellipse cx="15" cy="-8" rx="8" ry="18" fill="#8C7A5B" />
+          <circle r="16" fill="#4A3B2C" />
+        </g>
+
+        <!-- Pétalos secos caídos en el suelo -->
+        <ellipse cx="-40" cy="135" rx="10" ry="4" fill="#8C7A5B" transform="rotate(-15 -40 135)" />
+        <ellipse cx="25" cy="142" rx="12" ry="5" fill="#A8946E" transform="rotate(25 25 142)" />
+        <ellipse cx="-10" cy="145" rx="9" ry="4" fill="#756448" transform="rotate(5 -10 145)" />
+
+        <!-- Regadera animada flotante -->
+        <g class="regadera-magica" id="regadera-svg" transform="translate(70, -140)">
+          <!-- Cuerpo de la regadera dorada -->
+          <path d="M-25 0 Q -30 35 0 35 Q 30 35 25 0 Z" fill="#EAB308" stroke="#CA8A04" stroke-width="2" />
+          <!-- Asa -->
+          <path d="M-15 -5 Q -40 -5 -35 25 Q -30 25 -22 15" stroke="#CA8A04" stroke-width="4" fill="none" stroke-linecap="round" />
+          <!-- Pico vertedor -->
+          <path d="M18 10 L 45 -10" stroke="#CA8A04" stroke-width="5" stroke-linecap="round" />
+          <ellipse cx="48" cy="-12" rx="7" ry="4" fill="#FACC15" stroke="#CA8A04" stroke-width="1.5" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="mensaje-marchito">
+      <span class="etiqueta-tiempo">⏳ Vencimiento: +1 Semana Inactivo</span>
+      <h2>¡Oh no! Este ramo de flores amarillas se ha marchitado... 🥀</h2>
+      <p>
+        Ha pasado más de 1 semana desde que se preparó este detalle para <strong>{gift.recipient}</strong>. 
+        Sin agua y sin cariño, los pétalos se durmieron por el paso del tiempo.
+      </p>
+      
+      <p class="pregunta-revivir">
+        ¿Quieres revivirlo y hacer que vuelva a florecer radiante como el primer día?
+      </p>
+
+      <!-- BOTÓN REGADERA / ECHAR AGUA -->
+      <button type="button" class="btn-regar-agua" id="btn-regar" data-id={gift.id} data-token={token}>
+        <span class="icono-gota">🚿</span>
+        <span>¡Echar Agua y Revivir Ramo! 💧</span>
+      </button>
+
+      <p class="nota-revivir">
+        Al regarlo, las flores absorberán agua fresca, recuperarán su color amarillo dorado y el regalo se reactivará por <strong>1 semana más</strong>.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .escena-marchita-contenedor {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 16px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .tarjeta-marchita {
+    background: #FFFDF9;
+    border: 2px dashed #BDB0A0;
+    border-radius: 28px;
+    max-width: 620px;
+    width: 100%;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 16px 45px rgba(80, 60, 40, 0.12);
+  }
+
+  .flores-marchitas-svg-wrap {
+    width: min(320px, 85vw);
+    height: 320px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .svg-marchito {
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.1));
+  }
+
+  .regadera-magica {
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: animFlotarRegadera 2.8s ease-in-out infinite;
+  }
+
+  @keyframes animFlotarRegadera {
+    0%, 100% { transform: translate(70px, -140px) rotate(0deg); }
+    50% { transform: translate(70px, -150px) rotate(-6deg); }
+  }
+
+  /* Animación al regar */
+  :global(.regadera-inclinada) {
+    animation: none !important;
+    transform: translate(20px, -90px) rotate(-45deg) !important;
+    transition: transform 0.6s ease;
+  }
+
+  /* Animación de revivir flores */
+  :global(.reviviendo .tallo-1) {
+    d: path("M-30 110 Q -45 40 -50 -50") !important;
+    stroke: #4A7C59 !important;
+    transition: all 1.8s ease-out;
+  }
+  :global(.reviviendo .tallo-2) {
+    d: path("M0 110 Q 0 30 0 -110") !important;
+    stroke: #4A7C59 !important;
+    transition: all 1.8s ease-out;
+  }
+  :global(.reviviendo .tallo-3) {
+    d: path("M30 110 Q 45 40 50 -50") !important;
+    stroke: #4A7C59 !important;
+    transition: all 1.8s ease-out;
+  }
+
+  :global(.reviviendo .flor-1) {
+    transform: translate(-50px, -80px) rotate(-15deg) scale(1.15) !important;
+    transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  :global(.reviviendo .flor-2) {
+    transform: translate(0, -135) rotate(0deg) scale(1.3) !important;
+    transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  :global(.reviviendo .flor-3) {
+    transform: translate(50px, -80px) rotate(15deg) scale(1.15) !important;
+    transition: all 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  :global(.reviviendo .cabeza-marchita ellipse) {
+    fill: #FBBF24 !important;
+    transition: fill 1.6s ease;
+  }
+  :global(.reviviendo .cabeza-marchita circle) {
+    fill: #78350F !important;
+    transition: fill 1.6s ease;
+  }
+  :global(.reviviendo .envoltorio-marchito) {
+    fill: #C8A173 !important;
+    transition: fill 1.6s ease;
+  }
+
+  .mensaje-marchito {
+    margin-top: 14px;
+  }
+
+  .etiqueta-tiempo {
+    display: inline-block;
+    background: #F1ECE4;
+    color: #7D6E5D;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .mensaje-marchito h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.85rem;
+    color: #614D3D;
+    margin-bottom: 12px;
+  }
+
+  .mensaje-marchito p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #6B5B4C;
+    margin-bottom: 14px;
+  }
+
+  .pregunta-revivir {
+    font-weight: 800;
+    color: #B45309 !important;
+    font-size: 1.15rem !important;
+  }
+
+  .btn-regar-agua {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #0EA5E9, #0284C7);
+    color: #FFF;
+    border: none;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: animPulsarRegar 2.4s ease-in-out infinite;
+  }
+
+  @keyframes animPulsarRegar {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .btn-regar-agua:hover {
+    transform: scale(1.08) translateY(-3px);
+    box-shadow: 0 12px 30px rgba(14, 165, 233, 0.55);
+  }
+
+  .icono-gota {
+    font-size: 1.4rem;
+  }
+
+  .nota-revivir {
+    font-size: 0.85rem !important;
+    opacity: 0.8;
+    margin-top: 14px;
+  }
+</style>
+
+<script>
+  function setupWateringRevive() {
+    const btn = document.getElementById('btn-regar');
+    const regadera = document.getElementById('regadera-svg');
+    const svgWrap = document.getElementById('contenedor-flores-svg');
+    const escena = document.getElementById('escena-marchita');
+
+    if (!btn || !regadera || !svgWrap) return;
+
+    btn.addEventListener('click', async () => {
+      btn.setAttribute('disabled', 'true');
+      btn.style.opacity = '0.7';
+      btn.innerHTML = `<span>💧 Regando las flores...</span>`;
+
+      // 1. Inclinar la regadera
+      regadera.classList.add('regadera-inclinada');
+
+      // 2. Efecto de lluvia de gotas de agua brillantes
+      spawnWaterDroplets(svgWrap);
+
+      // Sonido si está disponible
+      if ((window as any).playSparkleChime) {
+        (window as any).playSparkleChime();
+      }
+
+      // 3. Transformación de las flores (reviviendo)
+      setTimeout(() => {
+        svgWrap.classList.add('reviviendo');
+      }, 700);
+
+      // 4. Llamar al endpoint de reactivación en Astro
+      const id = btn.getAttribute('data-id') || 'especial';
+      const token = btn.getAttribute('data-token') || '';
+
+      try {
+        const res = await fetch('/api/revivir', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, token })
+        });
+        const result = await res.json();
+
+        // 5. Tras 2.5s de florecimiento, recargar la página para mostrar el regalo vivo
+        setTimeout(() => {
+          if (result.success && result.url) {
+            window.location.href = result.url;
+          } else {
+            window.location.reload();
+          }
+        }, 2600);
+      } catch (e) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2500);
+      }
+    });
+
+    function spawnWaterDroplets(container: HTMLElement) {
+      const rect = container.getBoundingClientRect();
+      const count = 35;
+
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const drop = document.createElement('div');
+          drop.textContent = '💧';
+          drop.style.cssText = `
+            position: fixed;
+            left: ${rect.left + rect.width * 0.55 + (Math.random() * 50 - 25)}px;
+            top: ${rect.top + 60}px;
+            font-size: ${12 + Math.random() * 12}px;
+            pointer-events: none;
+            z-index: 99999;
+            transition: transform 0.9s cubic-bezier(0.4, 0, 1, 1), opacity 0.9s ease;
+          `;
+          document.body.appendChild(drop);
+
+          requestAnimationFrame(() => {
+            drop.style.transform = `translate(${(Math.random() - 0.5) * 60}px, ${160 + Math.random() * 90}px) scale(0.6)`;
+            drop.style.opacity = '0';
+          });
+
+          setTimeout(() => drop.remove(), 950);
+        }, i * 45);
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', setupWateringRevive);
+</script>

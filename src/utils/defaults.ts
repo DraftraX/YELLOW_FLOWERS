@@ -39,25 +39,25 @@ export interface GiftData {
 export const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 días en milisegundos
 
 export const DEFAULT_GIFT: GiftData = {
-  id: "maria-iboni",
+  id: "especial",
   createdAt: Date.now(),
   expiresAt: Date.now() + ONE_WEEK_MS,
-  recipient: "Maria Iboni <3",
+  recipient: "Mi persona favorita 💛",
   senderTag: "Con mucho amor",
   headerPill: "21 · DE · SEPTIEMBRE",
   headerTitle: "Flores Amarillas para Ti",
   headerSubtitle: "Un detalle inolvidable preparado con todo el corazón…",
-  boxTag: "Para: Maria Iboni <3",
+  boxTag: "Para: Alguien Especial ✨",
   boxSubtitle: "Toca la caja para abrir tu regalo especial ✨",
-  letterTitle: "Para ti, mi niña hermosa",
-  letterBody: "El 21 de septiembre se regalan flores amarillas como símbolo de un amor puro, incondicional y lleno de luz. Hoy este ramo entero florece para ti, Maria Iboni, porque no hay sol ni jardín en este mundo que brille con tanta calidez, dulzura y magia como lo haces tú todos los días en mi vida. Eres mi momento favorito, mi paz y mi alegría más grande.",
-  letterSign: "— Con todo mi amor, hoy y siempre",
+  letterTitle: "Para ti, con todo mi corazón",
+  letterBody: "El 21 de septiembre se regalan flores amarillas como promesa de un amor puro, alegría y complicidad que florece con cada amanecer. Hoy este ramo entero florece para ti, porque no hay sol ni jardín en este mundo que brille con tanta calidez, dulzura y magia como lo haces tú todos los días en mi vida. Eres mi momento favorito, mi paz y mi alegría más grande.",
+  letterSign: "— Siempre contigo, con todo mi amor",
   photoUrl: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80",
   photoTitle: "Mi persona favorita",
-  photoSubtitle: "Maria Iboni, brillas más que mil girasoles 🌻",
+  photoSubtitle: "Brillas más que mil girasoles 🌻",
   theme: "clasico",
   bouquetStyle: "exuberante",
-  audioUrl: "", // Por defecto usa la caja de música sintetizada o la que suba el usuario
+  audioUrl: "",
   audioName: "Caja de Música Romántica (Sintetizador)",
   notes: [
     {
@@ -78,7 +78,7 @@ export const DEFAULT_GIFT: GiftData = {
     {
       id: "n4",
       title: "Nuestra Promesa 💌",
-      body: "Prometo cuidar siempre de ti, celebrar cada uno de tus sueños y recordarte todos los días lo maravillosa que eres."
+      body: "Prometo cuidar siempre de ti, celebrar cada uno de tus sueños y recordarte todos los días lo increíble que eres."
     }
   ],
   animals: [
@@ -86,7 +86,7 @@ export const DEFAULT_GIFT: GiftData = {
       id: "gato",
       name: "Gatito Cariñoso",
       active: true,
-      msg: "¡Miau! Ronroneos y caricias infinitas para Maria Iboni 💕"
+      msg: "¡Miau! Ronroneos y caricias infinitas para ti 💕"
     },
     {
       id: "perrito",
@@ -98,7 +98,7 @@ export const DEFAULT_GIFT: GiftData = {
       id: "conejito",
       name: "Conejito Tierno",
       active: true,
-      msg: "¡Saltitos de alegría! Eres la más linda de todas 🌸"
+      msg: "¡Saltitos de alegría! Eres la persona más linda de todas 🌸"
     },
     {
       id: "abeja",

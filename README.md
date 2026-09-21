@@ -1,50 +1,67 @@
-# 🌻 Flores Amarillas — 21 de Septiembre (Para Maria Iboni <3)
+# 🌻 Flores Amarillas — 21 de Septiembre (Repositorio Libre Comunitario)
 
-Una experiencia interactiva y romántica de **Flores Amarillas** desarrollada con **Astro** y optimizada para despliegue gratuito en **Vercel**. Incluye ramo artesanal dinámico, apertura de regalo sorpresa (unboxing), soporte para subir multimedia y audio personalizado, instancias públicas independientes y límite de vigencia de 1 semana.
+Un proyecto de código abierto y libre desarrollado con **Astro** y optimizado para **Vercel**, diseñado para que **cualquier persona en el mundo pueda crear y regalar un ramo virtual de flores amarillas totalmente gratis** este 21 de septiembre.
 
 Repositorio: [https://github.com/DraftraX/21-09.git](https://github.com/DraftraX/21-09.git)
 
 ---
 
-## 🌟 Características Principales
+## ✨ ¿Por qué se regalan flores amarillas el 21 de septiembre?
 
-1. **🎁 Instancia Pública Pura (0 Botones)**:
-   - Ruta: `/regalo/[id]` (ej. `/regalo/maria-iboni`).
-   - La persona que recibe el regalo **no ve ningún botón de edición, ni barras de navegación ni publicidad**: únicamente la misteriosa caja de regalo 3D lista para abrir.
-2. **🎵 Subida de Audio Propio y Multimedia**:
-   - En el taller (`/crear`), puedes subir tu propia canción (MP3, WAV, M4A) o mensaje de voz para que suene automáticamente al abrir la caja, además de subir fotos especiales. Si no subes audio, cuenta con una caja musical de ensueño sintetizada con Web Audio API.
-3. **⏳ Duración Máxima de 1 Semana por Regalo**:
-   - Cada regalo que se cree es independiente y tiene un temporizador de caducidad estricto de máximo 1 semana (7 días), ideal para la temporada del 21 de septiembre.
-   - Tras 1 semana, muestra un emotivo mensaje de ciclo completado preservando el cariño.
-4. **🌻 Ramo de Flores Exuberante y Dinámico**:
-   - Girasoles dorados radiantes de doble corona de pétalos y centro texturizado, rosas aterciopeladas, tulipanes, margaritas, follaje de eucalipto, paniculata (*Gypsophila*) y envoltura de papel kraft con moño satinado.
-   - Brisa constante, flores interactivas que reaccionan al clic rebotando y desprendiendo polen y chispas doradas (`✨`, `💛`, `🌻`).
-5. **🐾 Amiguitos Interactivos**:
-   - Gatito, Perrito, Conejito, Abejita, Pollito y Capibara con globos de diálogo interactivos.
+En muchos países de Latinoamérica y el mundo, el 21 de septiembre marca el inicio de la primavera y se ha convertido en una hermosa tradición para regalar **flores amarillas** (inspirado en la canción de *Floricienta*). Representan:
+- 💛 **Amor puro y complicidad**: La promesa de estar juntos y compartir la vida.
+- ☀️ **Alegría y vitalidad**: Llenar de luz y sonrisas a esa persona especial.
+- 🌿 **Comienzo de nuevos ciclos**: Florecer con optimismo y ternura.
+
+---
+
+## 🌟 Características de esta Aplicación Libre
+
+1. **🎁 Instancias Independientes y Gratuitas**:
+   - Cada persona puede entrar al taller (`/crear`), escribir el nombre de su ser querido, personalizar la dedicatoria, las razones de amor y los animalitos.
+   - Al hacer clic en crear, se genera un **enlace único e independiente** (ej. `/regalo/[id]`) listo para enviar por WhatsApp, Instagram o mensaje.
+
+2. **0️⃣ Vista Pública Pura (0 Botones)**:
+   - La persona que recibe el regalo **no ve ningún botón de edición, menú ni publicidad**.
+   - Solo ve la misteriosa caja de regalo 3D. Al tocarla, la tapa vuela, brota el ramo dinámico, estalla confeti y comienza la música.
+
+3. **🎵 Subida de Audio Propio y Multimedia**:
+   - Puedes subir un archivo de audio propio (MP3, WAV, M4A) o una nota de voz para que suene de fondo.
+   - Si no subes audio, incluye una delicada caja musical sintetizada con Web Audio API.
+   - Permite subir fotos que se enmarcan con una corona giratoria de girasoles.
+
+4. **🥀 Mecánica de Flores Marchitas y Regadera para Revivir**:
+   - Cada regalo tiene una **vigencia de 1 semana** (7 días activos).
+   - Si el enlace pasa más de 1 semana inactivo, el ramo se **marchita** (se muestra una escena artística con flores decaídas y mustias en tonos sepia).
+   - **¡Pero el cariño nunca muere!**: La pantalla incluye una **regadera mágica interactiva** (🚿). Al hacer clic para **echar agua**, caen gotas de lluvia brillante, los tallos se yerguen, los pétalos recuperan su color amarillo dorado y el regalo se **revive por 1 semana más**.
+
+5. **🌻 Ramo Exuberante y Dinámico**:
+   - Girasoles radiantes de doble corona de pétalos, rosas, tulipanes, margaritas, hojas de eucalipto, paniculata (*Gypsophila*) y papel kraft artesanal con moño satinado.
+   - Animación de brisa y flores que reaccionan al clic desprendiendo polen y chispas (`✨`, `💛`, `🌻`).
 
 ---
 
 ## 🚀 Despliegue Gratuito en Vercel (1 Clic)
 
-1. Sube los cambios a tu repositorio GitHub:
+Cualquiera puede hacer un **Fork** de este repositorio y desplegarlo gratis:
+
+1. Haz un fork o clona este repositorio:
    ```bash
-   git add .
-   git commit -m "Migración a Astro con Vercel, subida de audio y caducidad de 1 semana"
-   git push -u origin main
+   git clone https://github.com/DraftraX/21-09.git
    ```
-2. Entra a [vercel.com](https://vercel.com/) e inicia sesión con tu cuenta de GitHub.
-3. Haz clic en **Add New Project** e importa el repositorio `DraftraX/21-09`.
-4. Vercel detectará automáticamente que es un proyecto **Astro**. Haz clic en **Deploy**.
-5. ¡Listo! Tu aplicación estará activa en internet en pocos segundos con tu dominio `.vercel.app`.
+2. Inicia sesión en [vercel.com](https://vercel.com/) con tu cuenta de GitHub.
+3. Haz clic en **Add New Project** y selecciona `DraftraX/21-09` (o tu fork).
+4. Vercel detectará automáticamente el framework **Astro**.
+5. Haz clic en **Deploy**. En segundos tu plataforma estará activa con tu propio enlace `.vercel.app`.
 
 ---
 
-## 🌐 Enlaces Principales del Proyecto
+## 📍 Rutas del Proyecto
 
-- 🎁 **Regalo Público de Maria Iboni <3**: `https://tu-proyecto.vercel.app/regalo/maria-iboni` (o la raíz `/`)
-- ✏️ **Taller para Crear Regalos**: `https://tu-proyecto.vercel.app/crear`
-- 🔗 **Cada regalo generado**: Tendrá su propia URL independiente con duración de 1 semana (ej. `/regalo/regalo_abc123`).
+- 🎁 **Regalo de Demostración**: `/regalo/demo` (o en la raíz `/`)
+- ✏️ **Taller para Crear tu Regalo**: `/crear`
+- 🔗 **Cada regalo generado**: `/regalo/[id]` (válido por 1 semana, revivible con agua).
 
 ---
 
-*Hecho con mucho amor para Maria Iboni <3 · 21 de Septiembre*
+*Repositorio libre y abierto para celebrar el amor, la amistad y la primavera este 21 de septiembre 🌻💛*
