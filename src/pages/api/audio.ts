@@ -77,7 +77,7 @@ export const GET: APIRoute = async ({ request, url }) => {
 
     const chunk = audioBuffer.subarray(start, end + 1);
 
-    return new Response(chunk, {
+    return new Response(new Uint8Array(chunk), {
       status: 206,
       headers: {
         'Content-Range': `bytes ${start}-${end}/${total}`,
@@ -89,7 +89,7 @@ export const GET: APIRoute = async ({ request, url }) => {
     });
   }
 
-  return new Response(audioBuffer, {
+  return new Response(new Uint8Array(audioBuffer), {
     status: 200,
     headers: {
       'Content-Type': mimeType,

@@ -81,12 +81,12 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // ============================================================
-    // CASO 2: AUDIO -> ALOJAMIENTO AUTÓNOMO EN SQLITE Y STREAMING LOCAL
+    // CASO 2: AUDIO -> ALOJAMIENTO EN CDN GLOBAL (Catbox) + FALLBACK SQLITE
     // ============================================================
     const audioId = `audio_${crypto.randomUUID().slice(0, 8)}`;
     const mimeType = file.type || 'audio/mpeg';
 
-    // 1. Guardar archivo binario en SQLite
+    // 1. Guardar archivo binario en SQLite como respaldo local
     try {
       dbSaveAudio(audioId, mimeType, rawBuffer);
     } catch (dbErr) {
@@ -103,16 +103,43 @@ export const POST: APIRoute = async ({ request }) => {
       console.warn("No se pudo guardar audio en disco:", fsErr);
     }
 
-    // URL ligera y directa al endpoint de streaming /api/audio
-    const audioUrl = `/api/audio?id=${audioId}`;
+    let finalAudioUrl = `/api/audio?id=${audioId}`;
+    let storageType = 'sqlite_stream';
+
+    // 3. Subir a Catbox.moe CDN para que funcione en Vercel Serverless (sin depender del filesystem efímero)
+    try {
+      const catboxForm = new FormData();
+      catboxForm.append('reqtype', 'fileupload');
+      const audioBlob = new Blob([rawBuffer], { type: mimeType });
+      catboxForm.append('fileToUpload', audioBlob, file.name || `${audioId}.mp3`);
+
+      const catboxRes = await fetch('https://catbox.moe/user/api.php', {
+        method: 'POST',
+        body: catboxForm,
+        headers: {
+          'User-Agent': 'FloresAmarillas/1.0'
+        }
+      });
+
+      if (catboxRes.ok) {
+        const catboxUrl = (await catboxRes.text()).trim();
+        if (catboxUrl.startsWith('https://files.catbox.moe/')) {
+          finalAudioUrl = catboxUrl;
+          storageType = 'catbox_cdn';
+          console.log(`[Upload] Audio alojado exitosamente en Catbox CDN: ${finalAudioUrl}`);
+        }
+      }
+    } catch (catboxErr) {
+      console.warn("[Upload] Catbox CDN no disponible, usando fallback local:", catboxErr);
+    }
 
     return new Response(JSON.stringify({
       success: true,
-      url: audioUrl,
+      url: finalAudioUrl,
       id: audioId,
       fileName: file.name,
       fileSize: file.size,
-      storageType: 'sqlite_stream'
+      storageType
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

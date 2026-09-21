@@ -15,7 +15,7 @@ const { audioUrl = "" } = Astro.props;
     <path d="M2 12 q6 -10 12 0 t12 0 t12 0 t12 0 t12 0" stroke="var(--color-primary)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   </svg>
 
-  <audio id="audio-elemento" src={audioUrl} loop preload="auto"></audio>
+  <audio id="audio-elemento" src={audioUrl} loop preload="auto" crossorigin="anonymous"></audio>
 </div>
 
 <style>
@@ -120,6 +120,15 @@ const { audioUrl = "" } = Astro.props;
 
       if (this.btn) {
         this.btn.addEventListener('click', () => this.toggle());
+      }
+
+      if (this.audioEl) {
+        this.audioEl.addEventListener('error', () => {
+          console.warn("Error cargando archivo de audio personalizado, activando melodía por defecto.");
+          if (this.isPlaying) {
+            this.startSynthMelody();
+          }
+        });
       }
 
       // Exponer métodos globales

@@ -96,7 +96,7 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
 
         <!-- FOTO CENTRAL ENMARCADA -->
         {gift.photoUrl && (
-          <section class="seccion-bloque">
+          <section class="seccion-bloque seccion-foto-central">
             <h2 class="titulo-seccion">La Sonrisa Más Hermosa</h2>
             <p class="subtitulo-seccion">En cualquier rincón del universo, tú eres mi sol</p>
 
@@ -300,20 +300,37 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
     font-weight: 700;
   }
 
+  .seccion-foto-central {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
+
+  .seccion-foto-central .titulo-seccion,
+  .seccion-foto-central .subtitulo-seccion {
+    position: relative;
+    z-index: 5;
+  }
+
+  .seccion-foto-central .subtitulo-seccion {
+    margin-bottom: 56px;
+  }
+
   .marco-foto-central {
     position: relative;
-    width: min(340px, 80vw);
+    width: min(320px, 75vw);
     aspect-ratio: 1;
-    margin: 30px auto;
+    margin: 40px auto 55px;
   }
 
   .corona-girasoles-rotativa {
     position: absolute;
-    inset: -52px;
-    width: calc(100% + 104px);
-    height: calc(100% + 104px);
+    inset: -38px;
+    width: calc(100% + 76px);
+    height: calc(100% + 76px);
     animation: rotarCorona 32s linear infinite;
     pointer-events: none;
+    z-index: 1;
   }
 
   @keyframes rotarCorona { to { transform: rotate(360deg); } }
@@ -325,6 +342,7 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
     overflow: hidden;
     border: 7px solid #FFFFFF;
     box-shadow: 0 0 0 5px var(--color-primary), 0 20px 45px rgba(80, 40, 10, 0.3), 0 0 60px var(--primary-glow);
+    z-index: 2;
   }
 
   .foto-recuerdo-wrapper img {
@@ -335,7 +353,9 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
   }
 
   .pie-foto-texto {
-    margin-top: 50px;
+    position: relative;
+    z-index: 5;
+    margin-top: 60px;
     font-family: 'Playfair Display', serif;
     font-size: 1.6rem;
     font-weight: 800;
@@ -348,7 +368,7 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--color-primary);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
 
   .grilla-notas {
@@ -426,18 +446,21 @@ const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de 
     .firma-carta {
       font-size: 1.05rem;
     }
+    .seccion-foto-central .subtitulo-seccion {
+      margin-bottom: 46px;
+    }
     .marco-foto-central {
-      width: min(280px, 75vw);
-      margin: 20px auto;
+      width: min(260px, 70vw);
+      margin: 32px auto 48px;
     }
     .corona-girasoles-rotativa {
-      inset: -36px;
-      width: calc(100% + 72px);
-      height: calc(100% + 72px);
+      inset: -30px;
+      width: calc(100% + 60px);
+      height: calc(100% + 60px);
     }
     .pie-foto-texto {
       font-size: 1.35rem;
-      margin-top: 36px;
+      margin-top: 52px;
     }
     .grilla-notas {
       grid-template-columns: 1fr;
