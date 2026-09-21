@@ -19,9 +19,22 @@ const lookupKey = id || queryToken || 'especial';
 const { gift: loadedGift, isExpired, remainingText } = getGift(lookupKey);
 
 const gift = loadedGift || DEFAULT_GIFT;
+
+const siteOrigin = Astro.url.origin;
+const photoOgUrl = `${siteOrigin}/api/foto?id=${gift.id}`;
+const currentFullUrl = `${siteOrigin}/regalo/${gift.id}`;
+const pageTitle = `🌻 Flores Amarillas — Para ${gift.recipient}`;
+const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de Flores Amarillas con mucho amor para este 21 de septiembre. Toca para abrir tu caja ✨`;
 ---
 
-<Layout title={`Flores Amarillas — Para ${gift.recipient}`} theme={gift.theme} isPublic={true}>
+<Layout 
+  title={pageTitle} 
+  theme={gift.theme} 
+  isPublic={true}
+  description={pageDesc}
+  ogImage={photoOgUrl}
+  ogUrl={currentFullUrl}
+>
   <FloatingPetals />
 
   {isExpired ? (

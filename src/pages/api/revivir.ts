@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
     const { gift, token } = reviveGift(idOrToken);
 
     const origin = new URL(request.url).origin;
-    const refreshedUrl = `${origin}/regalo/${gift.id}?d=${token}`;
+    const refreshedUrl = `${origin}/regalo/${gift.id}`;
 
     return new Response(JSON.stringify({
       success: true,

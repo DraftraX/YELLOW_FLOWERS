@@ -9,8 +9,8 @@ export const POST: APIRoute = async ({ request }) => {
     const { gift, token } = saveGift(body);
 
     const origin = new URL(request.url).origin;
-    // La URL puede usar el id o el token como fallback resiliente
-    const publicUrl = `${origin}/regalo/${gift.id}?d=${token}`;
+    // URL limpia, corta y profesional usando UUID único sin parámetros innecesarios
+    const publicUrl = `${origin}/regalo/${gift.id}`;
 
     return new Response(JSON.stringify({
       success: true,

@@ -1,6 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
-import fs from 'node:fs';
-import path from 'node:path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import type { GiftData } from './defaults';
 import { DEFAULT_GIFT, ONE_WEEK_MS } from './defaults';
 

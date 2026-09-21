@@ -820,15 +820,10 @@ import { DEFAULT_GIFT } from '../utils/defaults';
 
           let finalUrl = "";
           if (result.success) {
-            finalUrl = `${currentOrigin}/regalo/${result.id}?d=${result.token}`;
+            // URL limpia y corta usando UUID único (sin monstruosos parámetros en la URL)
+            finalUrl = result.url || `${currentOrigin}/regalo/${result.id}`;
           } else {
-            // Fallback resiliente cliente si la API fallase
-            const jsonStr = JSON.stringify(giftPayload);
-            const bytes = new TextEncoder().encode(jsonStr);
-            let binary = '';
-            for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-            const token = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-            finalUrl = `${currentOrigin}/regalo/especial?d=${token}`;
+            finalUrl = `${currentOrigin}/regalo/especial`;
           }
 
           if (modal && inputUrl && btnAbrir) {
@@ -841,23 +836,8 @@ import { DEFAULT_GIFT } from '../utils/defaults';
             modal.style.display = 'flex';
           }
         } catch (err) {
-          console.warn("Fallo API, usando generador de enlace directo:", err);
-          const jsonStr = JSON.stringify(giftPayload);
-          const bytes = new TextEncoder().encode(jsonStr);
-          let binary = '';
-          for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-          const token = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-          const finalUrl = `${currentOrigin}/regalo/especial?d=${token}`;
-
-          if (modal && inputUrl && btnAbrir) {
-            inputUrl.value = finalUrl;
-            btnAbrir.href = finalUrl;
-            if (btnWs) {
-              const msg = encodeURIComponent(`🌻 ¡Hola ${recipient}! Te preparé un detalle muy especial de Flores Amarillas para este 21 de septiembre: ${finalUrl}`);
-              btnWs.href = `https://api.whatsapp.com/send?text=${msg}`;
-            }
-            modal.style.display = 'flex';
-          }
+          console.error("Error al crear el regalo:", err);
+          alert("Hubo un problema al crear el regalo. Por favor verifica tu conexión e intenta de nuevo.");
         } finally {
           if (btnSubmit) btnSubmit.textContent = '🎁 Crear Regalo y Generar Enlace Único';
         }

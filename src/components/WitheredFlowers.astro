@@ -85,17 +85,25 @@ const { gift, token = "" } = Astro.props;
       </p>
       
       <p class="pregunta-revivir">
-        ¿Quieres revivirlo y hacer que vuelva a florecer radiante como el primer día?
+        ¿Quieres revivirlo con agua fresca o crear un ramo nuevo con fotos y música renovada?
       </p>
 
-      <!-- BOTÓN REGADERA / ECHAR AGUA -->
-      <button type="button" class="btn-regar-agua" id="btn-regar" data-id={gift.id} data-token={token}>
-        <span class="icono-gota">🚿</span>
-        <span>¡Echar Agua y Revivir Ramo! 💧</span>
-      </button>
+      <!-- BOTONES DE ACCIÓN: ECHAR AGUA O CREAR NUEVO RAMO -->
+      <div class="acciones-marchito">
+        <button type="button" class="btn-regar-agua" id="btn-regar" data-id={gift.id} data-token={token}>
+          <span class="icono-gota">🚿</span>
+          <span>¡Echar Agua y Revivir! 💧</span>
+        </button>
+
+        <a href="/crear" class="btn-crear-nuevo-ramo">
+          <span class="icono-flor-btn">🌻</span>
+          <span>Crear un Nuevo Ramo Fresco</span>
+        </a>
+      </div>
 
       <p class="nota-revivir">
-        Al regarlo, las flores absorberán agua fresca, recuperarán su color amarillo dorado y el regalo se reactivará por <strong>1 semana más</strong>.
+        Por optimización de espacio y privacidad, tras 7 días inactivos los archivos pesados se liberan automáticamente. 
+        Puedes echar agua para despertar las flores o crear un nuevo ramo personalizado.
       </p>
     </div>
 
@@ -259,8 +267,47 @@ const { gift, token = "" } = Astro.props;
     box-shadow: 0 12px 30px rgba(14, 165, 233, 0.55);
   }
 
-  .icono-gota {
-    font-size: 1.4rem;
+  .acciones-marchito {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin: 18px 0 10px;
+  }
+
+  @media (min-width: 520px) {
+    .acciones-marchito {
+      flex-direction: row;
+      gap: 16px;
+    }
+  }
+
+  .btn-crear-nuevo-ramo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #FFF;
+    color: #B45309;
+    border: 2px solid #F59E0B;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-crear-nuevo-ramo:hover {
+    transform: translateY(-2px);
+    background: #FFFBEB;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
+  }
+
+  .icono-flor-btn {
+    font-size: 1.25rem;
   }
 
   .nota-revivir {
