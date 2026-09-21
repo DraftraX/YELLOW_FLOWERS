@@ -1,0 +1,227 @@
+---
+interface Props {
+  audioUrl?: string;
+}
+
+const { audioUrl = "" } = Astro.props;
+---
+
+<div class="audio-widget-container">
+  <button id="btn-musica" class="btn-musica-flotante" title="Reproducir música" aria-label="Música">
+    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+  </button>
+  
+  <svg id="onda" class="onda-audio" width="70" height="24" viewBox="0 0 70 24">
+    <path d="M2 12 q6 -10 12 0 t12 0 t12 0 t12 0 t12 0" stroke="var(--color-primary)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <audio id="audio-elemento" src={audioUrl} loop preload="auto"></audio>
+</div>
+
+<style>
+  .btn-musica-flotante {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 90;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    border: none;
+    background: var(--box-bg);
+    cursor: pointer;
+    box-shadow: 0 10px 26px rgba(92, 58, 33, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: animLatidoMusica 2.4s ease-in-out infinite;
+  }
+
+  .btn-musica-flotante:hover {
+    transform: scale(1.15) rotate(-6deg);
+  }
+
+  :global(.btn-musica-flotante.tocando) {
+    animation: animRotarMusica 6s linear infinite !important;
+  }
+
+  @keyframes animRotarMusica {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes animLatidoMusica {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .btn-musica-flotante svg {
+    width: 30px;
+    height: 30px;
+    fill: #3D2311;
+  }
+
+  .onda-audio {
+    position: fixed;
+    bottom: 42px;
+    right: 94px;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  :global(.onda-audio.activa) {
+    opacity: 1 !important;
+  }
+
+  .onda-audio path {
+    stroke-dasharray: 6 8;
+    animation: animCorrerOnda 1.2s linear infinite;
+  }
+
+  @keyframes animCorrerOnda {
+    to { stroke-dashoffset: -28; }
+  }
+</style>
+
+<script>
+  class AudioEngine {
+    private audioCtx: AudioContext | null = null;
+    private isPlaying = false;
+    private synthTimer: any = null;
+    private audioEl: HTMLAudioElement | null = null;
+    private btn: HTMLElement | null = null;
+    private onda: HTMLElement | null = null;
+
+    constructor() {
+      this.audioEl = document.getElementById('audio-elemento') as HTMLAudioElement;
+      this.btn = document.getElementById('btn-musica');
+      this.onda = document.getElementById('onda');
+
+      if (this.btn) {
+        this.btn.addEventListener('click', () => this.toggle());
+      }
+
+      // Exponer métodos globales
+      (window as any).playSparkleChime = () => this.playSparkleChime();
+      (window as any).startRomanticMusic = () => this.startMusic();
+    }
+
+    private initContext() {
+      if (!this.audioCtx) {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContextClass) {
+          this.audioCtx = new AudioContextClass();
+        }
+      }
+      if (this.audioCtx && this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+      }
+    }
+
+    playSparkleChime() {
+      this.initContext();
+      if (!this.audioCtx) return;
+      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          if (!this.audioCtx) return;
+          try {
+            const osc = this.audioCtx.createOscillator();
+            const gain = this.audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.001, this.audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.18, this.audioCtx.currentTime + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 1.4);
+            osc.connect(gain);
+            gain.connect(this.audioCtx.destination);
+            osc.start();
+            osc.stop(this.audioCtx.currentTime + 1.4);
+          } catch(e) {}
+        }, idx * 70);
+      });
+    }
+
+    private startSynthMelody() {
+      this.initContext();
+      this.isPlaying = true;
+      const notes = [523.25, 659.25, 783.99, 1046.50, 880.00, 783.99, 659.25, 587.33];
+      let step = 0;
+
+      const playStep = () => {
+        if (!this.isPlaying) return;
+        const freq = notes[step % notes.length];
+        if (this.audioCtx) {
+          try {
+            const osc = this.audioCtx.createOscillator();
+            const gain = this.audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.001, this.audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.12, this.audioCtx.currentTime + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 1.6);
+            osc.connect(gain);
+            gain.connect(this.audioCtx.destination);
+            osc.start();
+            osc.stop(this.audioCtx.currentTime + 1.6);
+          } catch(e) {}
+        }
+        step++;
+        this.synthTimer = setTimeout(playStep, 680);
+      };
+
+      playStep();
+      this.updateUI();
+    }
+
+    startMusic() {
+      this.initContext();
+      if (this.audioEl && this.audioEl.src && this.audioEl.src !== window.location.href) {
+        this.audioEl.play().then(() => {
+          this.isPlaying = true;
+          this.updateUI();
+        }).catch(() => {
+          this.startSynthMelody();
+        });
+      } else {
+        this.startSynthMelody();
+      }
+    }
+
+    pauseMusic() {
+      this.isPlaying = false;
+      if (this.synthTimer) {
+        clearTimeout(this.synthTimer);
+      }
+      if (this.audioEl) {
+        this.audioEl.pause();
+      }
+      this.updateUI();
+    }
+
+    toggle() {
+      if (this.isPlaying) {
+        this.pauseMusic();
+      } else {
+        this.startMusic();
+      }
+    }
+
+    private updateUI() {
+      if (!this.btn) return;
+      if (this.isPlaying) {
+        this.btn.classList.add('tocando');
+        if (this.onda) this.onda.classList.add('activa');
+      } else {
+        this.btn.classList.remove('tocando');
+        if (this.onda) this.onda.classList.remove('activa');
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    new AudioEngine();
+  });
+</script>

@@ -1,0 +1,16 @@
+{
+  "name": "flores-amarillas-21-09",
+  "type": "module",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/vercel": "^8.0.8",
+    "astro": "^5.4.2"
+  }
+}

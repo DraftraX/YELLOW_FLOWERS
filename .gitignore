@@ -1,0 +1,23 @@
+# Dependencias
+node_modules/
+
+# Compilación y caché de Astro
+.astro/
+dist/
+
+# Vercel
+.vercel/
+
+# Entorno y variables
+.env
+.env.production
+.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

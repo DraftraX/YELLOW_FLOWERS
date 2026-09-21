@@ -1,0 +1,243 @@
+---
+import type { GiftAnimal } from '../utils/defaults';
+
+interface Props {
+  animals: GiftAnimal[];
+}
+
+const { animals = [] } = Astro.props;
+const activeAnimals = animals.filter(a => a.active !== false);
+
+const ANIMAL_SVGS: Record<string, string> = {
+  gato: `
+    <svg viewBox="0 0 90 90" width="100%" height="100%">
+      <polygon points="22,35 16,10 38,24" fill="#F59E0B"/>
+      <polygon points="68,35 74,10 52,24" fill="#F59E0B"/>
+      <polygon points="24,31 20,16 34,25" fill="#FECDD3"/>
+      <polygon points="66,31 70,16 56,25" fill="#FECDD3"/>
+      <circle cx="45" cy="50" r="28" fill="#FBBF24"/>
+      <circle cx="45" cy="54" r="18" fill="#FEF3C7" opacity="0.8"/>
+      <ellipse cx="35" cy="46" rx="4" ry="5" fill="#3E2723"/>
+      <circle cx="36.5" cy="44.5" r="1.5" fill="#FFFFFF"/>
+      <ellipse cx="55" cy="46" rx="4" ry="5" fill="#3E2723"/>
+      <circle cx="56.5" cy="44.5" r="1.5" fill="#FFFFFF"/>
+      <polygon points="45,53 42,50 48,50" fill="#E11D48"/>
+      <path d="M41 55 Q 45 59 45 55 Q 45 59 49 55" stroke="#3E2723" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <line x1="20" y1="50" x2="30" y2="52" stroke="#3E2723" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="18" y1="56" x2="29" y2="56" stroke="#3E2723" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="70" y1="50" x2="60" y2="52" stroke="#3E2723" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="72" y1="56" x2="61" y2="56" stroke="#3E2723" stroke-width="1.8" stroke-linecap="round"/>
+      <g transform="translate(68, 28) scale(0.6)">
+        <circle cx="0" cy="0" r="6" fill="#FDE047"/>
+        <circle cx="0" cy="0" r="2.5" fill="#B45309"/>
+      </g>
+    </svg>
+  `,
+  perrito: `
+    <svg viewBox="0 0 90 90" width="100%" height="100%">
+      <ellipse cx="20" cy="46" rx="10" ry="18" fill="#B45309" transform="rotate(-15 20 46)"/>
+      <ellipse cx="70" cy="46" rx="10" ry="18" fill="#B45309" transform="rotate(15 70 46)"/>
+      <circle cx="45" cy="48" r="28" fill="#F59E0B"/>
+      <ellipse cx="45" cy="58" rx="16" ry="12" fill="#FFFBEB"/>
+      <circle cx="34" cy="44" r="4.5" fill="#3E2723"/>
+      <circle cx="35.5" cy="42.5" r="1.5" fill="#FFF"/>
+      <circle cx="56" cy="44" r="4.5" fill="#3E2723"/>
+      <circle cx="57.5" cy="42.5" r="1.5" fill="#FFF"/>
+      <ellipse cx="45" cy="54" rx="5" ry="3.5" fill="#1F2937"/>
+      <path d="M43 62 Q 45 68 47 62" fill="#F43F5E"/>
+    </svg>
+  `,
+  conejito: `
+    <svg viewBox="0 0 90 90" width="100%" height="100%">
+      <ellipse cx="32" cy="22" rx="7.5" ry="20" fill="#FFFFFF"/>
+      <ellipse cx="32" cy="22" rx="4" ry="14" fill="#FBCFE8"/>
+      <ellipse cx="58" cy="22" rx="7.5" ry="20" fill="#FFFFFF"/>
+      <ellipse cx="58" cy="22" rx="4" ry="14" fill="#FBCFE8"/>
+      <circle cx="45" cy="54" r="26" fill="#FFFFFF"/>
+      <circle cx="28" cy="58" r="5" fill="#F472B6" opacity="0.4"/>
+      <circle cx="62" cy="58" r="5" fill="#F472B6" opacity="0.4"/>
+      <path d="M30 50 Q 35 46 40 50" stroke="#475569" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M50 50 Q 55 46 60 50" stroke="#475569" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="45" cy="56" rx="2.5" ry="2" fill="#FB7185"/>
+      <circle cx="45" cy="34" r="6" fill="#FACC15"/>
+      <circle cx="45" cy="34" r="2.5" fill="#EAB308"/>
+    </svg>
+  `,
+  abeja: `
+    <svg viewBox="0 0 90 90" width="100%" height="100%">
+      <ellipse cx="34" cy="30" rx="12" ry="17" fill="#E0F2FE" opacity="0.8" transform="rotate(-25 34 30)"/>
+      <ellipse cx="56" cy="30" rx="12" ry="17" fill="#E0F2FE" opacity="0.8" transform="rotate(25 56 30)"/>
+      <ellipse cx="45" cy="54" rx="24" ry="19" fill="#FACC15"/>
+      <path d="M31 46 Q 45 54 59 46 V 52 Q 45 60 31 52 Z" fill="#292524"/>
+      <path d="M35 60 Q 45 66 55 60 V 64 Q 45 70 35 64 Z" fill="#292524"/>
+      <circle cx="36" cy="46" r="3.2" fill="#292524"/>
+      <circle cx="37" cy="45" r="1.2" fill="#FFF"/>
+      <circle cx="54" cy="46" r="3.2" fill="#292524"/>
+      <circle cx="55" cy="45" r="1.2" fill="#FFF"/>
+      <path d="M42 52 Q 45 56 48 52" stroke="#292524" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>
+  `,
+  pollito: `
+    <svg viewBox="0 0 90 90" width="100%" height="100%">
+      <ellipse cx="23" cy="54" rx="7" ry="10" fill="#FBBF24" transform="rotate(20 23 54)"/>
+      <ellipse cx="67" cy="54" rx="7" ry="10" fill="#FBBF24" transform="rotate(-20 67 54)"/>
+      <circle cx="45" cy="50" r="25" fill="#FEF08A"/>
+      <circle cx="36" cy="46" r="3.8" fill="#1F2937"/>
+      <circle cx="37.5" cy="44.5" r="1.5" fill="#FFF"/>
+      <circle cx="54" cy="46" r="3.8" fill="#1F2937"/>
+      <circle cx="55.5" cy="44.5" r="1.5" fill="#FFF"/>
+      <polygon points="41,51 49,51 45,58" fill="#F97316"/>
+    </svg>
+  `,
+  capibara: `
+    <svg viewBox="0 0 90 90" width="100%" height="100%">
+      <ellipse cx="28" cy="28" rx="6" ry="7" fill="#854D0E"/>
+      <ellipse cx="62" cy="28" rx="6" ry="7" fill="#854D0E"/>
+      <rect x="24" y="32" width="42" height="42" rx="16" fill="#A16207"/>
+      <rect x="30" y="52" width="30" height="22" rx="10" fill="#713F12"/>
+      <line x1="32" y1="46" x2="38" y2="46" stroke="#451A03" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="52" y1="46" x2="58" y2="46" stroke="#451A03" stroke-width="2.4" stroke-linecap="round"/>
+      <g transform="translate(45, 26)">
+        <circle cx="0" cy="0" r="7" fill="#FACC15"/>
+        <circle cx="0" cy="0" r="3" fill="#EA580C"/>
+      </g>
+    </svg>
+  `
+};
+---
+
+<div class="contenedor-animalitos">
+  {activeAnimals.map((animal, idx) => (
+    <div 
+      class="tarjeta-animal" 
+      role="button" 
+      tabindex="0" 
+      aria-label={`${animal.name}: ${animal.msg}`}
+      style={`animation-delay: ${idx * 0.2}s`}
+    >
+      <div class="globo-dialogo">
+        <span>{animal.msg}</span>
+      </div>
+      <div class="icono-animal-svg" set:html={ANIMAL_SVGS[animal.id] || ANIMAL_SVGS.gato}></div>
+      <span class="nombre-animal">{animal.name}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .contenedor-animalitos {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 35px;
+  }
+
+  .tarjeta-animal {
+    position: relative;
+    width: 96px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: animMecerAnimal 3s ease-in-out infinite;
+  }
+
+  @keyframes animMecerAnimal {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .tarjeta-animal:hover {
+    transform: scale(1.18) translateY(-12px);
+  }
+
+  .icono-animal-svg {
+    width: 82px;
+    height: 82px;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.18));
+  }
+
+  .nombre-animal {
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-top: 6px;
+    opacity: 0.9;
+  }
+
+  .globo-dialogo {
+    position: absolute;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: #FFF;
+    border: 2px solid var(--color-primary);
+    border-radius: 16px;
+    padding: 8px 14px;
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: var(--marron-osc);
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+    z-index: 10;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+    opacity: 0;
+  }
+
+  .globo-dialogo::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: var(--color-primary);
+  }
+
+  .tarjeta-animal:hover .globo-dialogo,
+  :global(.globo-dialogo.activo) {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+
+  @media (max-width: 650px) {
+    .contenedor-animalitos { gap: 16px; }
+    .tarjeta-animal { width: 78px; }
+    .icono-animal-svg { width: 68px; height: 68px; }
+  }
+</style>
+
+<script>
+  function setupAnimals() {
+    const cards = document.querySelectorAll('.tarjeta-animal');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const bubble = card.querySelector('.globo-dialogo');
+        if (bubble) {
+          bubble.classList.add('activo');
+          setTimeout(() => bubble.classList.remove('activo'), 3400);
+        }
+
+        // Corazoncito flotante
+        const rect = card.getBoundingClientRect();
+        const heart = document.createElement('div');
+        heart.textContent = '💛';
+        heart.style.cssText = `
+          position: fixed;
+          left: ${rect.left + rect.width / 2}px;
+          top: ${rect.top}px;
+          font-size: 22px;
+          z-index: 99999;
+          pointer-events: none;
+          animation: animHeart 1.2s ease-out forwards;
+        `;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1200);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', setupAnimals);
+</script>

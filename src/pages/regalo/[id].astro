@@ -1,0 +1,535 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GiftBox from '../../components/GiftBox.astro';
+import MasterpieceBouquet from '../../components/MasterpieceBouquet.astro';
+import AnimalsBand from '../../components/AnimalsBand.astro';
+import FloatingPetals from '../../components/FloatingPetals.astro';
+import AudioExperience from '../../components/AudioExperience.astro';
+import { getGift } from '../../utils/storage';
+import { DEFAULT_GIFT } from '../../utils/defaults';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+const queryToken = Astro.url.searchParams.get('d') || '';
+
+// Buscar regalo por ID o por token fallback
+const lookupKey = id || queryToken || 'maria-iboni';
+const { gift: loadedGift, isExpired, remainingText } = getGift(lookupKey);
+
+const gift = loadedGift || DEFAULT_GIFT;
+---
+
+<Layout title={`Flores Amarillas — Para ${gift.recipient}`} theme={gift.theme} isPublic={true}>
+  <FloatingPetals />
+
+  {isExpired ? (
+    <div class="pantalla-expirado">
+      <div class="tarjeta-expirado">
+        <span class="icono-reloj">⌛</span>
+        <h2>Ciclo de Florecimiento Concluido</h2>
+        <p>
+          Este regalo especial para <strong>{gift.recipient}</strong> fue entregado con mucho amor, 
+          cumpliendo su periodo máximo de 1 semana activa.
+        </p>
+        <p class="cita-amor">
+          “Las flores del 21 de septiembre florecen con el sol, pero el cariño y los momentos compartidos permanecen para siempre en el corazón.”
+        </p>
+      </div>
+    </div>
+  ) : (
+    <main class="contenedor-regalo-publico">
+      <!-- ENCABEZADO LIMPIO (SIN BOTONES) -->
+      <header class="encabezado-limpio">
+        <span class="fecha-pill">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9L21 9.3l-5 4.4 1.6 6.8L12 16.9 6.4 20.5 8 13.7 3 9.3l6.6-.4L12 2z"/></svg>
+          {gift.headerPill || "21 · DE · SEPTIEMBRE"}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9L21 9.3l-5 4.4 1.6 6.8L12 16.9 6.4 20.5 8 13.7 3 9.3l6.6-.4L12 2z"/></svg>
+        </span>
+
+        <h1 class="titulo-principal">{gift.headerTitle}</h1>
+        <p class="subtitulo-principal">{gift.headerSubtitle}</p>
+        
+        <div class="indicador-tiempo-limite" title="Duración del regalo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>{remainingText}</span>
+        </div>
+      </header>
+
+      <!-- ETAPA 1: CAJA DE REGALO SORPRESA -->
+      <GiftBox 
+        boxTag={gift.boxTag || `Para: ${gift.recipient}`} 
+        senderTag={gift.senderTag || "Con mucho amor"} 
+        boxSubtitle={gift.boxSubtitle || "Toca la caja para abrir tu regalo especial ✨"} 
+      />
+
+      <!-- ETAPA 2: CONTENIDO REVELADO TRAS ABRIR EL REGALO -->
+      <div id="contenido-revelado" class="contenido-revelado-oculto">
+        
+        <!-- CARTA SECRETA -->
+        <section class="seccion-bloque">
+          <div class="carta-amor-contenedor">
+            <h3>{gift.letterTitle}</h3>
+            <p>{gift.letterBody}</p>
+            <div class="firma-carta">{gift.letterSign}</div>
+          </div>
+        </section>
+
+        <!-- RAMO DE FLORES EXUBERANTE Y DINÁMICO -->
+        <section class="seccion-bloque">
+          <h2 class="titulo-seccion">Un Ramo que Florece por Ti</h2>
+          <p class="subtitulo-seccion">Cada flor fue cultivada con cariño para ti</p>
+
+          <MasterpieceBouquet recipient={gift.recipient} isMini={false} />
+
+          <div style="text-align:center; margin-top: 14px;">
+            <span class="pista-ramo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-primary)"><path d="M12 2l2.4 6.9L21 9.3l-5 4.4 1.6 6.8L12 16.9 6.4 20.5 8 13.7 3 9.3l6.6-.4L12 2z"/></svg>
+              Toca las flores para verlas florecer con destellos ✨
+            </span>
+          </div>
+        </section>
+
+        <!-- FOTO CENTRAL ENMARCADA -->
+        {gift.photoUrl && (
+          <section class="seccion-bloque">
+            <h2 class="titulo-seccion">La Sonrisa Más Hermosa</h2>
+            <p class="subtitulo-seccion">En cualquier rincón del universo, tú eres mi sol</p>
+
+            <div class="marco-foto-central">
+              <!-- Corona de girasoles rotativa -->
+              <svg class="corona-girasoles-rotativa" viewBox="0 0 100 100" id="corona-svg"></svg>
+              
+              <div class="foto-recuerdo-wrapper">
+                <img src={gift.photoUrl} alt={gift.recipient} />
+              </div>
+            </div>
+
+            <p class="pie-foto-texto">
+              <small>{gift.photoTitle || "Mi persona favorita"}</small>
+              <span>{gift.photoSubtitle || `${gift.recipient}, brillas más que mil girasoles 🌻`}</span>
+            </p>
+          </section>
+        )}
+
+        <!-- NOTITAS DE AMOR -->
+        {gift.notes && gift.notes.length > 0 && (
+          <section class="seccion-bloque">
+            <h2 class="titulo-seccion">Razones por las que Iluminas Mi Vida</h2>
+            <p class="subtitulo-seccion">Unas cuantas de las infinitas razones para quererte tanto</p>
+
+            <div class="grilla-notas">
+              {gift.notes.map((nota) => (
+                <div class="nota-polaroid">
+                  <h4>{nota.title}</h4>
+                  <p>{nota.body}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- BANDA DE ANIMALITOS AMIGOS -->
+        {gift.animals && gift.animals.length > 0 && (
+          <section class="seccion-bloque">
+            <h2 class="titulo-seccion">Nuestros Amiguitos te Mandan Saludos</h2>
+            <p class="subtitulo-seccion">Toca a cada uno para escuchar sus cariños</p>
+            <AnimalsBand animals={gift.animals} />
+          </section>
+        )}
+
+        <!-- PIE DE PÁGINA -->
+        <footer>
+          <svg viewBox="0 0 150 24" style="width:140px;margin:0 auto 12px;display:block;">
+            <path d="M0 12 H55 M95 12 H150" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round"/>
+            <g transform="translate(75,12)">
+              <path d="M0 5 C -8 -4 -18 2 0 12 C 18 2 8 -4 0 5Z" fill="var(--color-accent)"/>
+            </g>
+          </svg>
+          <p>Hecho con mucho amor para {gift.recipient} · 21 de Septiembre</p>
+        </footer>
+
+      </div>
+
+      <AudioExperience audioUrl={gift.audioUrl} />
+    </main>
+  )}
+</Layout>
+
+<style>
+  .contenedor-regalo-publico {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .encabezado-limpio {
+    text-align: center;
+    padding: 30px 10px 10px;
+  }
+
+  .fecha-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+    border: 2px solid var(--color-primary);
+    padding: 8px 22px;
+    border-radius: 50px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    box-shadow: 0 6px 16px var(--primary-glow);
+  }
+
+  .titulo-principal {
+    margin-top: 18px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(2.3rem, 6.5vw, 4.2rem);
+    line-height: 1.1;
+    background: linear-gradient(95deg, var(--color-primary) 0%, #C97B10 50%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitulo-principal {
+    font-size: 1.15rem;
+    margin-top: 12px;
+    opacity: 0.9;
+    font-weight: 600;
+  }
+
+  .indicador-tiempo-limite {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(240, 165, 0, 0.35);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  /* Revelación de Contenido */
+  .contenido-revelado-oculto {
+    display: none;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+
+  :global(.contenido-revelado-oculto.revelado) {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .seccion-bloque {
+    margin: 70px auto;
+    text-align: center;
+  }
+
+  .titulo-seccion {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+  }
+
+  .subtitulo-seccion {
+    font-size: 1.05rem;
+    opacity: 0.85;
+    margin-bottom: 26px;
+  }
+
+  /* Carta Secreta */
+  .carta-amor-contenedor {
+    max-width: 660px;
+    margin: 20px auto;
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 38px 32px;
+    box-shadow: 0 18px 46px rgba(92, 58, 33, 0.15);
+    border: 3px solid var(--color-secondary);
+    position: relative;
+    text-align: left;
+  }
+
+  .carta-amor-contenedor h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    color: var(--color-primary);
+    margin-bottom: 16px;
+  }
+
+  .carta-amor-contenedor p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+
+  .firma-carta {
+    margin-top: 22px;
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-primary);
+  }
+
+  .pista-ramo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.85);
+    border: 1.5px solid var(--color-secondary);
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  /* Foto enmarcada */
+  .marco-foto-central {
+    position: relative;
+    width: min(340px, 80vw);
+    aspect-ratio: 1;
+    margin: 30px auto;
+  }
+
+  .corona-girasoles-rotativa {
+    position: absolute;
+    inset: -52px;
+    width: calc(100% + 104px);
+    height: calc(100% + 104px);
+    animation: rotarCorona 32s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes rotarCorona { to { transform: rotate(360deg); } }
+
+  .foto-recuerdo-wrapper {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 7px solid #FFFFFF;
+    box-shadow: 0 0 0 5px var(--color-primary), 0 20px 45px rgba(80, 40, 10, 0.3), 0 0 60px var(--primary-glow);
+  }
+
+  .foto-recuerdo-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .pie-foto-texto {
+    margin-top: 50px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .pie-foto-texto small {
+    display: block;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+  }
+
+  /* Notitas */
+  .grilla-notas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 26px;
+  }
+
+  .nota-polaroid {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 26px 22px;
+    box-shadow: 0 12px 28px rgba(92, 58, 33, 0.12);
+    text-align: left;
+    border-top: 8px solid var(--color-primary);
+    transition: transform 0.3s ease;
+  }
+
+  .nota-polaroid:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+
+  .nota-polaroid h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    color: var(--color-primary);
+  }
+
+  .nota-polaroid p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 60px 20px 30px;
+    font-weight: 800;
+  }
+
+  /* Pantalla de Regalo Expirado */
+  .pantalla-expirado {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .tarjeta-expirado {
+    background: #FFF;
+    border-radius: 28px;
+    padding: 44px 34px;
+    max-width: 580px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    border: 3px solid var(--color-primary);
+  }
+
+  .icono-reloj {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .tarjeta-expirado h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: 14px;
+  }
+
+  .tarjeta-expirado p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .cita-amor {
+    font-style: italic;
+    opacity: 0.85;
+    font-size: 0.95rem;
+  }
+</style>
+
+<script>
+  function setupPublicUnboxing() {
+    const caja = document.getElementById('caja-regalo');
+    const contenido = document.getElementById('contenido-revelado');
+    let abierta = false;
+
+    // Generar corona de girasoles para la foto
+    const corona = document.getElementById('corona-svg');
+    if (corona) {
+      let html = '';
+      for (let i = 0; i < 14; i++) {
+        const ang = (360 / 14) * i;
+        let petals = '';
+        for (let p = 0; p < 8; p++) {
+          petals += `<ellipse cx="0" cy="-6" rx="2.5" ry="6" fill="#FBBF24" stroke="#F59E0B" stroke-width="0.5" transform="rotate(${p * 45})"/>`;
+        }
+        html += `<g transform="rotate(${ang} 50 50) translate(50 7)"><g>${petals}<circle r="3" fill="#78350F"/><circle r="1.5" fill="#451A03"/></g></g>`;
+      }
+      corona.innerHTML = html;
+    }
+
+    if (!caja || !contenido) return;
+
+    function openGift() {
+      if (abierta) return;
+      abierta = true;
+
+      // Sonido y Música
+      if ((window as any).playSparkleChime) {
+        (window as any).playSparkleChime();
+      }
+      if ((window as any).startRomanticMusic) {
+        (window as any).startRomanticMusic();
+      }
+
+      // Animación de caja
+      caja.classList.add('abierta');
+
+      // Explosión de confeti
+      const rect = caja.getBoundingClientRect();
+      spawnConfetti(rect.left + rect.width / 2, rect.top + rect.height * 0.45);
+
+      // Revelar contenido
+      setTimeout(() => {
+        contenido.classList.add('revelado');
+        setTimeout(() => {
+          contenido.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 450);
+      }, 800);
+    }
+
+    caja.addEventListener('click', openGift);
+    caja.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openGift();
+      }
+    });
+
+    function spawnConfetti(x: number, y: number) {
+      const colors = ['#F59E0B', '#FBBF24', '#FDE047', '#EF4444', '#EC4899', '#FFFFFF'];
+      for (let i = 0; i < 70; i++) {
+        const el = document.createElement('div');
+        const size = 10 + Math.random() * 12;
+        el.style.cssText = `
+          position: fixed;
+          left: ${x}px;
+          top: ${y}px;
+          width: ${size}px;
+          height: ${size}px;
+          background: ${colors[i % colors.length]};
+          border-radius: ${Math.random() > 0.5 ? '50%' : '3px'};
+          z-index: 99999;
+          pointer-events: none;
+        `;
+        document.body.appendChild(el);
+
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 120 + Math.random() * 260;
+        const destX = Math.cos(angle) * dist;
+        const destY = Math.sin(angle) * dist - 120;
+
+        el.animate([
+          { transform: 'translate(0, 0) scale(0.6)', opacity: 1 },
+          { transform: `translate(${destX * 0.5}px, ${destY * 0.8}px) scale(1.2)`, opacity: 0.95, offset: 0.4 },
+          { transform: `translate(${destX}px, ${destY + 180}px) scale(0.8) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+        ], {
+          duration: 1800 + Math.random() * 600,
+          easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+          fill: 'forwards'
+        }).onfinish = () => el.remove();
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', setupPublicUnboxing);
+</script>

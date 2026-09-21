@@ -1,0 +1,825 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { DEFAULT_GIFT } from '../utils/defaults';
+---
+
+<Layout title="Crear un Regalo de Flores Amarillas" theme="clasico">
+  <div class="crear-contenedor">
+    
+    <!-- CABECERA -->
+    <header class="crear-header">
+      <div class="crear-brand">
+        <span class="icono-flor">🌻</span>
+        <div>
+          <h1>Taller de Regalos — Flores Amarillas</h1>
+          <p>Crea un regalo sorpresa único para esa persona especial. Cada regalo es independiente y dura hasta 1 semana.</p>
+        </div>
+      </div>
+      <div class="crear-actions">
+        <a href="/regalo/maria-iboni" target="_blank" class="btn-secundario">
+          🎁 Ver Ejemplo de Maria Iboni
+        </a>
+      </div>
+    </header>
+
+    <div class="crear-grid">
+      <!-- FORMULARIO DE PERSONALIZACIÓN -->
+      <div class="crear-panel">
+        
+        <!-- Pestañas de navegación -->
+        <div class="tabs-bar">
+          <button type="button" class="tab-btn activo" data-tab="tab-persona">💌 Para Quién</button>
+          <button type="button" class="tab-btn" data-tab="tab-audio">🎵 Subir Audio</button>
+          <button type="button" class="tab-btn" data-tab="tab-foto">📷 Subir Foto</button>
+          <button type="button" class="tab-btn" data-tab="tab-tema">🎨 Temática</button>
+          <button type="button" class="tab-btn" data-tab="tab-animales">🐾 Animales</button>
+          <button type="button" class="tab-btn" data-tab="tab-notas">📝 Notitas</button>
+        </div>
+
+        <form id="form-crear-regalo">
+          <!-- TAB 1: DESTINATARIA & CARTA -->
+          <div class="tab-pane activo" id="tab-persona">
+            <div class="form-grupo">
+              <label>¿Para quién es el regalo?</label>
+              <input type="text" id="input-recipient" class="form-control" value="Maria Iboni <3" placeholder="Ej: Maria Iboni <3" required>
+              <small>Este nombre aparecerá en la caja de regalo, el ramo y toda la sorpresa.</small>
+            </div>
+
+            <div class="form-grupo">
+              <label>Firma / De parte de</label>
+              <input type="text" id="input-sender" class="form-control" value="Con mucho amor" placeholder="Ej: Con mucho amor">
+            </div>
+
+            <div class="form-grupo">
+              <label>Título de la dedicatoria</label>
+              <input type="text" id="input-headertitle" class="form-control" value="Flores Amarillas para Ti">
+            </div>
+
+            <hr class="separador">
+            <h4 class="subtitulo-form">Carta de Amor Secreta</h4>
+
+            <div class="form-grupo">
+              <label>Título de la carta</label>
+              <input type="text" id="input-lettertitle" class="form-control" value="Para ti, mi niña hermosa">
+            </div>
+
+            <div class="form-grupo">
+              <label>Mensaje de amor</label>
+              <textarea id="input-letterbody" class="form-control textarea" rows="4">El 21 de septiembre se regalan flores amarillas como símbolo de un amor puro, incondicional y lleno de luz. Hoy este ramo entero florece para ti, porque no hay sol ni jardín en este mundo que brille con tanta calidez, dulzura y magia como lo haces tú todos los días en mi vida.</textarea>
+            </div>
+
+            <div class="form-grupo">
+              <label>Firma de la carta</label>
+              <input type="text" id="input-lettersign" class="form-control" value="— Con todo mi amor, hoy y siempre">
+            </div>
+          </div>
+
+          <!-- TAB 2: SUBIR AUDIO PERSONALIZADO -->
+          <div class="tab-pane" id="tab-audio">
+            <div class="form-grupo">
+              <label>Subir canción o mensaje de voz (Audio MP3 / WAV)</label>
+              <p class="ayuda-texto">Este audio comenzará a sonar automáticamente cuando la persona toque la caja para abrirla.</p>
+              
+              <div class="dropzone-archivo">
+                <input type="file" id="file-audio" accept="audio/*">
+                <span class="dropzone-icono">🎵</span>
+                <p>Haz clic para elegir un archivo de audio (MP3, WAV, M4A)</p>
+                <small id="audio-filename" style="color:#B45309;font-weight:700;"></small>
+              </div>
+
+              <!-- Reproductor de prueba -->
+              <div id="preview-audio-container" style="display:none;margin-top:14px;">
+                <label>Vista previa del audio seleccionado:</label>
+                <audio id="audio-preview-player" controls style="width:100%;margin-top:6px;"></audio>
+              </div>
+            </div>
+
+            <div class="form-grupo" style="margin-top:20px;">
+              <label>O ingresa un enlace directo a una canción (URL MP3)</label>
+              <input type="text" id="input-audiourl" class="form-control" placeholder="https://ejemplo.com/cancion.mp3">
+              <small>Si no subes audio, se reproducirá la delicada caja de música sintetizada ✨</small>
+            </div>
+          </div>
+
+          <!-- TAB 3: SUBIR FOTO / MULTIMEDIA -->
+          <div class="tab-pane" id="tab-foto">
+            <div class="form-grupo">
+              <label>Subir foto especial</label>
+              <p class="ayuda-texto">Aparecerá en un marco especial rodeado de una corona de girasoles rotativa.</p>
+              
+              <div class="dropzone-archivo">
+                <input type="file" id="file-photo" accept="image/*">
+                <span class="dropzone-icono">📷</span>
+                <p>Haz clic para elegir una foto desde tu celular o computadora</p>
+              </div>
+
+              <!-- Vista previa de la foto -->
+              <div id="foto-preview-container" style="margin-top:14px;text-align:center;">
+                <img id="img-preview" src={DEFAULT_GIFT.photoUrl} alt="Vista previa" style="width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid #F59E0B;box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+              </div>
+            </div>
+
+            <div class="form-grupo">
+              <label>O ingresa la URL de la imagen</label>
+              <input type="text" id="input-photourl" class="form-control" value={DEFAULT_GIFT.photoUrl}>
+            </div>
+
+            <div class="form-grupo">
+              <label>Título sobre la foto</label>
+              <input type="text" id="input-phototitle" class="form-control" value="Mi persona favorita">
+            </div>
+
+            <div class="form-grupo">
+              <label>Frase bajo la foto</label>
+              <input type="text" id="input-photosubtitle" class="form-control" value="Brillas más que mil girasoles 🌻">
+            </div>
+          </div>
+
+          <!-- TAB 4: TEMÁTICA -->
+          <div class="tab-pane" id="tab-tema">
+            <label style="font-weight:800;margin-bottom:12px;display:block;">Elige el estilo visual del regalo</label>
+            <div class="grid-temas">
+              <label class="tarjeta-tema seleccionado">
+                <input type="radio" name="theme" value="clasico" checked>
+                <div class="preview-color" style="background:linear-gradient(135deg, #FFD45E, #F0A500);"></div>
+                <strong>Amarillo Radiante</strong>
+                <small>Clásico del 21 de septiembre</small>
+              </label>
+
+              <label class="tarjeta-tema">
+                <input type="radio" name="theme" value="atardecer">
+                <div class="preview-color" style="background:linear-gradient(135deg, #FFD1BA, #E76F51);"></div>
+                <strong>Atardecer Dorado</strong>
+                <small>Tonos ámbar y coral cálido</small>
+              </label>
+
+              <label class="tarjeta-tema">
+                <input type="radio" name="theme" value="noche">
+                <div class="preview-color" style="background:linear-gradient(135deg, #1E293B, #0F172A);"></div>
+                <strong>Noche Estrellada</strong>
+                <small>Azul noche con flores luminiscentes</small>
+              </label>
+
+              <label class="tarjeta-tema">
+                <input type="radio" name="theme" value="pastel">
+                <div class="preview-color" style="background:linear-gradient(135deg, #FEF9C3, #ECFDF5);"></div>
+                <strong>Jardín de Ensueño</strong>
+                <small>Verde menta y amarillo pastel</small>
+              </label>
+            </div>
+          </div>
+
+          <!-- TAB 5: ANIMALITOS -->
+          <div class="tab-pane" id="tab-animales">
+            <p class="ayuda-texto">Activa o cambia los mensajes de los animalitos:</p>
+            <div class="lista-animales" id="lista-animales">
+              {DEFAULT_GIFT.animals.map((item, idx) => (
+                <div class="item-animal-edit">
+                  <div class="item-animal-head">
+                    <strong>{item.name}</strong>
+                    <label>
+                      <input type="checkbox" checked={item.active} data-idx={idx} class="chk-animal">
+                      Activo
+                    </label>
+                  </div>
+                  <input type="text" value={item.msg} class="form-control txt-animal-msg" data-idx={idx}>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- TAB 6: NOTITAS -->
+          <div class="tab-pane" id="tab-notas">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <label style="font-weight:800;margin:0;">Razones de Amor (Notitas polaroid)</label>
+              <button type="button" class="btn-secundario" id="btn-add-note" style="padding:4px 10px;font-size:0.8rem;">
+                + Añadir Nota
+              </button>
+            </div>
+            <div id="lista-notas">
+              {DEFAULT_GIFT.notes.map((nota, idx) => (
+                <div class="item-nota-edit">
+                  <input type="text" class="form-control txt-nota-t" value={nota.title} data-idx={idx} style="font-weight:700;margin-bottom:6px;">
+                  <textarea class="form-control txt-nota-b" rows="2" data-idx={idx}>{nota.body}</textarea>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- BOTÓN PRINCIPAL DE GENERACIÓN -->
+          <div class="barra-generar">
+            <div class="info-expiracion">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>Vigencia: Máximo 1 semana activa para cada regalo creado</span>
+            </div>
+            <button type="submit" class="btn-crear-regalo" id="btn-submit">
+              🎁 Crear Regalo y Generar Enlace Único
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- PANEL LATERAL: INFORMACIÓN Y VISTA -->
+      <div class="info-lateral">
+        <div class="tarjeta-guia">
+          <h3>🌟 ¿Cómo funciona tu regalo?</h3>
+          <ul>
+            <li><strong>100% Sorpresa</strong>: El destinatario solo verá la misteriosa caja de regalo al entrar.</li>
+            <li><strong>Música & Audio Propio</strong>: Al tocar la caja, explota confeti y comenzará la canción que subiste.</li>
+            <li><strong>Sin Distracciones</strong>: En el enlace que le envíes no habrá ningún botón de edición ni publicidad.</li>
+            <li><strong>Caducidad de 1 semana</strong>: Diseñado como un detalle especial de temporada del 21 de septiembre.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL DE ENLACE GENERADO -->
+  <div id="modal-enlace" class="modal-fondo">
+    <div class="modal-caja">
+      <span class="modal-icono">🎉</span>
+      <h2>¡Tu Regalo está Listo para Entregar!</h2>
+      <p>Copia el enlace único a continuación y envíaselo por WhatsApp o mensaje:</p>
+      
+      <div class="caja-enlace">
+        <input type="text" id="url-generada" readonly>
+        <button type="button" id="btn-copiar-url">Copiar</button>
+      </div>
+
+      <div class="modal-acciones">
+        <a id="btn-abrir-regalo" href="#" target="_blank" class="btn-crear-regalo" style="text-decoration:none;display:inline-block;padding:10px 20px;">
+          Abrir y Ver Regalo Ahora
+        </a>
+        <button type="button" id="btn-cerrar-modal" class="btn-secundario" style="margin-top:10px;">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .crear-contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+  }
+
+  .crear-header {
+    background: #FFF;
+    border-radius: 20px;
+    padding: 20px 28px;
+    border: 1.5px solid #E2E8F0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .crear-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .icono-flor {
+    font-size: 2.5rem;
+  }
+
+  .crear-brand h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #B45309;
+    margin: 0;
+  }
+
+  .crear-brand p {
+    font-size: 0.88rem;
+    color: #64748B;
+    margin-top: 4px;
+  }
+
+  .btn-secundario {
+    background: #FFFBEB;
+    color: #B45309;
+    border: 1.5px solid #FDE68A;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .crear-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .crear-grid { grid-template-columns: 1fr; }
+  }
+
+  .crear-panel {
+    background: #FFF;
+    border-radius: 20px;
+    border: 1.5px solid #E2E8F0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .tabs-bar {
+    display: flex;
+    overflow-x: auto;
+    background: #F8FAFC;
+    border-bottom: 1.5px solid #E2E8F0;
+    padding: 8px 12px 0;
+    gap: 6px;
+  }
+
+  .tab-btn {
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: none;
+    background: transparent;
+    color: #64748B;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab-btn.activo {
+    background: #FFF;
+    color: #D97706;
+    border-top: 3px solid #F59E0B;
+    font-weight: 800;
+  }
+
+  .tab-pane {
+    display: none;
+    padding: 24px;
+  }
+
+  .tab-pane.activo {
+    display: block;
+  }
+
+  .form-grupo {
+    margin-bottom: 18px;
+  }
+
+  .form-grupo label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #334155;
+    margin-bottom: 6px;
+  }
+
+  .ayuda-texto {
+    font-size: 0.82rem;
+    color: #64748B;
+    margin-bottom: 10px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #CBD5E1;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #1E293B;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #F59E0B;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
+
+  .textarea {
+    resize: vertical;
+  }
+
+  .separador {
+    border: none;
+    border-top: 1.5px dashed #E2E8F0;
+    margin: 20px 0;
+  }
+
+  .subtitulo-form {
+    font-family: 'Playfair Display', serif;
+    color: #B45309;
+    margin-bottom: 12px;
+  }
+
+  /* Subida de archivo dropzone */
+  .dropzone-archivo {
+    position: relative;
+    border: 2px dashed #F59E0B;
+    border-radius: 14px;
+    background: #FFFDF5;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .dropzone-archivo input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .dropzone-icono {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Selector de temas */
+  .grid-temas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .tarjeta-tema {
+    border: 2px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 12px;
+    cursor: pointer;
+  }
+
+  .tarjeta-tema.seleccionado {
+    border-color: #F59E0B;
+    background: #FFFBEB;
+  }
+
+  .preview-color {
+    height: 34px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* Lista de animales */
+  .item-animal-edit {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .item-animal-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  /* Lista de notas */
+  .item-nota-edit {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* Barra inferior de generar */
+  .barra-generar {
+    padding: 20px 24px;
+    background: #F8FAFC;
+    border-top: 1.5px solid #E2E8F0;
+  }
+
+  .info-expiracion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #64748B;
+    margin-bottom: 12px;
+  }
+
+  .btn-crear-regalo {
+    width: 100%;
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    color: #FFF;
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-crear-regalo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(217, 119, 6, 0.45);
+  }
+
+  /* Tarjeta Guía Lateral */
+  .tarjeta-guia {
+    background: #FFF;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1.5px solid #E2E8F0;
+  }
+
+  .tarjeta-guia h3 {
+    font-size: 1.1rem;
+    color: #B45309;
+    margin-bottom: 12px;
+  }
+
+  .tarjeta-guia ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tarjeta-guia li {
+    font-size: 0.86rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .tarjeta-guia li::before {
+    content: '💛';
+    position: absolute;
+    left: 0;
+    font-size: 0.8rem;
+  }
+
+  /* Modal */
+  .modal-fondo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-caja {
+    background: #FFF;
+    border-radius: 24px;
+    padding: 34px 28px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .modal-icono {
+    font-size: 3rem;
+  }
+
+  .caja-enlace {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+  }
+
+  .caja-enlace input {
+    flex-grow: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #CBD5E1;
+    font-size: 0.9rem;
+  }
+
+  .caja-enlace button {
+    background: #F59E0B;
+    color: #FFF;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  let uploadedAudioUrl = "";
+  let uploadedPhotoUrl = "";
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Pestañas
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('activo'));
+        tabPanes.forEach(p => p.classList.remove('activo'));
+        btn.classList.add('activo');
+        const target = document.getElementById(btn.getAttribute('data-tab') || '');
+        if (target) target.classList.add('activo');
+      });
+    });
+
+    // Temas
+    const temas = document.querySelectorAll('.tarjeta-tema');
+    temas.forEach(tema => {
+      tema.addEventListener('click', () => {
+        temas.forEach(t => t.classList.remove('seleccionado'));
+        tema.classList.add('seleccionado');
+      });
+    });
+
+    // Subida de audio
+    const fileAudio = document.getElementById('file-audio') as HTMLInputElement;
+    const audioNameLabel = document.getElementById('audio-filename');
+    const audioPlayerContainer = document.getElementById('preview-audio-container');
+    const audioPreviewPlayer = document.getElementById('audio-preview-player') as HTMLAudioElement;
+
+    if (fileAudio) {
+      fileAudio.addEventListener('change', async (e: any) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (audioNameLabel) audioNameLabel.textContent = `Subiendo: ${file.name}...`;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', 'audio');
+
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+          const json = await res.json();
+          if (json.success) {
+            uploadedAudioUrl = json.url;
+            if (audioNameLabel) audioNameLabel.textContent = `Audio cargado: ${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
+            if (audioPlayerContainer && audioPreviewPlayer) {
+              audioPreviewPlayer.src = json.url;
+              audioPlayerContainer.style.display = 'block';
+            }
+          } else {
+            alert(json.error || 'Error subiendo audio');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Error de conexión al subir audio');
+        }
+      });
+    }
+
+    // Subida de foto
+    const filePhoto = document.getElementById('file-photo') as HTMLInputElement;
+    const imgPreview = document.getElementById('img-preview') as HTMLImageElement;
+
+    if (filePhoto) {
+      filePhoto.addEventListener('change', async (e: any) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', 'image');
+
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+          const json = await res.json();
+          if (json.success) {
+            uploadedPhotoUrl = json.url;
+            if (imgPreview) imgPreview.src = json.url;
+          } else {
+            alert(json.error || 'Error subiendo foto');
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Enviar formulario y crear regalo
+    const form = document.getElementById('form-crear-regalo');
+    const modal = document.getElementById('modal-enlace');
+    const inputUrl = document.getElementById('url-generada') as HTMLInputElement;
+    const btnCopiar = document.getElementById('btn-copiar-url');
+    const btnCerrar = document.getElementById('btn-cerrar-modal');
+    const btnAbrir = document.getElementById('btn-abrir-regalo') as HTMLAnchorElement;
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const selectedThemeEl = document.querySelector('input[name="theme"]:checked') as HTMLInputElement;
+        const theme = selectedThemeEl ? selectedThemeEl.value : 'clasico';
+
+        // Recolectar animales
+        const animalMsgEls = document.querySelectorAll('.txt-animal-msg');
+        const animalChkEls = document.querySelectorAll('.chk-animal');
+        const animals = Array.from(animalMsgEls).map((el: any, i) => {
+          const chk = animalChkEls[i] as HTMLInputElement;
+          const ids = ['gato', 'perrito', 'conejito', 'abeja', 'pollito', 'capibara'];
+          const names = ['Gatito Cariñoso', 'Perrito Fiel', 'Conejito Tierno', 'Abejita', 'Pollito', 'Capibara Zen'];
+          return {
+            id: ids[i] || 'gato',
+            name: names[i] || 'Amiguito',
+            active: chk ? chk.checked : true,
+            msg: el.value
+          };
+        });
+
+        // Recolectar notas
+        const noteTitleEls = document.querySelectorAll('.txt-nota-t');
+        const noteBodyEls = document.querySelectorAll('.txt-nota-b');
+        const notes = Array.from(noteTitleEls).map((el: any, i) => {
+          const bodyEl = noteBodyEls[i] as HTMLTextAreaElement;
+          return {
+            id: 'n_' + i,
+            title: el.value,
+            body: bodyEl ? bodyEl.value : ''
+          };
+        });
+
+        const manualAudioUrl = (document.getElementById('input-audiourl') as HTMLInputElement).value;
+        const manualPhotoUrl = (document.getElementById('input-photourl') as HTMLInputElement).value;
+
+        const giftPayload = {
+          recipient: (document.getElementById('input-recipient') as HTMLInputElement).value,
+          senderTag: (document.getElementById('input-sender') as HTMLInputElement).value,
+          headerTitle: (document.getElementById('input-headertitle') as HTMLInputElement).value,
+          letterTitle: (document.getElementById('input-lettertitle') as HTMLInputElement).value,
+          letterBody: (document.getElementById('input-letterbody') as HTMLTextAreaElement).value,
+          letterSign: (document.getElementById('input-lettersign') as HTMLInputElement).value,
+          theme,
+          audioUrl: uploadedAudioUrl || manualAudioUrl || "",
+          photoUrl: uploadedPhotoUrl || manualPhotoUrl || "",
+          photoTitle: (document.getElementById('input-phototitle') as HTMLInputElement).value,
+          photoSubtitle: (document.getElementById('input-photosubtitle') as HTMLInputElement).value,
+          animals,
+          notes
+        };
+
+        const btnSubmit = document.getElementById('btn-submit');
+        if (btnSubmit) btnSubmit.textContent = '⏳ Creando regalo...';
+
+        try {
+          const res = await fetch('/api/regalo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(giftPayload)
+          });
+          const result = await res.json();
+
+          if (result.success && modal && inputUrl && btnAbrir) {
+            inputUrl.value = result.url;
+            btnAbrir.href = result.url;
+            modal.style.display = 'flex';
+          } else {
+            alert(result.error || 'Error al crear regalo');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Error de conexión');
+        } finally {
+          if (btnSubmit) btnSubmit.textContent = '🎁 Crear Regalo y Generar Enlace Único';
+        }
+      });
+    }
+
+    if (btnCopiar && inputUrl) {
+      btnCopiar.addEventListener('click', () => {
+        navigator.clipboard.writeText(inputUrl.value).then(() => {
+          btnCopiar.textContent = '¡Copiado!';
+          setTimeout(() => { btnCopiar.textContent = 'Copiar'; }, 2500);
+        });
+      });
+    }
+
+    if (btnCerrar && modal) {
+      btnCerrar.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    }
+  });
+</script>

@@ -1,0 +1,109 @@
+---
+// Componente de pétalos cayendo y mariposas flotantes
+---
+
+<div id="petalos-fondo" class="petalos-contenedor"></div>
+
+<div class="mariposa-flotante" style="animation-delay: 0s; top: 0;">
+  <svg viewBox="0 0 40 40"><g><ellipse cx="12" cy="16" rx="9" ry="12" fill="#FFC93C" transform="rotate(-24 12 16)"/><ellipse cx="28" cy="16" rx="9" ry="12" fill="#F0A500" transform="rotate(24 28 16)"/><ellipse cx="14" cy="29" rx="6" ry="8" fill="#FFE37A" transform="rotate(-14 14 29)"/><ellipse cx="26" cy="29" rx="6" ry="8" fill="#FFD45E" transform="rotate(14 26 29)"/><rect x="18.6" y="8" width="2.8" height="26" rx="1.4" fill="#4E2F18"/></g></svg>
+</div>
+
+<div class="mariposa-flotante" style="animation-delay: 7s; top: 0;">
+  <svg viewBox="0 0 40 40"><g><ellipse cx="12" cy="16" rx="9" ry="12" fill="#FF9F68" transform="rotate(-24 12 16)"/><ellipse cx="28" cy="16" rx="9" ry="12" fill="#F0803C" transform="rotate(24 28 16)"/><ellipse cx="14" cy="29" rx="6" ry="8" fill="#FFC093" transform="rotate(-14 14 29)"/><ellipse cx="26" cy="29" rx="6" ry="8" fill="#FFAF78" transform="rotate(14 26 29)"/><rect x="18.6" y="8" width="2.8" height="26" rx="1.4" fill="#4E2F18"/></g></svg>
+</div>
+
+<style>
+  .petalos-contenedor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  :global(.petalo-caida) {
+    position: absolute;
+    top: -50px;
+    animation: animCaerPetalo linear infinite;
+    transform-origin: center;
+  }
+
+  @keyframes animCaerPetalo {
+    0% {
+      transform: translateY(-8vh) translateX(0) rotate(0deg) rotateY(0deg);
+    }
+    35% {
+      transform: translateY(35vh) translateX(26px) rotate(120deg) rotateY(180deg);
+    }
+    70% {
+      transform: translateY(75vh) translateX(-20px) rotate(240deg) rotateY(360deg);
+    }
+    100% {
+      transform: translateY(115vh) translateX(12px) rotate(360deg) rotateY(540deg);
+    }
+  }
+
+  .mariposa-flotante {
+    position: fixed;
+    width: 42px;
+    z-index: 3;
+    pointer-events: none;
+    animation: animVolarMariposa 16s linear infinite;
+  }
+
+  .mariposa-flotante svg {
+    width: 100%;
+    animation: animAleteo 0.45s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+
+  @keyframes animAleteo {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0.4); }
+  }
+
+  @keyframes animVolarMariposa {
+    0%   { transform: translate(-10vw, 70vh) rotate(10deg); }
+    25%  { transform: translate(30vw, 35vh) rotate(-10deg); }
+    50%  { transform: translate(60vw, 60vh) rotate(12deg); }
+    75%  { transform: translate(85vw, 25vh) rotate(-8deg); }
+    100% { transform: translate(110vw, 55vh) rotate(10deg); }
+  }
+</style>
+
+<script>
+  function initPetals() {
+    const cont = document.getElementById('petalos-fondo');
+    if (!cont) return;
+    cont.innerHTML = '';
+    const tones = [
+      ['#FDE047', '#EAB308'],
+      ['#FACC15', '#CA8A04'],
+      ['#FEF08A', '#F59E0B'],
+      ['#FFFBEB', '#FBBF24']
+    ];
+
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'petalo-caida';
+      const [fill, stroke] = tones[i % tones.length];
+      const w = 14 + Math.random() * 16;
+      const h = w * 1.35;
+
+      p.innerHTML = `
+        <svg viewBox="0 0 24 32" width="${w}" height="${h}">
+          <path d="M12 2 C 21 8, 22 22, 12 30 C 2 22, 3 8, 12 2 Z" fill="${fill}" stroke="${stroke}" stroke-width="0.8" opacity="0.9"/>
+        </svg>
+      `;
+
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (8 + Math.random() * 10) + 's';
+      p.style.animationDelay = (-Math.random() * 16) + 's';
+      p.style.opacity = (0.5 + Math.random() * 0.45).toString();
+
+      cont.appendChild(p);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initPetals);
+</script>

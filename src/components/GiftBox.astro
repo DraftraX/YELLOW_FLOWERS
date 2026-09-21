@@ -1,0 +1,250 @@
+---
+interface Props {
+  boxTag?: string;
+  senderTag?: string;
+  boxSubtitle?: string;
+}
+
+const {
+  boxTag = "Para: Maria Iboni <3",
+  senderTag = "Con mucho amor",
+  boxSubtitle = "Toca la caja para abrir tu regalo especial ✨"
+} = Astro.props;
+---
+
+<section id="zona-regalo" class="zona-regalo-seccion">
+  <p class="invitacion-apertura" id="txt-invitacion">
+    {boxSubtitle}
+  </p>
+
+  <div class="caja-regalo-wrap" id="caja-regalo" role="button" aria-label="Abrir caja de regalo" tabindex="0">
+    <!-- Ramo mini que brota al abrir -->
+    <div class="ramo-brote-caja" id="ramo-mini-caja"></div>
+
+    <!-- Tapa de la caja -->
+    <div class="tapa-caja"></div>
+
+    <!-- Lazo superior -->
+    <svg class="lazo-superior" viewBox="0 0 96 60">
+      <path d="M48 34 C 30 6, 6 10, 12 26 C 16 38, 38 38, 48 34 Z" fill="#E53935"/>
+      <path d="M48 34 C 66 6, 90 10, 84 26 C 80 38, 58 38, 48 34 Z" fill="#C62828"/>
+      <path d="M48 34 C 40 30, 38 24, 44 22 C 50 20, 54 26, 52 32 Z" fill="#B71C1C"/>
+      <path d="M48 34 C 56 30, 58 24, 52 22 C 46 20, 42 26, 44 32 Z" fill="#B71C1C"/>
+      <path d="M44 40 L 40 56 L 47 50 L 49 58 L 53 42 Z" fill="#E53935"/>
+    </svg>
+
+    <!-- Etiqueta personalizada -->
+    <div class="etiqueta-destinatario">
+      <small>{senderTag}</small>
+      <span>{boxTag}</span>
+    </div>
+
+    <!-- Cuerpo de la caja -->
+    <div class="cuerpo-caja"></div>
+
+    <!-- Sombra en suelo -->
+    <div class="sombra-caja"></div>
+  </div>
+</section>
+
+<style>
+  .zona-regalo-seccion {
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 10px 40px;
+    position: relative;
+  }
+
+  .invitacion-apertura {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: var(--text-color);
+    animation: pulsarInv 2s ease-in-out infinite;
+  }
+
+  @keyframes pulsarInv {
+    0%, 100% { transform: scale(1); opacity: 0.92; }
+    50% { transform: scale(1.04); opacity: 1; color: var(--color-primary); }
+  }
+
+  .caja-regalo-wrap {
+    position: relative;
+    width: 320px;
+    height: 360px;
+    margin: 0 auto;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .caja-regalo-wrap:hover {
+    transform: scale(1.05) translateY(-4px);
+  }
+
+  .sombra-caja {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 38px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(60, 30, 10, 0.4), transparent 70%);
+    transition: all 0.6s ease;
+  }
+
+  .cuerpo-caja {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 190px;
+    border-radius: 18px;
+    background: var(--box-bg);
+    box-shadow: inset 0 -16px 28px rgba(78, 47, 24, 0.22), 0 16px 36px rgba(100, 50, 10, 0.25);
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .cuerpo-caja::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 48px;
+    transform: translateX(-50%);
+    background: var(--ribbon-bg);
+    box-shadow: 2px 0 6px rgba(0,0,0,0.18), -2px 0 6px rgba(255,255,255,0.25);
+  }
+
+  .cuerpo-caja::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.38) 0% 22%, transparent 35%);
+    pointer-events: none;
+  }
+
+  .tapa-caja {
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 292px;
+    height: 64px;
+    border-radius: 14px;
+    background: var(--box-bg);
+    box-shadow: 0 12px 24px rgba(60, 30, 10, 0.32);
+    z-index: 4;
+    transition: transform 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.8s ease;
+  }
+
+  .tapa-caja::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 48px;
+    transform: translateX(-50%);
+    background: var(--ribbon-bg);
+  }
+
+  .lazo-superior {
+    position: absolute;
+    top: -48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 105px;
+    z-index: 5;
+    transform-origin: 50% 90%;
+    animation: animMecerLazo 3s ease-in-out infinite;
+    filter: drop-shadow(0 6px 8px rgba(80, 20, 20, 0.35));
+    transition: transform 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.8s ease;
+  }
+
+  @keyframes animMecerLazo {
+    0%, 100% { transform: translateX(-50%) rotate(-5deg); }
+    50% { transform: translateX(-50%) rotate(5deg); }
+  }
+
+  .etiqueta-destinatario {
+    position: absolute;
+    top: 48px;
+    right: 16px;
+    z-index: 6;
+    background: #FFFDF5;
+    border: 1.5px dashed var(--color-primary);
+    border-radius: 8px;
+    padding: 6px 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+    transform: rotate(8deg);
+  }
+
+  .etiqueta-destinatario small {
+    display: block;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-accent);
+    font-weight: 800;
+  }
+
+  .etiqueta-destinatario span {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--marron-osc);
+  }
+
+  .ramo-brote-caja {
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 260px;
+    height: 270px;
+    z-index: 3;
+    transform-origin: bottom center;
+    transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+    pointer-events: none;
+  }
+
+  /* Estado Abierto */
+  :global(.caja-regalo-wrap.abierta) {
+    cursor: default;
+  }
+  :global(.caja-regalo-wrap.abierta .tapa-caja) {
+    transform: translateX(-50%) translateY(-220px) rotate(-32deg) scale(0.85);
+    opacity: 0;
+    pointer-events: none;
+  }
+  :global(.caja-regalo-wrap.abierta .lazo-superior) {
+    transform: translateX(-50%) translateY(-220px) rotate(-32deg) scale(0.85);
+    opacity: 0;
+    pointer-events: none;
+  }
+  :global(.caja-regalo-wrap.abierta .ramo-brote-caja) {
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+  }
+  :global(.caja-regalo-wrap.abierta .sombra-caja) {
+    width: 320px;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 650px) {
+    .caja-regalo-wrap { width: 270px; height: 310px; }
+    .cuerpo-caja { width: 220px; height: 160px; }
+    .tapa-caja { width: 250px; height: 54px; bottom: 152px; }
+    .lazo-superior { width: 85px; top: -40px; }
+    .etiqueta-destinatario { top: 36px; right: 6px; padding: 4px 8px; }
+  }
+</style>

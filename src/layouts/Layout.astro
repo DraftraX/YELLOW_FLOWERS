@@ -1,0 +1,117 @@
+---
+interface Props {
+  title?: string;
+  theme?: string;
+  isPublic?: boolean;
+}
+
+const { 
+  title = "Flores Amarillas — 21 de Septiembre", 
+  theme = "clasico",
+  isPublic = false 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>" />
+  <title>{title}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style is:global>
+    :root {
+      --amarillo: #FFC93C;
+      --amarillo-osc: #F0A500;
+      --dorado: #E8B33C;
+      --crema: #FFFDF5;
+      --marron: #5C3A21;
+      --marron-osc: #3D2311;
+      --verde: #5B8C4A;
+      --rojo: #E05555;
+
+      --app-bg: radial-gradient(circle at 15% 20%, rgba(255,214,90,.4), transparent 45%), radial-gradient(circle at 85% 75%, rgba(255,190,60,.35), transparent 50%), linear-gradient(180deg,#FFF3C4 0%,#FFE792 38%,#FFF9E8 100%);
+      --card-bg: #FFFFFF;
+      --text-color: #5C3A21;
+      --color-primary: #F0A500;
+      --primary-glow: rgba(240,165,0,0.45);
+      --color-accent: #E05555;
+      --color-secondary: #FFD45E;
+      --box-bg: linear-gradient(160deg, #FFD45E, #F0A500);
+      --ribbon-bg: linear-gradient(90deg, #E05555, #B83A3A);
+    }
+
+    /* Temáticas */
+    .theme-atardecer {
+      --app-bg: radial-gradient(circle at 20% 25%, rgba(255,160,122,.35), transparent 45%), radial-gradient(circle at 80% 70%, rgba(255,193,7,.3), transparent 50%), linear-gradient(180deg,#FFE4D6 0%,#FFD1BA 40%,#FFF5EB 100%);
+      --text-color: #542F26;
+      --color-primary: #E76F51;
+      --primary-glow: rgba(231,111,81,0.45);
+      --color-accent: #F4A261;
+      --color-secondary: #E9C46A;
+      --box-bg: linear-gradient(160deg, #F4A261, #E76F51);
+      --ribbon-bg: linear-gradient(90deg, #C73E1D, #93291E);
+    }
+
+    .theme-noche {
+      --app-bg: radial-gradient(circle at 25% 20%, rgba(255,215,0,.22), transparent 40%), radial-gradient(circle at 75% 80%, rgba(240,165,0,.15), transparent 50%), linear-gradient(180deg,#0F172A 0%,#1E293B 40%,#090D16 100%);
+      --card-bg: #1E293B;
+      --text-color: #F8FAFC;
+      --color-primary: #FBBF24;
+      --primary-glow: rgba(251,191,36,0.6);
+      --color-accent: #F43F5E;
+      --color-secondary: #FCD34D;
+      --box-bg: linear-gradient(160deg, #F59E0B, #B45309);
+      --ribbon-bg: linear-gradient(90deg, #F43F5E, #BE123C);
+    }
+
+    .theme-pastel {
+      --app-bg: radial-gradient(circle at 18% 22%, rgba(254,240,138,.45), transparent 45%), radial-gradient(circle at 82% 78%, rgba(187,247,208,.38), transparent 50%), linear-gradient(180deg,#FEF9C3 0%,#ECFDF5 45%,#FFFBEB 100%);
+      --text-color: #334155;
+      --color-primary: #EAB308;
+      --primary-glow: rgba(234,179,8,0.4);
+      --color-accent: #EC4899;
+      --color-secondary: #FDE047;
+      --box-bg: linear-gradient(160deg, #FDE047, #EAB308);
+      --ribbon-bg: linear-gradient(90deg, #EC4899, #BE185D);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--app-bg);
+      min-height: 100vh;
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+      transition: background 0.6s ease, color 0.4s ease;
+    }
+
+    body.theme-noche .carta-amor-contenedor,
+    body.theme-noche .nota-polaroid,
+    body.theme-noche .tarjeta-animal {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+      border-color: rgba(251, 191, 36, 0.4) !important;
+    }
+  </style>
+</head>
+<body class={`theme-${theme}`}>
+  <slot />
+</body>
+</html>

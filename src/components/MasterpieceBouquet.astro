@@ -1,0 +1,437 @@
+---
+interface Props {
+  recipient?: string;
+  isMini?: boolean;
+}
+
+const { recipient = "Maria Iboni <3", isMini = false } = Astro.props;
+const viewBox = isMini ? "-160 -190 320 340" : "-270 -310 540 580";
+---
+
+<div class={`ramo-contenedor ${isMini ? 'ramo-mini' : 'ramo-hero'}`} id={isMini ? 'ramo-mini-art' : 'ramo-hero-art'}>
+  <svg 
+    class="masterpiece-bouquet-svg" 
+    viewBox={viewBox} 
+    width="100%" 
+    height="100%" 
+    xmlns="http://www.w3.org/2000/svg"
+    role="img" 
+    aria-label={`Hermoso ramo de flores amarillas para ${recipient}`}
+  >
+    <defs>
+      <!-- Girasol exterior -->
+      <linearGradient id="gradSunOuter" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#D97706" />
+        <stop offset="50%" stop-color="#F59E0B" />
+        <stop offset="90%" stop-color="#FDE047" />
+        <stop offset="100%" stop-color="#FEF08A" />
+      </linearGradient>
+
+      <!-- Girasol interior -->
+      <linearGradient id="gradSunInner" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#B45309" />
+        <stop offset="50%" stop-color="#FBBF24" />
+        <stop offset="100%" stop-color="#FEF9C3" />
+      </linearGradient>
+
+      <!-- Centro de girasol -->
+      <radialGradient id="gradSunCore" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#2D1507" />
+        <stop offset="65%" stop-color="#4E270E" />
+        <stop offset="85%" stop-color="#783D15" />
+        <stop offset="100%" stop-color="#B45309" />
+      </radialGradient>
+
+      <!-- Rosas -->
+      <linearGradient id="gradRoseOut" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#D97706"/>
+        <stop offset="60%" stop-color="#FBBF24"/>
+        <stop offset="100%" stop-color="#FEF08A"/>
+      </linearGradient>
+      <linearGradient id="gradRoseMid" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#B45309"/>
+        <stop offset="50%" stop-color="#F59E0B"/>
+        <stop offset="100%" stop-color="#FDE047"/>
+      </linearGradient>
+
+      <!-- Tulipanes -->
+      <linearGradient id="gradTulipLeft" x1="100%" y1="50%" x2="0%" y2="50%">
+        <stop offset="0%" stop-color="#F59E0B"/>
+        <stop offset="70%" stop-color="#FDE047"/>
+        <stop offset="100%" stop-color="#FEF08A"/>
+      </linearGradient>
+      <linearGradient id="gradTulipRight" x1="0%" y1="50%" x2="100%" y2="50%">
+        <stop offset="0%" stop-color="#D97706"/>
+        <stop offset="70%" stop-color="#FBBF24"/>
+        <stop offset="100%" stop-color="#FEF9C3"/>
+      </linearGradient>
+
+      <!-- Papel Kraft Envoltura -->
+      <linearGradient id="gradKraftBack" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#D5B083"/>
+        <stop offset="50%" stop-color="#BE976B"/>
+        <stop offset="100%" stop-color="#A57D52"/>
+      </linearGradient>
+      <linearGradient id="gradKraftFrontLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#E8CEAE"/>
+        <stop offset="70%" stop-color="#D0A87B"/>
+        <stop offset="100%" stop-color="#B68B5E"/>
+      </linearGradient>
+      <linearGradient id="gradKraftFrontRight" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#DFBF9B"/>
+        <stop offset="70%" stop-color="#C59C6F"/>
+        <stop offset="100%" stop-color="#A97E52"/>
+      </linearGradient>
+
+      <!-- Lazo rojo -->
+      <linearGradient id="gradRibbon" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#E53935"/>
+        <stop offset="50%" stop-color="#EF5350"/>
+        <stop offset="100%" stop-color="#C62828"/>
+      </linearGradient>
+
+      <!-- Sombra -->
+      <filter id="shadowBouquet" x="-30%" y="-20%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#4E2B0C" flood-opacity="0.32"/>
+      </filter>
+    </defs>
+
+    <!-- SOMBRA GENERAL EN LA BASE -->
+    <ellipse cx="0" cy={isMini ? "120" : "210"} rx={isMini ? "70" : "130"} ry={isMini ? "14" : "24"} fill="rgba(82,44,17,0.28)" filter="blur(6px)"/>
+
+    <!-- ENVOLTURA TRASERA DE PAPEL KRAFT -->
+    <g class="envoltura-trasera" filter="url(#shadowBouquet)">
+      <polygon points="-160,-120 160,-120 70,190 -70,190" fill="url(#gradKraftBack)"/>
+      <polygon points="-160,-120 -195,-60 -70,190" fill="#9F764C" opacity="0.75"/>
+      <polygon points="160,-120 195,-60 70,190" fill="#9F764C" opacity="0.75"/>
+    </g>
+
+    <!-- CAPA 1: FOLLAJE DE FONDO -->
+    <g class="capa-follaje-fondo">
+      <!-- Eucalipto izquierdo -->
+      <g transform="translate(-90, -40) rotate(-48) scale(1.1)">
+        <path d="M0 80 Q -10 20 -15 -60" stroke="#4A7C59" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <g transform="translate(-4, 45) rotate(-35)"><ellipse rx="15" ry="11" fill="#588B67"/><ellipse rx="12" ry="8" fill="#6FA45C" opacity="0.7"/></g>
+        <g transform="translate(-3, 20) rotate(35)"><ellipse rx="16" ry="12" fill="#4D7F5C"/><ellipse rx="13" ry="9" fill="#6FA45C" opacity="0.7"/></g>
+        <g transform="translate(-10, -10) rotate(-40)"><ellipse rx="17" ry="13" fill="#588B67"/><ellipse rx="14" ry="10" fill="#7CB668" opacity="0.7"/></g>
+      </g>
+      <!-- Eucalipto derecho -->
+      <g transform="translate(90, -40) rotate(48) scale(1.1)">
+        <path d="M0 80 Q 10 20 15 -60" stroke="#4A7C59" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <g transform="translate(4, 45) rotate(35)"><ellipse rx="15" ry="11" fill="#588B67"/><ellipse rx="12" ry="8" fill="#6FA45C" opacity="0.7"/></g>
+        <g transform="translate(3, 20) rotate(-35)"><ellipse rx="16" ry="12" fill="#4D7F5C"/><ellipse rx="13" ry="9" fill="#6FA45C" opacity="0.7"/></g>
+        <g transform="translate(10, -10) rotate(40)"><ellipse rx="17" ry="13" fill="#588B67"/><ellipse rx="14" ry="10" fill="#7CB668" opacity="0.7"/></g>
+      </g>
+      <!-- Paniculata / Gypsophila flores blancas -->
+      <g transform="translate(-130, -90) rotate(-30) scale(1.1)">
+        <circle cx="0" cy="-30" r="3.8" fill="#FFFFFF" filter="drop-shadow(0 0 4px #FFF)"/>
+        <circle cx="-10" cy="-36" r="3.2" fill="#FFFDE7"/>
+        <circle cx="10" cy="-38" r="3.2" fill="#FFFDE7"/>
+        <circle cx="20" cy="-20" r="3.5" fill="#FFFFFF"/>
+      </g>
+      <g transform="translate(130, -90) rotate(30) scale(1.1)">
+        <circle cx="0" cy="-30" r="3.8" fill="#FFFFFF" filter="drop-shadow(0 0 4px #FFF)"/>
+        <circle cx="-10" cy="-36" r="3.2" fill="#FFFDE7"/>
+        <circle cx="10" cy="-38" r="3.2" fill="#FFFDE7"/>
+        <circle cx="-20" cy="-20" r="3.5" fill="#FFFFFF"/>
+      </g>
+    </g>
+
+    <!-- CAPA 2: TALLOS -->
+    <g class="capa-tallos" stroke="#4A7C59" stroke-width="7" stroke-linecap="round" opacity="0.8">
+      <line x1="-70" y1="-80" x2="-20" y2="90"/>
+      <line x1="-30" y1="-120" x2="-10" y2="90"/>
+      <line x1="0" y1="-130" x2="0" y2="90"/>
+      <line x1="30" y1="-120" x2="10" y2="90"/>
+      <line x1="70" y1="-80" x2="20" y2="90"/>
+    </g>
+
+    <!-- CAPA 3: FLORES SECUNDARIAS (TULIPANES Y ROSAS) -->
+    <g class="capa-flores-fondo">
+      <!-- Tulipán izquierdo -->
+      <g class="flor-interactiva" transform="translate(-85, -135) rotate(-24) scale(1.05)">
+        <path d="M-20 -2 C -24 -24, -8 -48, 0 -52 C 8 -48, 24 -24, 20 -2 C 14 16, -14 16, -20 -2 Z" fill="#F59E0B"/>
+        <path d="M-22 0 C -26 -28, -6 -50, -4 -50 C 4 -32, 2 -8, -6 12 C -15 12, -20 6, -22 0 Z" fill="url(#gradTulipLeft)"/>
+        <path d="M22 0 C 26 -28, 6 -50, 4 -50 C -4 -32, -2 -8, 6 12 C 15 12, 20 6, 22 0 Z" fill="url(#gradTulipRight)"/>
+        <ellipse cx="0" cy="-26" rx="4" ry="12" fill="#FEF08A" opacity="0.85"/>
+      </g>
+      <!-- Tulipán derecho -->
+      <g class="flor-interactiva" transform="translate(85, -135) rotate(24) scale(1.05)">
+        <path d="M-20 -2 C -24 -24, -8 -48, 0 -52 C 8 -48, 24 -24, 20 -2 C 14 16, -14 16, -20 -2 Z" fill="#F59E0B"/>
+        <path d="M-22 0 C -26 -28, -6 -50, -4 -50 C 4 -32, 2 -8, -6 12 C -15 12, -20 6, -22 0 Z" fill="url(#gradTulipLeft)"/>
+        <path d="M22 0 C 26 -28, 6 -50, 4 -50 C -4 -32, -2 -8, 6 12 C 15 12, 20 6, 22 0 Z" fill="url(#gradTulipRight)"/>
+        <ellipse cx="0" cy="-26" rx="4" ry="12" fill="#FEF08A" opacity="0.85"/>
+      </g>
+      <!-- Rosa izquierda -->
+      <g class="flor-interactiva" transform="translate(-125, -60) rotate(-15) scale(0.95)">
+        <circle r="40" fill="#EAB308"/>
+        <path d="M-38 0 C -42 -28, -18 -42, 0 -40 C 18 -42, 42 -28, 38 0 C 32 28, 8 42, 0 40 C -8 42, -32 28, -38 0 Z" fill="url(#gradRoseOut)"/>
+        <path d="M-25 -6 C -30 -25, -6 -32, 5 -28 C 20 -32, 28 -15, 25 5 C 20 20, 0 28, -10 25 C -22 20, -22 6, -25 -6 Z" fill="url(#gradRoseMid)"/>
+        <circle cx="0" cy="-3" r="10" fill="#D97706"/>
+        <circle cx="-1" cy="-4" r="5" fill="#FEF08A"/>
+      </g>
+      <!-- Rosa derecha -->
+      <g class="flor-interactiva" transform="translate(125, -60) rotate(15) scale(0.95)">
+        <circle r="40" fill="#EAB308"/>
+        <path d="M-38 0 C -42 -28, -18 -42, 0 -40 C 18 -42, 42 -28, 38 0 C 32 28, 8 42, 0 40 C -8 42, -32 28, -38 0 Z" fill="url(#gradRoseOut)"/>
+        <path d="M-25 -6 C -30 -25, -6 -32, 5 -28 C 20 -32, 28 -15, 25 5 C 20 20, 0 28, -10 25 C -22 20, -22 6, -25 -6 Z" fill="url(#gradRoseMid)"/>
+        <circle cx="0" cy="-3" r="10" fill="#D97706"/>
+        <circle cx="-1" cy="-4" r="5" fill="#FEF08A"/>
+      </g>
+    </g>
+
+    <!-- CAPA 4: FLORES PROTAGONISTAS (GIRASOLES RADIANTE DE DOBLE CORONA) -->
+    <g class="capa-flores-principales">
+      <!-- Girasol Centro-Izquierdo -->
+      <g class="flor-interactiva" transform="translate(-65, -55) rotate(-8) scale(1.12)">
+        <g class="corona-petalos">
+          <!-- 16 pétalos exteriores -->
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(45)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(90)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(135)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(180)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(225)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(270)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(315)"/>
+          <!-- Pétalos interiores intercalados -->
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(22.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(67.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(112.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(157.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(202.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(247.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(292.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(337.5)"/>
+        </g>
+        <circle r="34" fill="url(#gradSunCore)"/>
+        <circle r="30" fill="none" stroke="#E5A020" stroke-width="1.8" stroke-dasharray="3 4" opacity="0.6"/>
+        <circle r="22" fill="#3D200E"/>
+        <circle r="14" fill="#2E170A"/>
+        <circle cx="0" cy="0" r="3" fill="#FBBF24"/>
+      </g>
+
+      <!-- Girasol Centro-Derecho -->
+      <g class="flor-interactiva" transform="translate(65, -55) rotate(16) scale(1.12)">
+        <g class="corona-petalos">
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(45)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(90)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(135)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(180)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(225)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(270)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(315)"/>
+          <!-- Pétalos interiores -->
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(22.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(67.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(112.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(157.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(202.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(247.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(292.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(337.5)"/>
+        </g>
+        <circle r="34" fill="url(#gradSunCore)"/>
+        <circle r="30" fill="none" stroke="#E5A020" stroke-width="1.8" stroke-dasharray="3 4" opacity="0.6"/>
+        <circle r="22" fill="#3D200E"/>
+        <circle r="14" fill="#2E170A"/>
+        <circle cx="0" cy="0" r="3" fill="#FBBF24"/>
+      </g>
+
+      <!-- Gran Girasol Central Solemne -->
+      <g class="flor-interactiva" transform="translate(0, -5) scale(1.35)">
+        <g class="corona-petalos">
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(45)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(90)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(135)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(180)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(225)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(270)"/>
+          <path d="M0 0 C -12 -38, -16 -75, 0 -98 C 16 -75, 12 -38, 0 0 Z" fill="url(#gradSunOuter)" transform="rotate(315)"/>
+          <!-- Pétalos interiores -->
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(22.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(67.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(112.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(157.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(202.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(247.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(292.5)"/>
+          <path d="M0 0 C -9 -30, -12 -62, 0 -82 C 12 -62, 9 -30, 0 0 Z" fill="url(#gradSunInner)" transform="rotate(337.5)"/>
+        </g>
+        <circle r="36" fill="url(#gradSunCore)"/>
+        <circle r="32" fill="none" stroke="#E5A020" stroke-width="2" stroke-dasharray="3 4" opacity="0.7"/>
+        <circle r="24" fill="#3D200E"/>
+        <circle r="15" fill="#2E170A"/>
+        <circle cx="0" cy="0" r="3.5" fill="#FBBF24"/>
+      </g>
+    </g>
+
+    <!-- CAPA 5: ENVOLTURA DELANTERA DE PAPEL KRAFT EN CAPAS -->
+    <g class="envoltura-frontal">
+      <polygon points="-120,25 0,110 120,25 70,185 -70,185" fill="#FFFDF5" opacity="0.5"/>
+      <polygon points="-155,-5 25,95 -45,210 -95,195" fill="url(#gradKraftFrontLeft)" filter="drop-shadow(3px 4px 6px rgba(0,0,0,0.22))"/>
+      <polygon points="155,-5 -35,100 45,210 95,195" fill="url(#gradKraftFrontRight)" filter="drop-shadow(-4px 4px 8px rgba(0,0,0,0.28))"/>
+      <line x1="-35" y1="100" x2="45" y2="210" stroke="#7A522A" stroke-width="1.8" opacity="0.4"/>
+    </g>
+
+    <!-- CAPA 6: LAZO Y MOÑO DE SEDA -->
+    <g class="moño-lazo" transform="translate(0, 115)" filter="drop-shadow(0 6px 8px rgba(80,20,20,0.35))">
+      <!-- Colitas del lazo -->
+      <path d="M-12 15 Q -35 55 -28 95 Q -25 80 -18 65 Q -8 40 -6 18 Z" fill="url(#gradRibbon)"/>
+      <path d="M12 15 Q 35 55 28 95 Q 25 80 18 65 Q 8 40 6 18 Z" fill="url(#gradRibbon)"/>
+      <!-- Lazos circulares -->
+      <path d="M0 0 C -45 -35, -80 -10, -50 16 C -25 32, -8 10, 0 2 Z" fill="url(#gradRibbon)"/>
+      <path d="M0 0 C 45 -35, 80 -10, 50 16 C 25 32, 8 10, 0 2 Z" fill="url(#gradRibbon)"/>
+      <!-- Nudo central -->
+      <circle cx="0" cy="4" r="13" fill="url(#gradRibbon)"/>
+      <circle cx="0" cy="4" r="9" fill="#B71C1C"/>
+      <!-- Etiqueta dorada con el nombre del destinatario -->
+      <g transform="translate(18, 25) rotate(15)">
+        <line x1="0" y1="0" x2="8" y2="18" stroke="#D4AF37" stroke-width="1.8"/>
+        <rect x="-2" y="18" width="56" height="24" rx="5" fill="#FFFDF2" stroke="#D4AF37" stroke-width="1.5"/>
+        <text x="26" y="34" font-family="'Playfair Display', serif" font-weight="bold" font-size="9" fill="#8C531B" text-anchor="middle">{recipient}</text>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .ramo-contenedor {
+    position: relative;
+    margin: 0 auto;
+    animation: mecerBrisaRamo 5.2s ease-in-out infinite;
+  }
+
+  .ramo-hero {
+    max-width: 580px;
+    height: 560px;
+  }
+
+  .ramo-mini {
+    width: 260px;
+    height: 270px;
+  }
+
+  @keyframes mecerBrisaRamo {
+    0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+    50% { transform: translateY(-8px) rotate(1.2deg); }
+  }
+
+  .flor-interactiva {
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .flor-interactiva:hover {
+    transform: scale(1.15);
+  }
+</style>
+
+<script>
+  function setupFlowerClicks() {
+    const flowers = document.querySelectorAll('.flor-interactiva');
+    const phrases = [
+      "¡Eres hermosa! 🌻",
+      "Iluminas todo ✨",
+      "Con todo mi amor 💛",
+      "Sonríe siempre 💕",
+      "Día de Flores Amarillas ☀️",
+      "Eres mi sol 🌸"
+    ];
+
+    flowers.forEach((flower, idx) => {
+      flower.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Efecto elástico
+        (flower as SVGElement).animate([
+          { transform: 'scale(1.28) rotate(-6deg)' },
+          { transform: 'scale(0.92) rotate(4deg)' },
+          { transform: 'scale(1.08) rotate(-2deg)' },
+          { transform: 'scale(1)' }
+        ], { duration: 600, easing: 'ease-out' });
+
+        // Sonido arpegiado si está disponible
+        if ((window as any).playSparkleChime) {
+          (window as any).playSparkleChime();
+        }
+
+        // Partículas saliendo de la flor
+        const rect = flower.getBoundingClientRect();
+        spawnSparkles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        showLoveToast(rect.left + rect.width / 2, rect.top, phrases[idx % phrases.length]);
+      });
+    });
+
+    function spawnSparkles(x: number, y: number) {
+      const symbols = ['✨', '💛', '🌻', '⭐', '💖'];
+      for (let i = 0; i < 14; i++) {
+        const p = document.createElement('div');
+        p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.cssText = `
+          position: fixed;
+          left: ${x}px;
+          top: ${y}px;
+          font-size: ${14 + Math.random() * 16}px;
+          pointer-events: none;
+          z-index: 99999;
+          transition: transform 1.2s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 1.2s ease-out;
+        `;
+        document.body.appendChild(p);
+
+        const angle = (Math.PI * 2 / 14) * i;
+        const dist = 50 + Math.random() * 80;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist - 30;
+
+        requestAnimationFrame(() => {
+          p.style.transform = `translate(${dx}px, ${dy}px) scale(0.5) rotate(${Math.random() * 360}deg)`;
+          p.style.opacity = '0';
+        });
+
+        setTimeout(() => p.remove(), 1200);
+      }
+    }
+
+    function showLoveToast(x: number, y: number, text: string) {
+      const bubble = document.createElement('div');
+      bubble.textContent = text;
+      bubble.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        transform: translate(-50%, -100%) scale(0.6);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 2px solid #F59E0B;
+        color: #78350F;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 6px 14px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(180,83,9,0.3);
+        pointer-events: none;
+        z-index: 100000;
+        opacity: 0;
+        transition: all 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      `;
+      document.body.appendChild(bubble);
+
+      requestAnimationFrame(() => {
+        bubble.style.transform = 'translate(-50%, -170%) scale(1.05)';
+        bubble.style.opacity = '1';
+      });
+
+      setTimeout(() => {
+        bubble.style.transform = 'translate(-50%, -230%) scale(0.85)';
+        bubble.style.opacity = '0';
+        setTimeout(() => bubble.remove(), 900);
+      }, 1400);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', setupFlowerClicks);
+</script>
