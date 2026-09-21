@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { saveGift, getGift } from '../../utils/storage';
+import { getPublicOrigin } from '../../utils/origin';
 
 export const prerender = false;
 
@@ -8,7 +9,7 @@ export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
     const { gift, token } = saveGift(body);
 
-    const origin = new URL(request.url).origin;
+    const origin = getPublicOrigin(request);
     // URL limpia, corta y profesional usando UUID único sin parámetros innecesarios
     const publicUrl = `${origin}/regalo/${gift.id}`;
 

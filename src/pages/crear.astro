@@ -819,11 +819,13 @@ import { DEFAULT_GIFT } from '../utils/defaults';
           const result = await res.json();
 
           let finalUrl = "";
-          if (result.success) {
-            // URL limpia y corta usando UUID único (sin monstruosos parámetros en la URL)
-            finalUrl = result.url || `${currentOrigin}/regalo/${result.id}`;
+          if (result.success && result.id) {
+            // Usar siempre el origin real del navegador del usuario (https://yellow-flowers-alpha.vercel.app)
+            const origin = window.location.origin || 'https://yellow-flowers-alpha.vercel.app';
+            finalUrl = `${origin}/regalo/${result.id}`;
           } else {
-            finalUrl = `${currentOrigin}/regalo/especial`;
+            const origin = window.location.origin || 'https://yellow-flowers-alpha.vercel.app';
+            finalUrl = `${origin}/regalo/especial`;
           }
 
           if (modal && inputUrl && btnAbrir) {

@@ -8,6 +8,7 @@ import AudioExperience from '../../components/AudioExperience.astro';
 import WitheredFlowers from '../../components/WitheredFlowers.astro';
 import { getGift } from '../../utils/storage';
 import { DEFAULT_GIFT } from '../../utils/defaults';
+import { getPublicOrigin } from '../../utils/origin';
 
 export const prerender = false;
 
@@ -20,7 +21,7 @@ const { gift: loadedGift, isExpired, remainingText } = getGift(lookupKey);
 
 const gift = loadedGift || DEFAULT_GIFT;
 
-const siteOrigin = Astro.url.origin;
+const siteOrigin = getPublicOrigin(Astro.request);
 const photoOgUrl = `${siteOrigin}/api/foto?id=${gift.id}`;
 const currentFullUrl = `${siteOrigin}/regalo/${gift.id}`;
 const pageTitle = `🌻 Flores Amarillas — Para ${gift.recipient}`;

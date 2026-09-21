@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { reviveGift } from '../../utils/storage';
+import { getPublicOrigin } from '../../utils/origin';
 
 export const prerender = false;
 
@@ -9,7 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
     const idOrToken = body.id || body.token || 'especial';
     const { gift, token } = reviveGift(idOrToken);
 
-    const origin = new URL(request.url).origin;
+    const origin = getPublicOrigin(request);
     const refreshedUrl = `${origin}/regalo/${gift.id}`;
 
     return new Response(JSON.stringify({
