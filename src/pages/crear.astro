@@ -11,13 +11,13 @@ import { DEFAULT_GIFT } from '../utils/defaults';
       <div class="crear-brand">
         <span class="icono-flor">🌻</span>
         <div>
-          <h1>Taller Libre de Flores Amarillas</h1>
-          <p>Crea un ramo virtual personalizado para quien tú quieras este 21 de septiembre. Cada regalo dura 1 semana (y se puede revivir regándolo con agua fresca 💧).</p>
+          <h1>Taller de Flores Amarillas</h1>
+          <p>Crea tu regalo personalizado para esa persona especial. Cada regalo es independiente y dura 1 semana (¡y se puede revivir regándolo con agua fresca! 💧).</p>
         </div>
       </div>
       <div class="crear-actions">
-        <a href="/regalo/demo" target="_blank" class="btn-secundario">
-          🎁 Ver Regalo Demo
+        <a href="/regalo/especial" target="_blank" class="btn-secundario">
+          🎁 Ver Regalo de Ejemplo
         </a>
       </div>
     </header>
@@ -40,9 +40,9 @@ import { DEFAULT_GIFT } from '../utils/defaults';
           <!-- TAB 1: DESTINATARIA & CARTA -->
           <div class="tab-pane activo" id="tab-persona">
             <div class="form-grupo">
-              <label>¿Para quién es el regalo? (Nombre o Apodo especial)</label>
-              <input type="text" id="input-recipient" class="form-control" placeholder="Ej: Mi persona favorita, Lucía <3, Mi amor..." required>
-              <small>Este nombre aparecerá en la caja de regalo, la etiqueta del ramo y la dedicatoria.</small>
+              <label>¿Para quién es el regalo? (Nombre o Apodo cariñoso) <span style="color:#E11D48">*</span></label>
+              <input type="text" id="input-recipient" class="form-control" placeholder="Ej: Mi amor, Sofía <3, Mi persona favorita..." required>
+              <small>Este nombre se mostrará en la caja de regalo 3D, la etiqueta del ramo y la dedicatoria.</small>
             </div>
 
             <div class="form-grupo">
@@ -51,7 +51,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
             </div>
 
             <div class="form-grupo">
-              <label>Título principal</label>
+              <label>Título principal de la sorpresa</label>
               <input type="text" id="input-headertitle" class="form-control" value="Flores Amarillas para Ti">
             </div>
 
@@ -77,19 +77,19 @@ import { DEFAULT_GIFT } from '../utils/defaults';
           <!-- TAB 2: SUBIR AUDIO PERSONALIZADO -->
           <div class="tab-pane" id="tab-audio">
             <div class="form-grupo">
-              <label>Subir canción o nota de voz (MP3 / WAV / M4A)</label>
-              <p class="ayuda-texto">Este audio comenzará a reproducirse automáticamente apenas la persona toque la caja para abrirla.</p>
+              <label>Subir tu propia canción o audio (MP3 / WAV / M4A)</label>
+              <p class="ayuda-texto">Este audio comenzará a reproducirse automáticamente al abrir la caja de regalo sorpresa.</p>
               
               <div class="dropzone-archivo">
                 <input type="file" id="file-audio" accept="audio/*">
                 <span class="dropzone-icono">🎵</span>
-                <p>Haz clic para elegir un archivo de audio desde tu dispositivo</p>
-                <small id="audio-filename" style="color:#B45309;font-weight:700;"></small>
+                <p>Haz clic para elegir un archivo de audio desde tu celular o computadora</p>
+                <small id="audio-filename" style="color:#B45309;font-weight:700;display:block;margin-top:6px;"></small>
               </div>
 
               <!-- Reproductor de prueba -->
-              <div id="preview-audio-container" style="display:none;margin-top:14px;">
-                <label>Vista previa del audio seleccionado:</label>
+              <div id="preview-audio-container" style="display:none;margin-top:14px;background:#FFFDF5;padding:12px;border-radius:12px;border:1px solid #FDE68A;">
+                <label style="font-weight:800;font-size:0.85rem;color:#B45309;">Audio cargado listo para el regalo:</label>
                 <audio id="audio-preview-player" controls style="width:100%;margin-top:6px;"></audio>
               </div>
             </div>
@@ -241,18 +241,23 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     <div class="modal-caja">
       <span class="modal-icono">🎉</span>
       <h2>¡Tu Regalo está Listo para Entregar!</h2>
-      <p>Copia el enlace único y envíaselo a esa persona especial por WhatsApp o mensaje:</p>
+      <p>Copia el enlace único y envíaselo a esa persona especial:</p>
       
       <div class="caja-enlace">
         <input type="text" id="url-generada" readonly>
         <button type="button" id="btn-copiar-url">Copiar</button>
       </div>
 
-      <div class="modal-acciones">
-        <a id="btn-abrir-regalo" href="#" target="_blank" class="btn-crear-regalo" style="text-decoration:none;display:inline-block;padding:12px 22px;">
+      <div class="modal-acciones" style="display:flex;flex-direction:column;gap:10px;">
+        <a id="btn-compartir-ws" href="#" target="_blank" class="btn-whatsapp" style="background:#25D366;color:#FFF;text-decoration:none;padding:12px 20px;border-radius:12px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span>📲 Enviar por WhatsApp</span>
+        </a>
+
+        <a id="btn-abrir-regalo" href="#" target="_blank" class="btn-crear-regalo" style="text-decoration:none;display:inline-block;padding:12px 22px;text-align:center;">
           Abrir y Ver Regalo Ahora
         </a>
-        <button type="button" id="btn-cerrar-modal" class="btn-secundario" style="margin-top:10px;">
+
+        <button type="button" id="btn-cerrar-modal" class="btn-secundario" style="margin-top:6px;">
           Cerrar
         </button>
       </div>
@@ -641,7 +646,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
       });
     });
 
-    // Subida de audio
+    // Subida de audio robusta (Cliente + Servidor Cloud)
     const fileAudio = document.getElementById('file-audio') as HTMLInputElement;
     const audioNameLabel = document.getElementById('audio-filename');
     const audioPlayerContainer = document.getElementById('preview-audio-container');
@@ -652,36 +657,46 @@ import { DEFAULT_GIFT } from '../utils/defaults';
         const file = e.target.files[0];
         if (!file) return;
 
-        if (audioNameLabel) audioNameLabel.textContent = `Subiendo: ${file.name}...`;
+        if (audioNameLabel) audioNameLabel.textContent = `Procesando: ${file.name}...`;
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('type', 'audio');
+        // 1. Inmediato en cliente para reproducción local sin esperar
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+          uploadedAudioUrl = event.target.result;
+          if (audioPreviewPlayer && audioPlayerContainer) {
+            audioPreviewPlayer.src = event.target.result;
+            audioPlayerContainer.style.display = 'block';
+          }
+          if (audioNameLabel) {
+            audioNameLabel.textContent = `✓ Audio listo: ${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
+          }
+        };
+        reader.readAsDataURL(file);
 
+        // 2. Intentar obtener URL de streaming ligero en la nube para no saturar enlaces
         try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('type', 'audio');
+
           const res = await fetch('/api/upload', {
             method: 'POST',
             body: formData
           });
-          const json = await res.json();
-          if (json.success) {
-            uploadedAudioUrl = json.url;
-            if (audioNameLabel) audioNameLabel.textContent = `Audio cargado: ${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
-            if (audioPlayerContainer && audioPreviewPlayer) {
-              audioPreviewPlayer.src = json.url;
-              audioPlayerContainer.style.display = 'block';
+          if (res.ok) {
+            const json = await res.json();
+            if (json.success && json.url) {
+              uploadedAudioUrl = json.url;
+              console.log("Audio alojado en cloud streaming:", json.url);
             }
-          } else {
-            alert(json.error || 'Error subiendo audio');
           }
         } catch (err) {
-          console.error(err);
-          alert('Error de conexión al subir audio');
+          console.warn("Usando audio codificado localmente:", err);
         }
       });
     }
 
-    // Subida de foto
+    // Subida de foto robusta
     const filePhoto = document.getElementById('file-photo') as HTMLInputElement;
     const imgPreview = document.getElementById('img-preview') as HTMLImageElement;
 
@@ -690,24 +705,32 @@ import { DEFAULT_GIFT } from '../utils/defaults';
         const file = e.target.files[0];
         if (!file) return;
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('type', 'image');
+        // Vista previa inmediata con FileReader
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+          uploadedPhotoUrl = event.target.result;
+          if (imgPreview) imgPreview.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
 
+        // Intentar alojamiento ligero
         try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('type', 'image');
+
           const res = await fetch('/api/upload', {
             method: 'POST',
             body: formData
           });
-          const json = await res.json();
-          if (json.success) {
-            uploadedPhotoUrl = json.url;
-            if (imgPreview) imgPreview.src = json.url;
-          } else {
-            alert(json.error || 'Error subiendo foto');
+          if (res.ok) {
+            const json = await res.json();
+            if (json.success && json.url) {
+              uploadedPhotoUrl = json.url;
+            }
           }
         } catch (err) {
-          console.error(err);
+          console.warn("Usando foto codificada localmente:", err);
         }
       });
     }
@@ -719,6 +742,7 @@ import { DEFAULT_GIFT } from '../utils/defaults';
     const btnCopiar = document.getElementById('btn-copiar-url');
     const btnCerrar = document.getElementById('btn-cerrar-modal');
     const btnAbrir = document.getElementById('btn-abrir-regalo') as HTMLAnchorElement;
+    const btnWs = document.getElementById('btn-compartir-ws') as HTMLAnchorElement;
 
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -783,6 +807,9 @@ import { DEFAULT_GIFT } from '../utils/defaults';
         const btnSubmit = document.getElementById('btn-submit');
         if (btnSubmit) btnSubmit.textContent = '⏳ Creando regalo...';
 
+        // Usar SIEMPRE el origin actual dinámico (en Vercel será https://yellow-flowers-alpha.vercel.app, en local será http://localhost:...)
+        const currentOrigin = window.location.origin;
+
         try {
           const res = await fetch('/api/regalo', {
             method: 'POST',
@@ -791,16 +818,46 @@ import { DEFAULT_GIFT } from '../utils/defaults';
           });
           const result = await res.json();
 
-          if (result.success && modal && inputUrl && btnAbrir) {
-            inputUrl.value = result.url;
-            btnAbrir.href = result.url;
-            modal.style.display = 'flex';
+          let finalUrl = "";
+          if (result.success) {
+            finalUrl = `${currentOrigin}/regalo/${result.id}?d=${result.token}`;
           } else {
-            alert(result.error || 'Error al crear regalo');
+            // Fallback resiliente cliente si la API fallase
+            const jsonStr = JSON.stringify(giftPayload);
+            const bytes = new TextEncoder().encode(jsonStr);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+            const token = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            finalUrl = `${currentOrigin}/regalo/especial?d=${token}`;
+          }
+
+          if (modal && inputUrl && btnAbrir) {
+            inputUrl.value = finalUrl;
+            btnAbrir.href = finalUrl;
+            if (btnWs) {
+              const msg = encodeURIComponent(`🌻 ¡Hola ${recipient}! Te preparé un detalle muy especial de Flores Amarillas para este 21 de septiembre. Toca aquí para abrir tu sorpresa: ${finalUrl}`);
+              btnWs.href = `https://api.whatsapp.com/send?text=${msg}`;
+            }
+            modal.style.display = 'flex';
           }
         } catch (err) {
-          console.error(err);
-          alert('Error de conexión');
+          console.warn("Fallo API, usando generador de enlace directo:", err);
+          const jsonStr = JSON.stringify(giftPayload);
+          const bytes = new TextEncoder().encode(jsonStr);
+          let binary = '';
+          for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+          const token = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+          const finalUrl = `${currentOrigin}/regalo/especial?d=${token}`;
+
+          if (modal && inputUrl && btnAbrir) {
+            inputUrl.value = finalUrl;
+            btnAbrir.href = finalUrl;
+            if (btnWs) {
+              const msg = encodeURIComponent(`🌻 ¡Hola ${recipient}! Te preparé un detalle muy especial de Flores Amarillas para este 21 de septiembre: ${finalUrl}`);
+              btnWs.href = `https://api.whatsapp.com/send?text=${msg}`;
+            }
+            modal.style.display = 'flex';
+          }
         } finally {
           if (btnSubmit) btnSubmit.textContent = '🎁 Crear Regalo y Generar Enlace Único';
         }
