@@ -908,12 +908,11 @@ import { DEFAULT_GIFT } from '../utils/defaults';
           const result = await res.json();
 
           let finalUrl = "";
+          const origin = window.location.origin || 'https://yellow-flowers-alpha.vercel.app';
           if (result.success && result.id) {
-            // Usar siempre el origin real del navegador del usuario (https://yellow-flowers-alpha.vercel.app)
-            const origin = window.location.origin || 'https://yellow-flowers-alpha.vercel.app';
-            finalUrl = `${origin}/regalo/${result.id}`;
+            const tokenQuery = result.token ? `?d=${encodeURIComponent(result.token)}` : '';
+            finalUrl = `${origin}/regalo/${result.id}${tokenQuery}`;
           } else {
-            const origin = window.location.origin || 'https://yellow-flowers-alpha.vercel.app';
             finalUrl = `${origin}/regalo/especial`;
           }
 

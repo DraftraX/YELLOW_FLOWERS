@@ -8,10 +8,11 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const idOrToken = body.id || body.token || 'especial';
-    const { gift, token } = reviveGift(idOrToken);
+    const queryToken = body.token || '';
+    const { gift, token } = await reviveGift(idOrToken, queryToken);
 
     const origin = getPublicOrigin(request);
-    const refreshedUrl = `${origin}/regalo/${gift.id}`;
+    const refreshedUrl = `${origin}/regalo/${gift.id}${token ? `?d=${token}` : ''}`;
 
     return new Response(JSON.stringify({
       success: true,
@@ -19,6 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
       gift,
       token,
       url: refreshedUrl,
+      cleanUrl: `${origin}/regalo/${gift.id}`,
       expiresAt: gift.expiresAt
     }), {
       status: 200,

@@ -63,14 +63,44 @@ export const POST: APIRoute = async ({ request }) => {
         const base64Webp = webpBuffer.toString('base64');
         const webpDataUri = `data:image/webp;base64,${base64Webp}`;
 
+        let finalImageUrl = webpDataUri;
+        let storageType = 'webp_data_uri';
+
+        // Subir a Catbox CDN permanente para que funcione en Vercel Serverless
+        try {
+          const catboxForm = new FormData();
+          catboxForm.append('reqtype', 'fileupload');
+          const imgBlob = new Blob([webpBuffer], { type: 'image/webp' });
+          catboxForm.append('fileToUpload', imgBlob, webpFileName);
+
+          const catboxRes = await fetch('https://catbox.moe/user/api.php', {
+            method: 'POST',
+            body: catboxForm,
+            headers: {
+              'User-Agent': 'FloresAmarillas/1.0'
+            }
+          });
+
+          if (catboxRes.ok) {
+            const catboxUrl = (await catboxRes.text()).trim();
+            if (catboxUrl.startsWith('https://files.catbox.moe/')) {
+              finalImageUrl = catboxUrl;
+              storageType = 'catbox_cdn';
+              console.log(`[Upload] Foto alojada exitosamente en Catbox CDN: ${finalImageUrl}`);
+            }
+          }
+        } catch (catboxErr) {
+          console.warn("[Upload] Catbox CDN no disponible para foto, usando WebP Data URI:", catboxErr);
+        }
+
         return new Response(JSON.stringify({
           success: true,
-          url: webpDataUri, // WebP ultra compacto (~20KB) garantizado para funcionar en cualquier hosting
+          url: finalImageUrl,
           localPath: `/uploads/${webpFileName}`,
           fileName: webpFileName,
           originalSize: file.size,
           compressedSize: webpBuffer.length,
-          storageType: 'webp_compressed'
+          storageType
         }), {
           status: 200,
           headers: { 'Content-Type': 'application/json' }

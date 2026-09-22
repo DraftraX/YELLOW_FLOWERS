@@ -80,10 +80,11 @@ const FALLBACK_BOUQUET_SVG = `
 
 export const GET: APIRoute = async ({ url }) => {
   const id = url.searchParams.get('id');
+  const token = url.searchParams.get('d') || '';
 
-  if (id) {
+  if (id || token) {
     try {
-      const { gift } = getGift(id);
+      const { gift } = await getGift(id || '', token);
 
       if (gift && gift.photoUrl) {
         // 1. Caso Base64 Data URI

@@ -7,17 +7,18 @@ export const prerender = false;
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { gift, token } = saveGift(body);
+    const { gift, token } = await saveGift(body);
 
     const origin = getPublicOrigin(request);
-    // URL limpia, corta y profesional usando UUID único sin parámetros innecesarios
-    const publicUrl = `${origin}/regalo/${gift.id}`;
+    // URL limpia que incluye el nombre del agasajado y el token de respaldo seguro
+    const publicUrl = `${origin}/regalo/${gift.id}${token ? `?d=${token}` : ''}`;
 
     return new Response(JSON.stringify({
       success: true,
       id: gift.id,
       token,
       url: publicUrl,
+      cleanUrl: `${origin}/regalo/${gift.id}`,
       expiresAt: gift.expiresAt,
       createdAt: gift.createdAt
     }), {
@@ -37,14 +38,16 @@ export const POST: APIRoute = async ({ request }) => {
 
 export const GET: APIRoute = async ({ url }) => {
   const id = url.searchParams.get('id');
-  if (!id) {
-    return new Response(JSON.stringify({ error: 'Falta parámetro id' }), {
+  const token = url.searchParams.get('d') || '';
+
+  if (!id && !token) {
+    return new Response(JSON.stringify({ error: 'Falta parámetro id o d' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' }
     });
   }
 
-  const { gift, isExpired, remainingText } = getGift(id);
+  const { gift, isExpired, remainingText } = await getGift(id || '', token);
   if (!gift) {
     return new Response(JSON.stringify({ error: 'Regalo no encontrado' }), {
       status: 404,

@@ -17,13 +17,13 @@ const queryToken = Astro.url.searchParams.get('d') || '';
 
 // Buscar regalo por ID o por token fallback
 const lookupKey = id || queryToken || 'especial';
-const { gift: loadedGift, isExpired, remainingText } = getGift(lookupKey);
+const { gift: loadedGift, isExpired, remainingText } = await getGift(lookupKey, queryToken);
 
 const gift = loadedGift || DEFAULT_GIFT;
 
 const siteOrigin = getPublicOrigin(Astro.request);
-const photoOgUrl = `${siteOrigin}/api/foto?id=${gift.id}`;
-const currentFullUrl = `${siteOrigin}/regalo/${gift.id}`;
+const photoOgUrl = `${siteOrigin}/api/foto?id=${gift.id}${queryToken ? `&d=${queryToken}` : ''}`;
+const currentFullUrl = `${siteOrigin}/regalo/${gift.id}${queryToken ? `?d=${queryToken}` : ''}`;
 const pageTitle = `🌻 Flores Amarillas — Para ${gift.recipient}`;
 const pageDesc = `¡Hola ${gift.recipient}! Te prepararon un regalo sorpresa de Flores Amarillas con mucho amor para este 21 de septiembre. Toca para abrir tu caja ✨`;
 ---
